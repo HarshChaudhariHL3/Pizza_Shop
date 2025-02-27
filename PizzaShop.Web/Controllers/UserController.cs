@@ -15,20 +15,26 @@ public class UserController(IUserService _userService) : Controller
         return View(user);
     }
 
-    public IActionResult GetCountries(){
+    public IActionResult GetCountries()
+    {
         var countries = _userService.GetCountries();
         return Json(countries);
     }
 
-    public IActionResult GetStates(int CountryId){
+    public IActionResult GetStates(int CountryId)
+    {
         var states = _userService.GetStates(CountryId);
         return Json(states);
     }
-    
-        public IActionResult GetCities(int StateId){
+
+    public IActionResult GetCities(int StateId)
+    {
         var cities = _userService.GetCities(StateId);
         return Json(cities);
     }
 
-
+    public async Task<IActionResult> userlist()
+    {
+        return View();
+    }
 }

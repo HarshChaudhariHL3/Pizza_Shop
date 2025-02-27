@@ -46,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxwcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/User/userlist.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclx1c2VybGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Validation/Changepassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVmFsaWRhdGlvblxDaGFuZ2VwYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

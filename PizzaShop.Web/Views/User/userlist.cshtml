@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "UserList Page";
+}
+<div class="row">
+    <div class="col-lg-12 d-flex justify-content-between">
+        <div>
+            <h2>Users</h2>
+        </div>
+        <div>
+            <div class="input-group">
+                <div class="d-flex align-items-center">
+
+                    <div class="form-outline d-flex border rounded align-items-center bg-white" data-mdb-input-init>
+                        <input type="search" id="form1" class="form-control outline-none border-0 "
+                            placeholder="Search" />
+                        <i class="bi bi-search pe-3"></i>
+                    </div>
+                    <div>
+                        <a href="adduser.html"
+                            class="ms-3 text-decoration-none text-dark border bg-primary rounded p-2">
+                            <i class="bi bi-plus-lg"></i>Add User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Role </th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-container">
+            
+        </div>
+    </div>
+</div>
