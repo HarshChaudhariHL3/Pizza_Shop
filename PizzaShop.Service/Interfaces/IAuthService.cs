@@ -8,9 +8,8 @@ public interface IAuthService
     Task<User> AuthenticateUser(string email, string password);
 
     Task<User> Useremail(string email);
-
-    Task<(bool success, string error)> ChangePassword(Changepassword model);
-
     Task<Role?> CheckRole(string role);
+    Task<(bool success, string? error)> ChangePassword(Resetpassword model);
+    Task<(bool success, string? error)> ChangePassword(Changepassword model);
 
 }

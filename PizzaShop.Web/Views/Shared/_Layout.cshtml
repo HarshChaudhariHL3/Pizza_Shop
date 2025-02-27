@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="~/PizzaShop.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -27,8 +26,13 @@
                     <div class="menu">
                         <ul>
                             <li>
-                                <a asp-controller="Profile" asp-action="Profile" >
+                                <a asp-controller="User" asp-action="Profile" >
                                     <span class="material-symbols-outlined"></span>My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Validation" asp-action="Changepassword" >
+                                    <span class="material-symbols-outlined"></span>Change Password
                                 </a>
                             </li>
                             <li>

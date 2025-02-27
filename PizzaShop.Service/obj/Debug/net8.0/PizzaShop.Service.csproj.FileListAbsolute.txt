@@ -15,3 +15,4 @@ D:\DotNet N Layered\PizzaShop\PizzaShop.Service\obj\Debug\net8.0\PizzaShop.Servi
 D:\DotNet N Layered\PizzaShop\PizzaShop.Service\obj\Debug\net8.0\refint\PizzaShop.Service.dll
 D:\DotNet N Layered\PizzaShop\PizzaShop.Service\obj\Debug\net8.0\PizzaShop.Service.pdb
 D:\DotNet N Layered\PizzaShop\PizzaShop.Service\obj\Debug\net8.0\ref\PizzaShop.Service.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Service\obj\Debug\net8.0\PizzaShop.Service.sourcelink.json

@@ -14,8 +14,10 @@ builder.Services.AddDbContext<PizzaShopContext>(q => q.UseNpgsql(conn));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISendmailService, SendmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 // Add authentication using cookies

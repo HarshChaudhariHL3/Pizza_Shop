@@ -35,6 +35,21 @@ public class AuthService(IAuthRepository _repository) : IAuthService
         return user;
     }
 
+    public async Task<(bool success, string error)> ChangePassword(Resetpassword model){
+        if(model.NewPassword != model.ConfirmPassword){
+            return (false, "Password does not match");
+        }
+        var user = await _repository.Useremail(model.email);
+        if(user == null){
+            return (false, "User not found");
+        }
+
+        var hashed = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+        user.Password = hashed ;
+        bool success = await _repository.Savepassword(user);
+        return (success , success ? null : "Failed to update Password");
+
+    }
     public async Task<(bool success, string error)> ChangePassword(Changepassword model){
         if(model.NewPassword != model.ConfirmPassword){
             return (false, "Password does not match");

@@ -85,13 +85,13 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
     [HttpGet]
     public IActionResult Resetpassword(string user_Email)
     {
-        Changepassword change = new();
+        Resetpassword change = new();
         change.email = user_Email;
         return View(change);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Resetpassword(Changepassword model)
+    public async Task<IActionResult> Resetpassword(Resetpassword model)
     {
 
         var (success, error) = await _authService.ChangePassword(model);
@@ -109,6 +109,37 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
 
         return RedirectToAction("ResetPassword", "Validation");
     }
+
+    public IActionResult Changepassword(){
+        var useremail = SessionUtils.GetUser(HttpContext);
+        Changepassword change = new();
+        change.email = useremail?.Email ?? string.Empty;
+        return View(change);
+    }
+
+        [HttpPost]
+    public async Task<IActionResult> Changepassword(Changepassword model)
+    {
+
+        var (success, error) = await _authService.ChangePassword(model);
+
+        if (error != null)
+        {
+            TempData["Error"] = error ?? "Invalid";
+            return RedirectToAction("ResetPassword", "Validation");
+        }
+        if (success)
+        {
+            TempData["Success"] = "Password is Change Successfully";
+            return RedirectToAction("Login", "Validation");
+        }
+
+        return RedirectToAction("ResetPassword", "Validation");
+    }
+
+    
+
+
 
 
 

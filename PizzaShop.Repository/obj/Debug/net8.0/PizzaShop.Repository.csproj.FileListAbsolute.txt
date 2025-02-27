@@ -13,3 +13,4 @@ D:\DotNet N Layered\PizzaShop\PizzaShop.Repository\obj\Debug\net8.0\PizzaShop.Re
 D:\DotNet N Layered\PizzaShop\PizzaShop.Repository\obj\Debug\net8.0\refint\PizzaShop.Repository.dll
 D:\DotNet N Layered\PizzaShop\PizzaShop.Repository\obj\Debug\net8.0\PizzaShop.Repository.pdb
 D:\DotNet N Layered\PizzaShop\PizzaShop.Repository\obj\Debug\net8.0\ref\PizzaShop.Repository.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Repository\obj\Debug\net8.0\PizzaShop.Repository.sourcelink.json
