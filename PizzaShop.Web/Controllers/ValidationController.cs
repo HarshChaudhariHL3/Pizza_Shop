@@ -36,8 +36,7 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
             return View(model);
         }
 
-        var token = _jwtService.GenerateJwtToken(user.FirstName + " " + user.LastName, user.Email, user.UserRole ?? 0);
-
+        var token = _jwtService.GenerateJwtToken(user.FirstName + " " + user.LastName, user.Email, user.UserRole ?? 0 , user.UserId);
         CookieUtils.SaveJWTToken(Response, token);
 
         if (model.Rememberme)
@@ -136,12 +135,6 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
 
         return RedirectToAction("ResetPassword", "Validation");
     }
-
-    
-
-
-
-
 
     public IActionResult Logout()
     {

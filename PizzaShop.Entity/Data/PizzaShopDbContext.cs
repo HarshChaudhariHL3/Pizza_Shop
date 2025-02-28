@@ -926,7 +926,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");
-            entity.Property(e => e.Phone).HasColumnName("phone");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(15)
+                .HasColumnName("phone");
             entity.Property(e => e.StateId).HasColumnName("state_id");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.UserRole).HasColumnName("user_role");

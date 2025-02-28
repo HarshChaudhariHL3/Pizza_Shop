@@ -25,8 +25,6 @@ public partial class User
 
     public int? CityId { get; set; }
 
-    public int? Phone { get; set; }
-
     public string? Address { get; set; }
 
     public int? ZipCode { get; set; }
@@ -42,6 +40,10 @@ public partial class User
     public string? ModifiedBy { get; set; }
 
     public List<string>? ImgUrl { get; set; }
+
+    public bool? Isdeleted { get; set; }
+
+    public string? Phone { get; set; }
 
     public virtual City? City { get; set; }
 

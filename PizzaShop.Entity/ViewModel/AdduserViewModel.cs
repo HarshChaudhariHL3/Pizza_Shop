@@ -2,16 +2,20 @@ using System.Runtime.Serialization.Formatters;
 
 namespace PizzaShop.Entity.ViewModel;
 
-public class ProfileViewModel
+public class AdduserViewModel
 {
 
     public int Id { get; set; }
     public string? Email { get; set; }
 
+    public int? Role { get; set; }
+
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
 
     public string? Username { get; set; }
+
+    public string? Password { get; set; }
 
     public int? Country { get; set; }
 
@@ -26,11 +30,4 @@ public class ProfileViewModel
     public int? ZipCode { get; set; }
 
      public IFieldInfo? ProfileImg { get; set; }
-
-    //  public IFieldInfo? MyImage { get; set; }
-
-    public static void Add(string v, string? userId)
-    {
-        throw new NotImplementedException();
-    }
 }

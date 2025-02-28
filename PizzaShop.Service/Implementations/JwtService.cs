@@ -20,7 +20,7 @@ public class JwtService : IJwtService
         _audience = configuration["Jwt:Audience"];
     }
 
-    public string GenerateJwtToken(string name, string email, int role)
+    public string GenerateJwtToken(string name, string email, int role, int id)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_key); // Secret Code (Salt)
@@ -29,6 +29,7 @@ public class JwtService : IJwtService
         {
             Subject = new ClaimsIdentity(new[]
             {
+                    new Claim("UserId", id.ToString()),
                     new Claim(ClaimTypes.Name, name),
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, role.ToString()),
@@ -65,7 +66,7 @@ public class JwtService : IJwtService
                 ClockSkew = TimeSpan.Zero
             };
 
-            var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken securityToken);
             return principal;
         }
         catch
