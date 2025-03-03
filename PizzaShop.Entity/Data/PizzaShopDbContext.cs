@@ -913,6 +913,7 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ImgUrl)
                 .HasColumnType("character varying[]")
                 .HasColumnName("img_url");
+            entity.Property(e => e.Isdeleted).HasDefaultValue(false);
             entity.Property(e => e.LastName)
                 .HasMaxLength(20)
                 .HasColumnName("last_name");
@@ -930,7 +931,9 @@ public partial class PizzaShopDbContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("phone");
             entity.Property(e => e.StateId).HasColumnName("state_id");
-            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Status)
+                .HasDefaultValue(true)
+                .HasColumnName("status");
             entity.Property(e => e.UserRole).HasColumnName("user_role");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)

@@ -141,34 +141,46 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>
 
 <script>
     $(document).ready(function () {
-
-        $.getJSON('/User/GetRoles', function (data) {
-            console.log(data);
-            $.each(data, function (index, Role) {
-                $('#roleSelect').append(`<option value="${Role.roleId}">${Role.roleName}</option>`);
-            });
+        $.ajax({
+            url: '/User/GetRoles',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (index, Role) {
+                    $('#roleSelect').append(`<option value="${Role.roleId}">${Role.roleName}</option>`);
+                });
+            }
         });
 
-
-        $.getJSON('/User/GetCountries', function (data) {
-            console.log(data);
-            $.each(data, function (index, Country) {
-                $('#countrySelect').append(`<option value="${Country.countryId}">${Country.countryName}</option>`);
-            });
+        $.ajax({
+            url: '/User/GetCountries',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                $.each(data, function (index, Country) {
+                    $('#countrySelect').append(`<option value="${Country.countryId}">${Country.countryName}</option>`);
+                });
+            }
         });
 
         $('#countrySelect').change(function () {
             var countryId = $(this).val();
             $('#stateSelect').empty().append('<option selected>Select state</option>').prop('disabled', false);
 
-            $.getJSON(`/User/GetStates?CountryId=${countryId}`, function (data) {
-                console.log(data);
-                $.each(data, function (index, State) {
-                    $('#stateSelect').append(`<option value="${State.stateId}">${State.stateName}</option>`);
-                });
+            $.ajax({
+                url: '/User/GetStates',
+                type: 'GET',
+                data: { CountryId: countryId },
+                success: function (data) {
+                    console.log(data);
+                    $.each(data, function (index, State) {
+                        $('#stateSelect').append(`<option value="${State.stateId}">${State.stateName}</option>`);
+                    });
+                }
             });
         });
 
@@ -176,10 +188,15 @@
             var stateId = $(this).val();
             $('#citySelect').empty().append('<option selected>Select city</option>').prop('disabled', false);
 
-            $.getJSON(`/User/GetCities?stateId=${stateId}`, function (data) {
-                $.each(data, function (index, City) {
-                    $('#citySelect').append(`<option value="${City.cityId}">${City.cityName}</option>`);
-                });
+            $.ajax({
+                url: '/User/GetCities',
+                type: 'GET',
+                data: { stateId: stateId },
+                success: function (data) {
+                    $.each(data, function (index, City) {
+                        $('#citySelect').append(`<option value="${City.cityId}">${City.cityName}</option>`);
+                    });
+                }
             });
         });
     });

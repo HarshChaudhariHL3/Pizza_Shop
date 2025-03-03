@@ -9,7 +9,14 @@ public interface IUserService
 {
     ProfileViewModel GetUser(string id);
 
+    EdituserViewModel GetUserByEmail(string Email);
+
     bool UpdateUser(ProfileViewModel model);
+
+    bool UpdateUserinEdit(EdituserViewModel model);
+
+    bool DeleteUser(string Email);
+    
 
     bool AddUser(AdduserViewModel model);
 

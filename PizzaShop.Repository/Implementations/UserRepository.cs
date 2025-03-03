@@ -5,7 +5,7 @@ using PizzaShop.Repository.Interfaces;
 
 namespace PizzaShop.Repository.Implementations;
 
-public class UserRepository (PizzaShopContext _context) : IUserRepository
+public class UserRepository (PizzaShopDbContext _context) : IUserRepository
 {
     public  User GetAll(int id)
     {
@@ -13,6 +13,16 @@ public class UserRepository (PizzaShopContext _context) : IUserRepository
         if (user == null)
         {
             throw new Exception($"User with id {id} not found.");
+        }
+        return user;
+    }
+
+    public  User GetAllByEmail(string email)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
+        if (user == null)
+        {
+            throw new Exception($"User with email {email} not found.");
         }
         return user;
     }
@@ -66,33 +76,22 @@ public class UserRepository (PizzaShopContext _context) : IUserRepository
             .ToList();
         }
         return _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower()))
-            .Where(u => u.Isdeleted == false || u.Isdeleted == null)
+            .Where(u => u.Isdeleted == false)
             .OrderBy(u => u.UserId)
             .Skip((page - 1) * page_size)
             .Take(page_size)
             .ToList();
     }
 
-    public int pagination_count (string search)
-    {
-        if(string.IsNullOrEmpty(search))
-        {
-            return _context.Users.Count();
-        }else{
-            return get_usercount(search);
-        }
-    }
-
     public int get_usercount(string search)
     {
         if(string.IsNullOrEmpty(search))
         {
-            return _context.Users.Count();
+            return _context.Users.Where(u => u.Isdeleted == false).Count();
         }else{
             var count = _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower()))
-            .Where(u => u.Isdeleted == false || u.Isdeleted == null)
+            .Where(u => u.Isdeleted == false)
             .Count();
-
             return count;
         }
     }
@@ -106,6 +105,14 @@ public class UserRepository (PizzaShopContext _context) : IUserRepository
     public bool Add(User user)
     {
         _context.Users.Add(user);
+        return _context.SaveChanges() > 0;
+    }
+
+    public bool Delete(User user)
+    {
+        user.Isdeleted = true;
+        // _context.Users.Remove(user);
+        _context.Users.Update(user);
         return _context.SaveChanges() > 0;
     }
 

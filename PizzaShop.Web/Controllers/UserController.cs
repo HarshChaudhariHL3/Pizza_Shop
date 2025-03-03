@@ -57,6 +57,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         user.Country = model.Country;
         user.State = model.State;
         user.City = model.City;
+        user.Status = model.Status;
         _userService.UpdateUser(user);
         TempData["Success"] = "Profile Updated Successfully";
         return RedirectToAction("Profile");
@@ -125,6 +126,42 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         _userService.AddUser(model);
 
         TempData["Success"] = "User Added Successfully";
+        return RedirectToAction("Users");
+    }
+
+    [HttpGet]
+    public IActionResult EditUser(string Email)
+    {
+        var user = _userService.GetUserByEmail(Email);
+
+        return View(user);
+    }
+
+    [HttpPost]
+    public IActionResult EditUser(EdituserViewModel model)
+    {
+        var user = _userService.GetUserByEmail(model.Email);
+
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Username = model.Username;
+        user.Status = model.Status;
+        user.Country = model.Country;
+        user.State = model.State;
+        user.City = model.City;
+        user.Phone = model.Phone;
+        user.Address = model.Address;
+        user.ZipCode = model.ZipCode;
+        _userService.UpdateUserinEdit(user);
+        TempData["Success"] = "User Updated Successfully";
+        return RedirectToAction("Users");
+    }
+
+    [HttpPost]
+    public IActionResult DeleteUser(string Email)
+    {
+        _userService.DeleteUser(Email);
+        TempData["Success"] = "User Deleted Successfully";
         return RedirectToAction("Users");
     }
 

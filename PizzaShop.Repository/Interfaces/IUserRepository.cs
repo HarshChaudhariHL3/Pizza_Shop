@@ -5,11 +5,15 @@ public interface IUserRepository
 {
      User GetAll(int id);
 
+     User GetAllByEmail(string email);
+
     List<Country> GetCountry();
 
     List<State> GetState(int country_id);
 
     Role GetRole(int id);
+
+    bool Delete(User user);
 
     List<Role> GetRoleList();
 
@@ -17,7 +21,6 @@ public interface IUserRepository
 
    List<User> pagination_user_list(int page, int page_size, string search);
 
-   int pagination_count(string search);
 
     int get_usercount(string search);
 

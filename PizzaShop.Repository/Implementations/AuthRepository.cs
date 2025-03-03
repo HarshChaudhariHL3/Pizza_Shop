@@ -7,7 +7,7 @@ using PizzaShop.Repository.Interfaces;
 
 namespace PizzaShop.Repository.Implementations;
 
-public class AuthRepository (PizzaShopContext _context) : IAuthRepository
+public class AuthRepository (PizzaShopDbContext _context) : IAuthRepository
 {
     public async Task<User> AuthenticateUser(string email, string password)
     {

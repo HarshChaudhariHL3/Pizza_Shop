@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var conn = builder.Configuration.GetConnectionString("PizzaShop");
-builder.Services.AddDbContext<PizzaShopContext>(q => q.UseNpgsql(conn));
+builder.Services.AddDbContext<PizzaShopDbContext>(q => q.UseNpgsql(conn));
 
 builder.Services.AddControllersWithViews();
 

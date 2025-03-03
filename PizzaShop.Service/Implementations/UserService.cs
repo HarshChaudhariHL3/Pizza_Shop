@@ -40,6 +40,35 @@ public class UserService(IUserRepository _repository) : IUserService
 
         return profileViewModel;
     }
+
+    public EdituserViewModel GetUserByEmail(string Email){
+        var user = _repository.GetAllByEmail(Email);
+        if (user == null)
+        {
+            return null;
+        }
+
+        var role = user.UserRole.HasValue ? _repository.GetRole(user.UserRole.Value) : null;
+
+        var edituserViewModel = new EdituserViewModel
+        {
+            Email = user.Email,
+            Role = user.UserRole,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Username = user.Username,
+            Status = user.Status,
+            Country = user.CountryId,
+            State = user.StateId,
+            City = user.CityId,
+            Phone = user.Phone,
+            Address = user.Address,
+            ZipCode = user.ZipCode,
+            // ProfileImg = user.ProfileImg,
+        };
+
+        return edituserViewModel;
+    }
     
 
     public List<Country> GetCountries()
@@ -82,6 +111,28 @@ public class UserService(IUserRepository _repository) : IUserService
 
         return _repository.Update(user);
     }
+    public bool UpdateUserinEdit(EdituserViewModel model)
+    {
+        var user = _repository.GetAllByEmail(model.Email);
+        if (user == null)
+        {
+            return false;
+        }
+
+        user.FirstName = model.FirstName;
+        user.LastName = model.LastName;
+        user.Username = model.Username;
+        user.CountryId = model.Country;
+        user.StateId = model.State;
+        user.CityId = model.City;
+        user.Phone = model.Phone;
+        user.Address = model.Address;
+        user.ZipCode = model.ZipCode;
+        user.Status = model.Status;
+        user.UserRole = model.Role;
+
+        return _repository.Update(user);
+    }
 
     // public bool UpdateProfileImage(ProfileViewModel model)
     // {
@@ -102,7 +153,7 @@ public class UserService(IUserRepository _repository) : IUserService
         var count = 0;
         if (string.IsNullOrEmpty(search))
         {
-            count = _repository.pagination_count(search);
+            count = _repository.get_usercount(search);
             userlist = _repository.pagination_user_list(page, pageSize, search);
 
         }else{
@@ -147,10 +198,22 @@ public class UserService(IUserRepository _repository) : IUserService
             Phone = model.Phone,
             Address = model.Address,
             ZipCode = model.ZipCode,
+            Status = model.Status,
             // ProfileImg = model.ProfileImg,
         };
 
         return _repository.Add(user);
+    }
+
+    public bool DeleteUser(string Email)
+    {
+        var user = _repository.GetAllByEmail(Email);
+        if (user == null)
+        {
+            return false;
+        }
+
+        return _repository.Delete(user);
     }
         
 

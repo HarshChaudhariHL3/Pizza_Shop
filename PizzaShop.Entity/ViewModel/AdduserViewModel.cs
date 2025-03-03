@@ -18,6 +18,8 @@ public class AdduserViewModel
 
     public int? Country { get; set; }
 
+    public bool? Status { get; set; }
+
     public int? State { get; set; }
 
     public int? City { get; set; }
