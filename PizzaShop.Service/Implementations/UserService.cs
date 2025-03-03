@@ -1,3 +1,4 @@
+using System.Threading.RateLimiting;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
@@ -19,6 +20,8 @@ public class UserService(IUserRepository _repository) : IUserService
             return null;
         }
 
+        var role = user.UserRole.HasValue ? _repository.GetRole(user.UserRole.Value) : null;
+
         var profileViewModel = new ProfileViewModel
         {
             Id = user.UserId,
@@ -29,13 +32,15 @@ public class UserService(IUserRepository _repository) : IUserService
             Country = user.CountryId,
             State = user.StateId,
             City = user.CityId,
-            Phone = string.Join(", ", user.Phone),
+            Phone = user.Phone,
             Address = user.Address,
             ZipCode = user.ZipCode,
+            Role = role?.RoleName,
         };
 
         return profileViewModel;
     }
+    
 
     public List<Country> GetCountries()
     {
@@ -117,7 +122,7 @@ public class UserService(IUserRepository _repository) : IUserService
             // user_view.ProfileImg = string.Join(", ", user.ImgUrl);
             user_view.Phone = user.Phone?.ToString();
             user_view.Status = user.Status ?? false;
-            // user_view.RoleName = role?.RoleName;
+            user_view.RoleName = role?.RoleName;
 
             user_data.Add(user_view);
         }

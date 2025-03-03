@@ -17,8 +17,6 @@ public class UserRepository (PizzaShopContext _context) : IUserRepository
         return user;
     }
 
-    
-
     public Role GetRole(int id)
     {
         var user = _context.Users.FirstOrDefault(u => u.UserId == id);

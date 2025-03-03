@@ -9,13 +9,13 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PizzaShop.Web
 build_property.RootNamespace = PizzaShop.Web
-build_property.ProjectDir = d:\DotNet N Layered\PizzaShop\PizzaShop.Web\
+build_property.ProjectDir = D:\DotNet N Layered\PizzaShop\PizzaShop.Web\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = d:\DotNet N Layered\PizzaShop\PizzaShop.Web
+build_property.MSBuildProjectDirectory = D:\DotNet N Layered\PizzaShop\PizzaShop.Web
 build_property._RazorSourceGeneratorDebug = 
 
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Home/Index.cshtml]
@@ -44,6 +44,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/User/Adduser.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxBZGR1c2VyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/User/Edituser.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxFZGl0dXNlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/User/profile.cshtml]

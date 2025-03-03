@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Implementations;
@@ -65,7 +66,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         // user.MyImage = model.MyImage;
     }
 
-    public IActionResult GetCountries()
+    public ActionResult GetCountries()
     {
         var countries = _userService.GetCountries();
         return Json(countries);
@@ -111,6 +112,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         return View();
     }
 
+    [Authorize(Roles = "1")]
     [HttpGet]
     public IActionResult AddUser()
     {
@@ -125,5 +127,6 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         TempData["Success"] = "User Added Successfully";
         return RedirectToAction("Users");
     }
+
     
 }

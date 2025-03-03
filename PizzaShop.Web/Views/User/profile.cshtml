@@ -15,12 +15,12 @@
             </div>
             <div class="row px-3">
                 <div class="UserDetails d-flex align-items-center justify-content-between">
-                    <div class="imagesec d-flex align-items-center flex-md-row flex-column">
+                    <div class="images d-flex align-items-center flex-md-row flex-column">
                         <img src="~/images/Default_pfp.svg.png" alt=""
                             style="max-height: 100px; aspect-ratio: 1/1; margin-top: -30px;">
                         <div class=" ms-2">
                             <h2>@Model.FirstName @Model.LastName</h2>
-                            @* <h4>@Model.Role</h4> *@
+                            <h4>@Model.Role</h4>
                         </div>
                     </div>
                     <div>
@@ -63,7 +63,7 @@
                         <div class="form-floating">
                             <select class="form-select" id="countrySelect" aria-label="Floating label select example"
                                 asp-for="Country">
-                                <option selected>Select country</option>
+
                             </select>
                             <label for="countrySelect">Country</label>
                         </div>
@@ -71,8 +71,8 @@
                     <div class="col-lg-4 pb-3">
                         <div class="form-floating">
                             <select class="form-select" id="stateSelect" aria-label="Floating label select example"
-                                asp-for="State" disabled>
-                                <option selected>Select state</option>
+                                asp-for="State">
+
                             </select>
                             <label for="stateSelect">State</label>
                         </div>
@@ -80,8 +80,7 @@
                     <div class="col-lg-4 pb-3">
                         <div class="form-floating">
                             <select class="form-select" id="citySelect" aria-label="Floating label select example"
-                                asp-for="City" disabled>
-                                <option selected>Select city</option>
+                                asp-for="City">
                             </select>
                             <label for="citySelect">City</label>
                         </div>
@@ -104,9 +103,9 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2 pe-3 pt-2 pb-3">
-                    <button class="btn btn-primary" type="submit">Update</button>   
+                    <button class="btn btn-primary" type="submit">Update</button>
                     @* <button class="btn btn-outline-primary" type="button">Cancel</button> *@
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary" >Cancel</a>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
                 </div>
             </form>
         </div>
@@ -115,38 +114,99 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
-        debugger;
-        $.getJSON('/User/GetCountries', function (data) {
-            console.log(data);
-            $.each(data, function (index, Country) {
-                $('#countrySelect').append(`<option value="${Country.countryId}">${Country.countryName}</option>`);
-            });
-        });
-
-        $('#countrySelect').change(function () {
-            var countryId = $(this).val();
-            $('#stateSelect').empty().append('<option selected>Select state</option>').prop('disabled', false);
-
-            $.getJSON(`/User/GetStates?CountryId=${countryId}`, function (data) {
+        $.ajax({
+            type: 'GET',
+            url: '/User/GetCountries',
+            success: function (data) {
                 console.log(data);
-                $.each(data, function (index, State) {
-                    $('#stateSelect').append(`<option value="${State.stateId}">${State.stateName}</option>`);
-                });
-            });
+                var s = '<option value="-1">Please select a country</option>';
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].countryId == @Model.Country) {
+                        s += '<option value="' + data[i].countryId + '" selected>' + data[i].countryName + '</option>';
+                    }
+                    else {
+                        s += '<option value="' + data[i].countryId + '">' + data[i].countryName + '</option>';
+                    }
+                }
+                $("#countrySelect").html(s);
+            }
         });
-
-        $('#stateSelect').change(function () {
-            var stateId = $(this).val();
-            $('#citySelect').empty().append('<option selected>Select city</option>').prop('disabled', false);
-
-            $.getJSON(`/User/GetCities?stateId=${stateId}`, function (data) {
-                $.each(data, function (index, City) {
-                    $('#citySelect').append(`<option value="${City.cityId}">${City.cityName}</option>`);
-                });
-            });
+        $.ajax({
+            type: 'GET',
+            url: '/User/GetStates',
+            data: { CountryId: @Model.Country },
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select a state</option>';
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].stateId == @Model.State) {
+                        s += '<option value="' + data[i].stateId + '" selected>' + data[i].stateName + '</option>';
+                    }
+                    else {
+                        s += '<option value="' + data[i].stateId + '">' + data[i].stateName + '</option>';
+                    }
+                }
+                $("#stateSelect").html(s);
+            }
         });
+        $.ajax({
+            type: 'GET',
+            url: '/User/GetCities',
+            data: { stateId: @Model.State },
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select a city</option>';
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].cityId == @Model.City) {
+                        s += '<option value="' + data[i].cityId + '" selected>' + data[i].cityName + '</option>';
+                    }
+                    else {
+                        s += '<option value="' + data[i].cityId + '">' + data[i].cityName + '</option>';
+                    }
+                }
+                $("#citySelect").html(s);
+            }
+        });
+    });
+
+    $('#countrySelect').change(function () {
+        var countryId = $(this).val();
+        $('#stateSelect').empty().append('<option selected>Select state</option>').prop('disabled', false);
+            $.ajax({
+                type: 'GET',
+                url: '/User/GetStates',
+                data: { CountryId: countryId },
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    var s = '<option value="-1">Please select a state</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].stateId + '">' + data[i].stateName + '</option>';
+                    }
+                    $("#stateSelect").html(s);
+                }
+            });
+    });
+
+    $('#stateSelect').change(function () {
+        var stateId = $(this).val();
+        $('#citySelect').empty().append('<option selected>Select city</option>').prop('disabled', false);
+            $.ajax({
+                type: 'GET',
+                url: '/User/GetCities',
+                data: { stateId: stateId },
+                success: function (data) {
+                    var s = '<option value="-1">Please select a city</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].cityId + '">' + data[i].cityName + '</option>';
+                    }
+                    $("#citySelect").html(s);
+                }
+            });
     });
 </script>

@@ -5,6 +5,10 @@ using PizzaShop.Service.Implementations;
 using PizzaShop.Service.Interfaces;
 using PizzaShop.Repository.Implementations;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PizzaShop.Web.MiddleWare;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,16 +24,37 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
-// Add authentication using cookies
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Validation/Login"; // Redirect to login if not authenticated
-        options.LogoutPath = "/Validation/Logout";
-        options.AccessDeniedPath = "/Validation/AccessDenied"; // Redirect if unauthorized
-    });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+  {
+      options.SaveToken = true;
+      options.RequireHttpsMetadata = false;
+      options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+      {
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          ValidAudience = "AuthenticationPizzaShopUsers",
+          ValidIssuer = "AuthenticationDemo",
+          ClockSkew = TimeSpan.Zero,// It forces tokens to expire exactly at token expiration time instead of 5 minutes later
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperSecretKey@2024#JWTAuth!$%^&*()"))
+      };
+  });
 
-builder.Services.AddAuthorization();
+
+// Add authentication using cookies
+// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//     .AddCookie(options =>
+//     {
+//         options.LoginPath = "/Validation/Login";
+//         options.LogoutPath = "/Validation/Logout";
+//         options.AccessDeniedPath = "/Validation/AccessDenied";
+//     });
+
+// builder.Services.AddAuthorization();
 
 // Add session services
 builder.Services.AddSession(options =>
@@ -56,6 +81,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseMiddleware<JwtMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
