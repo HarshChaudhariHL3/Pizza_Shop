@@ -4,14 +4,14 @@
     "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\PizzaShop.Web.csproj": {}
   },
   "projects": {
-    "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
+    "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj",
+        "projectUniqueName": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj",
         "projectName": "PizzaShop.Entity",
-        "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj",
+        "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj",
         "packagesPath": "C:\\Users\\pca96\\.nuget\\packages\\",
-        "outputPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\obj\\",
+        "outputPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pca96\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -100,8 +100,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
-                "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
+              "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
+                "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
               }
             }
           }
@@ -168,8 +168,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
-                "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
+              "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
+                "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
               },
               "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Repository\\PizzaShop.Repository.csproj": {
                 "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Repository\\PizzaShop.Repository.csproj"
@@ -247,8 +247,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
-                "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
+              "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
+                "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
               },
               "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj": {
                 "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj"

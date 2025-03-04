@@ -6115,8 +6115,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
-              "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
+            "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
+              "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
             },
             "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj": {
               "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj"

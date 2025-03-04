@@ -11,11 +11,11 @@ public partial class RolePermission
 
     public int? RoleId { get; set; }
 
-    public bool? CanView { get; set; }
+    public bool CanView { get; set; }
 
-    public bool? CanAddEdit { get; set; }
+    public bool CanAddEdit { get; set; }
 
-    public bool? CanDelete { get; set; }
+    public bool CanDelete { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -24,6 +24,8 @@ public partial class RolePermission
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public bool IsChecked { get; set; }
 
     public virtual Permission? Permission { get; set; }
 

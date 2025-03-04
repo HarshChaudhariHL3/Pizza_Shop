@@ -1,116 +1,116 @@
-            <div class="row">
-                <div class="col-lg-12 d-flex justify-content-between">
-                    <div>
-                        <h2>Permission</h2>
+@{
+    ViewData["Title"] = "Roles and Permissions";
+}
+@model PizzaShop.Entity.ViewModel.RoleViewModel
+
+<div class="row">
+    <div class="col-lg-12 d-flex justify-content-between">
+        <div>
+            <h2>Permission</h2>
+        </div>
+        <div>
+            <div class="input-group">
+                <div class="d-flex align-items-center">
+                    <div class="border">
+                        <a asp-action="Roles" asp-controller="Role" class="btn border border-info" role="button"><i
+                                class="bi bi-arrow-left"></i>Back</a>
                     </div>
-                    <div>
-                        <div class="input-group">
-                            <div class="d-flex align-items-center">
-                                <div class="border">
-                                    <a asp-action="Roles" asp-controller="Role" class="btn border border-info" role="button"><i
-                                            class="bi bi-arrow-left"></i>Back</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white pt-3 mt-3">
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="form-floating ">
-                                <input type="text" class="form-control" id="fname" value="@ViewBag.role" />
-
-                                <label for="role">Role</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive mt-3">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="flexCheckIndeterminate">
-                                            <label class="form-check-label" for="flexCheckIndeterminate">
-                                                Permission
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th scope="col">Can View</th>
-                                    <th scope="col">Can Add/Edit</th>
-                                    <th scope="col">Can Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="flexCheckChecked" checked>
-                                            <label class="form-check-label" for="flexCheckChecked">
-                                                Users
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckChecked" checked>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckChecked" checked>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckChecked" checked>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            Roles and Permission
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckDefault">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckDefault">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckDefault">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-end gap-3 m-3">
-                            <a href="" class="btn btn-primary text-white">Save</a>
-                            <a href="" class="btn border border-primary text-primary">Cancel</a>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div>
-
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="bg-white pt-3 mt-3">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-floating ">
+                    <input type="text" class="form-control" id="fname" value="@ViewBag.RoleName" />
+
+                    <label for="role">Role</label>
+                </div>
+            </div>
+        </div>
+        <form method="post" asp-action="Permission" asp-controller="Role">
+            <input type="text"asp-for="RoleId" hidden >
+            <div class="table-responsive mt-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+
+                                @* <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+                            </div> *@
+                            </th>
+                            <th>
+                                <label class="form-check-label" for="flexCheckIndeterminate">
+                                    Permission
+                                </label>
+                            </th>
+                            <th scope="col">Can View</th>
+                            <th scope="col">Can Add/Edit</th>
+                            <th scope="col">Can Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for (int i = 0; i < Model.PermissionList.Count; i++)
+                        {
+                            <tr>
+                                <input type="text" name="" hidden asp-for="PermissionList[i].PermissionId">
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input main-checkbox" type="checkbox" value=""
+                                            asp-for="PermissionList[i].IsChecked" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <label class="form-check" for="flexCheckIndeterminate">
+                                        @Model.PermissionList[i].ModuleName
+                                    </label>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-switch" type="checkbox"
+                                            asp-for="PermissionList[i].CanView" value="" id="flexCheckIndeterminate" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-switch" type="checkbox"
+                                            asp-for="PermissionList[i].CanAddEdit" value="" id="flexCheckIndeterminate" disabled />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input toggle-switch" type="checkbox"
+                                            asp-for="PermissionList[i].CanDelete" value="" id="flexCheckIndeterminate" disabled />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end gap-3 m-3">
+                    <button type="submit" class="btn btn-primary text-white">Save</button>
+                    <a asp-action="Roles" asp-controller="Role" class="btn border border-primary text-primary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".main-checkbox").forEach(x => {
+            x.addEventListener("change", function (){
+                let row = this.closest("tr");
+                let toggleswitch = row.querySelectorAll(".toggle-switch");
+
+                toggleswitch.forEach(y => {
+                    y.disabled = !this.checked;
+                })
+            })
+        })
+    })
+</script>

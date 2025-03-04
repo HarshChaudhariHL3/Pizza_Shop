@@ -17,7 +17,7 @@ namespace AuthenticationDemo.Utils
             {
                 HttpOnly = true,
                 Secure = true,
-                Expires = DateTime.UtcNow.AddMinutes(30)
+                Expires = DateTime.UtcNow.AddDays(3)
             });
         }
 

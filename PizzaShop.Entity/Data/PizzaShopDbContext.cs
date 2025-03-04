@@ -676,6 +676,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
+            entity.Property(e => e.IsChecked)
+                .HasDefaultValue(false)
+                .HasColumnName("Is_checked");
             entity.Property(e => e.ModifiedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")

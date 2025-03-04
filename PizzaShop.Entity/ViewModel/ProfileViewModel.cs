@@ -31,7 +31,7 @@ public class ProfileViewModel
 
     public IFieldInfo? ProfileImg { get; set; }
 
-    //  public IFieldInfo? MyImage { get; set; }
+     public IFieldInfo? MyImage { get; set; }
 
     public static void Add(string v, string? userId)
     {
