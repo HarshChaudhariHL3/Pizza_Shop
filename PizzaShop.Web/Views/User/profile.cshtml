@@ -3,121 +3,6 @@
 }
 @model PizzaShop.Entity.ViewModel.ProfileViewModel
 
-@* <div class="ms-5 mb-4" style="color: rgb(0, 102, 187);">
-    <h1>My Profile</h1>
-</div>
-
-<div class="d-flex">
-    <div class="w-100">
-        <div class="bg-white border ms-5 me-5">
-            <div class="row ">
-                <img src="~/images/profile_div_bg.jpg" alt="bg-image" style="max-width: 100%; max-height: 10dvh;">
-            </div>
-            <div class="row px-3">
-                    <div class=" images d-flex align-items-center flex-md-row flex-column">
-                        <div class="position-absolute">
-                            <img src="~/images/Default_pfp.svg.png" alt=""
-                                style="max-height: 100px; aspect-ratio: 1/1; margin-top: -30px;">
-                            <label for="upload-photo" class="position-absolute">
-                                <img src="~/images/icons/camera.png" width="20" height="20" asp-for="ProfileImg" alt="">
-                            </label>
-                            <input type="file" id="upload-photo" style="display: none;">
-                        </div>
-                    </div>
-                <div class="UserDetails d-flex align-items-center justify-content-between">
-                    <div style="margin-left: 100px;">
-                        <h2>@Model.FirstName @Model.LastName</h2>
-                        <h4>@Model.Role</h4>
-                    </div>
-                    <div>
-                        <p>@Model.Email</p>
-                    </div>
-                </div>
-            </div>
-            <form method="post" asp-controller="User" asp-action="Profile">
-                <div class="row ps-3 pe-3 pt-3">
-                    <div class="col-lg-6 pb-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="firstnameInput" placeholder="First Name"
-                                asp-for="FirstName">
-                            <label for="firstnameInput">First Name</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 pb-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="lastnameInput" placeholder="Last Name"
-                                asp-for="LastName">
-                            <label for="lastnameInput">Last Name</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 pb-1">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="usernameInput" placeholder="User Name"
-                                asp-for="Email">
-                            <label for="usernameInput">User Name</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 pb-1">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="phonenumberInput" asp-for="Phone" />
-                            <label for="phonenumberInput">Phone number</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row ps-3 pe-3 pt-3">
-                    <div class="col-lg-4 pb-3">
-                        <div class="form-floating">
-                            <select class="form-select" id="countrySelect" aria-label="Floating label select example"
-                                asp-for="Country">
-                            </select>
-                            <label for="countrySelect">Country</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 pb-3">
-                        <div class="form-floating">
-                            <select class="form-select" id="stateSelect" aria-label="Floating label select example"
-                                asp-for="State">
-
-                            </select>
-                            <label for="stateSelect">State</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 pb-3">
-                        <div class="form-floating">
-                            <select class="form-select" id="citySelect" aria-label="Floating label select example"
-                                asp-for="City">
-                            </select>
-                            <label for="citySelect">City</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row ps-3 pe-3 pt-3">
-                    <div class="col-lg-8 pb-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="addressInput" placeholder="Address"
-                                asp-for="Address">
-                            <label for="addressInput">Address</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 pb-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="zipcodeInput" placeholder="Zip Code"
-                                asp-for="ZipCode">
-                            <label for="zipcodeInput">Zip Code</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end gap-2 pe-3 pt-2 pb-3">
-                    <button class="btn btn-primary" type="submit">Update</button> 
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> *@
-
-
-
 <div class="">
     <div class="row">
         <div class="col-lg-12 d-flex justify-content-between">
@@ -166,62 +51,70 @@
                     <input type="hidden" asp-for="Id" />
                     <div class="row g-3">
                         <div class="col-md-6">
-                            @* <div class="form-floating">
-                            </div> *@
                             <div class="form-floating ">
-                            <label class="form-label" for="Firstname">First Name</label>
-                            <input asp-for="FirstName" type="text" class="form-control" id="Firstname">
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                                @* <input type="email" class="form-control" id="floatingInput"
-                                    placeholder="name@example.com">
-                                <label for="floatingInput">Email address</label> *@
+                                <input type="text" class="form-control" id="Firstname" asp-for="FirstName">
+                                <label for="Firstname">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-6 form-floating">
-                            <label asp-for="LastName" for="Lastname" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="Lastname" asp-for="LastName">
-                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        <div class="col-md-6">
+                            <div class="form-floating ">
+                                <input type="text" class="form-control" id="Lastname" asp-for="LastName">
+                                <label for="Lastname">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-md-6 form-floating">
-                            <label asp-for="UserName" for="Username" class="form-label">User Name</label>
-                            <input type="text" class="form-control" id="Username" asp-for="UserName">
-                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        <div class="col-md-6">
+                            <div class="form-floating ">
+                                <input type="text" class="form-control" id="Username" asp-for="Username">
+                                <label for="Username">User Name</label> 
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-md-6 form-floating">
-                            <label asp-for="Phone" class="form-label">Phone</label>
-                            <input type="text" class="form-control" asp-for="Phone">
-                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        <div class="col-md-6">
+                            <div class="form-floating ">
+                                <input type="text" class="form-control" id="Phone" asp-for="Phone">
+                                <label for="Phone">Phone</label>
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-floating">
+                        <div class="col-md-4">
+                            <div class="form-floating">
 
-                            <select class="form-select" id="countrySelect" aria-label="Floating label select example"
-                                asp-for="Country">
+                            <select class="form-select" id="countrySelect" aria-label="Floating label select example" asp-for="Country">
                             </select>
                             <label for="countrySelect">Country</label>
 
+                            </div>
                         </div>
-                        <div class="col-md-4 form-floating">
-                            <select class="form-select" id="stateSelect" aria-label="Floating label select example"
-                                asp-for="State">
-
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                            <select class="form-select" id="stateSelect" aria-label="Floating label select example" asp-for="State">
                             </select>
                             <label for="stateSelect">State</label>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-floating">
-                            <select class="form-select" id="citySelect" aria-label="Floating label select example"
-                                asp-for="City">
+                        <div class="col-md-4">
+                            <div class="form-floating">
+
+                            <select class="form-select" id="citySelect" aria-label="Floating label select example" asp-for="City">
                             </select>
                             <label for="citySelect">City</label>
+                            </div>
                         </div>
-                        <div class="col-md-8 form-floating">
-                            <label class="form-label">Address</label>
-                            <input type="text" class="form-control" asp-for="Address">
-                            <span asp-validation-for="Address" class="text-danger"></span>
+                        <div class="col-md-8">
+                            <div class="form-floating ">
+                                <input type="text" class="form-control" id="Address" asp-for="Address">
+                                <label for="Address">Address</label>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-floating">
-                            <label asp-for="ZipCode" class="form-label">Zipcode</label>
-                            <input type="text" class="form-control" asp-for="ZipCode">
-                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        <div class="col-md-4">
+                            <div class="form-floating ">
+                                <input type="text" class="form-control" id="ZipCode" asp-for="ZipCode">
+                                <label for="ZipCode">ZipCode</label>
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center justify-content-md-end mt-3">

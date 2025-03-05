@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\DotNet N Layered\PizzaShop\PizzaShop.Web
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Partial View/CategoryList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFydGlhbCBWaWV3XENhdGVnb3J5TGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -26,8 +30,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Menu/menuitem.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxtZW51aXRlbS5jc2h0bWw=
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Menu/menu.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxtZW51LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Role/Permission.cshtml]
