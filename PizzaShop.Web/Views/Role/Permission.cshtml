@@ -29,23 +29,18 @@
                 </div>
             </div>
         </div>
-        <form method="post" asp-action="Permission" asp-controller="Role">
-            <input type="text"asp-for="RoleId" hidden >
+        <form method="post">
+            <input type="text" asp-for="RoleId" hidden>
             <div class="table-responsive mt-3">
                 <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">
-
-                                @* <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
-                            </div> *@
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAll">
+                                </div>
                             </th>
-                            <th>
-                                <label class="form-check-label" for="flexCheckIndeterminate">
-                                    Permission
-                                </label>
-                            </th>
+                            <th scope="col">Permission</th>
                             <th scope="col">Can View</th>
                             <th scope="col">Can Add/Edit</th>
                             <th scope="col">Can Delete</th>
@@ -53,37 +48,39 @@
                     </thead>
                     <tbody>
 
-                        @for (int i = 0; i < Model.PermissionList.Count; i++)
+                        @for (int i = 0; i < @Model.PermissionList.Count(); i++)
                         {
+                            <input type="hidden" asp-for="PermissionList[i].PermissionId">
+                            <input type="hidden" asp-for="PermissionList[i].ModuleName">
+
+
                             <tr>
-                                <input type="text" name="" hidden asp-for="PermissionList[i].PermissionId">
                                 <td>
                                     <div class="form-check">
-                                        <input class="form-check-input main-checkbox" type="checkbox" value=""
-                                            asp-for="PermissionList[i].IsChecked" />
+                                        <input class="form-check-input row-checkbox" id="checked'@i'"  type="checkbox" />
                                     </div>
                                 </td>
                                 <td>
-                                    <label class="form-check" for="flexCheckIndeterminate">
+                                    <label class="form-check" for="checked'@i'">
                                         @Model.PermissionList[i].ModuleName
                                     </label>
                                 </td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-switch" type="checkbox"
-                                            asp-for="PermissionList[i].CanView" value="" id="flexCheckIndeterminate" disabled />
+                                        <input class="form-check-input toggle-switch canView" type="checkbox"
+                                            asp-for="@Model.PermissionList[i].CanView"  />
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-switch" type="checkbox"
-                                            asp-for="PermissionList[i].CanAddEdit" value="" id="flexCheckIndeterminate" disabled />
+                                        <input class="form-check-input toggle-switch canAddEdit" type="checkbox"
+                                            asp-for="@Model.PermissionList[i].CanAddEdit" />
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-switch" type="checkbox"
-                                            asp-for="PermissionList[i].CanDelete" value="" id="flexCheckIndeterminate" disabled />
+                                        <input class="form-check-input toggle-switch canDelete" type="checkbox"
+                                            asp-for="@Model.PermissionList[i].CanDelete"  />
                                     </div>
                                 </td>
                             </tr>
@@ -93,24 +90,82 @@
                 </table>
                 <div class="d-flex justify-content-end gap-3 m-3">
                     <button type="submit" class="btn btn-primary text-white">Save</button>
-                    <a asp-action="Roles" asp-controller="Role" class="btn border border-primary text-primary">Cancel</a>
+                    <a asp-action="Roles" asp-controller="Role"
+                        class="btn border border-primary text-primary">Cancel</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".main-checkbox").forEach(x => {
-            x.addEventListener("change", function (){
-                let row = this.closest("tr");
-                let toggleswitch = row.querySelectorAll(".toggle-switch");
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-                toggleswitch.forEach(y => {
-                    y.disabled = !this.checked;
-                })
-            })
-        })
-    })
+
+<script>
+    $(document).ready(function () {
+        let selectAll = $("#selectAll");
+        let checkboxes = $(".row-checkbox");
+
+        function updateSelectAllState() {
+            let checkedCount = checkboxes.filter(":checked").length;
+            selectAll.prop("indeterminate", checkedCount > 0 && checkedCount < checkboxes.length)
+                        .prop("checked", checkedCount === checkboxes.length);
+        }
+
+        function toggleRowSwitches(row, isChecked) {
+            let switches = row.find(".toggle-switch");
+            switches.prop("disabled", !isChecked);
+            if (!isChecked) {
+                switches.prop("checked", false);
+            }
+        }
+
+        selectAll.change(function () {
+            let isChecked = this.checked;
+            checkboxes.prop("checked", isChecked);
+            checkboxes.each(function () {
+                let row = $(this).closest("tr");
+                toggleRowSwitches(row, isChecked);
+            });
+            updateSelectAllState();
+        });
+
+        checkboxes.change(function () {
+            let row = $(this).closest("tr");
+            let isChecked = $(this).is(":checked");
+            toggleRowSwitches(row, isChecked);
+            updateSelectAllState();
+        });
+
+        $(".canAddEdit, .canDelete").change(function () {
+            let row = $(this).closest("tr");
+            let canView = row.find(".canView");
+
+            if ($(this).is(":checked")) {
+                canView.prop("checked", true);
+            }
+        });
+
+        $(".canView").change(function () {
+            let row = $(this).closest("tr");
+            let canAddEdit = row.find(".canAddEdit");
+            let canDelete = row.find(".canDelete");
+
+            if (!$(this).is(":checked")) {
+                canAddEdit.prop("checked", false);
+                canDelete.prop("checked", false);
+            }
+        });
+
+        checkboxes.each(function () {
+            let row = $(this).closest("tr");
+            let canView = row.find(".canView");
+            if (canView.is(":checked")) {
+                $(this).prop("checked", true);
+            }
+            let isChecked = $(this).is(":checked");
+            toggleRowSwitches(row, isChecked);
+        });
+        updateSelectAllState();
+    });
 </script>

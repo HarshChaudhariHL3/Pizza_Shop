@@ -1,4 +1,5 @@
 using System.Runtime.Serialization.Formatters;
+using Microsoft.AspNetCore.Http;
 
 namespace PizzaShop.Entity.ViewModel;
 
@@ -9,6 +10,9 @@ public class ProfileViewModel
     public string? Email { get; set; }
 
     public string? Role { get; set; }
+
+    public string? UserName { get; set; }
+
 
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
@@ -29,9 +33,9 @@ public class ProfileViewModel
 
     public int? ZipCode { get; set; }
 
-    public IFieldInfo? ProfileImg { get; set; }
+    public IFormFile FormFile { get; set; }
 
-     public IFieldInfo? MyImage { get; set; }
+
 
     public static void Add(string v, string? userId)
     {

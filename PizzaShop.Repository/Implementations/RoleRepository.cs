@@ -8,9 +8,6 @@ namespace PizzaShop.Repository.Implementations;
 
 public class RoleRepository(PizzaShopDbContext _content) : IRoleRepository
 {
-
-
-
     public List<Role> GetRoles()
     {
         return _content.Roles.ToList();
@@ -41,6 +38,23 @@ public class RoleRepository(PizzaShopDbContext _content) : IRoleRepository
         return permissionList;
     }
 
+    public RoleViewModel UpdatePermission(RoleViewModel model){
+        if(model != null){
+            var query = _content.RolePermissions.Where(x => x.RoleId == model.RoleId).ToList();
+            foreach(var item in model.PermissionList){
+                var value = query.FirstOrDefault(y => y.PermissionId == item.PermissionId );
+
+                value.CanView = item.CanView;
+                value.CanAddEdit = item.CanAddEdit;
+                value.CanDelete = item.CanDelete;
+
+                _content.Update(value);
+            }
+            _content.SaveChanges();
+            return model;
+        }
+        return null;
+    }
 
 
 }

@@ -24,5 +24,13 @@ public class RoleService(IRoleRepository _roleRepository) : IRoleService
         return _roleRepository.GetPermissionListByRoleId(roleId);
     } 
 
+    public RoleViewModel UpdatePermission (RoleViewModel model){
+        var index = _roleRepository.UpdatePermission(model);
+        if(index !=null){
+            return model;
+        }
+        return null;
+    }
+
 
 }

@@ -3,7 +3,7 @@
 }
 @model PizzaShop.Entity.ViewModel.ProfileViewModel
 
-<div class="ms-5 mb-4" style="color: rgb(0, 102, 187);">
+@* <div class="ms-5 mb-4" style="color: rgb(0, 102, 187);">
     <h1>My Profile</h1>
 </div>
 
@@ -108,13 +108,131 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end gap-2 pe-3 pt-2 pb-3">
-                    <button class="btn btn-primary" type="submit">Update</button>
-                    @* <button class="btn btn-outline-primary" type="button">Cancel</button> *@
+                    <button class="btn btn-primary" type="submit">Update</button> 
                     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
+</div> *@
+
+
+
+<div class="">
+    <div class="row">
+        <div class="col-lg-12 d-flex justify-content-between">
+            <div>
+                <h2>My Profile </h2>
+            </div>
+        </div>
+        <form asp-controller="User" asp-action="Profile" enctype="multipart/form-data" asp-antiforgery="true"
+            method="post">
+            <div class="mb-5">
+                <div>
+                    <div class="position-relative">
+                        <img src="~/images/profile_div_bg.jpg" alt="" style=" width: 100%; height: 100px; "
+                            class="col-4">
+                    </div>
+
+                    <div class="">
+                        <div class="position-absolute" style="margin-top: -40px; z-index: 1;">
+                            <img class="position-relative rounded-circle profile-image" alt="Profile Image"
+                                height="100">
+                            <label class="position-absolute bottom-0 end-0 bg-light rounded-circle p-1 border"
+                                for="upload-photo" style="cursor: pointer;">
+                                <img src="~/images/icons/camera.png" width="20" height="20" alt="Upload">
+                            </label>
+                            <input type="file" id="upload-photo" class="d-none" asp-for="FormFile">
+                        </div>
+                        <div class=" " style="margin-left:100px ;">
+                            <h3>
+                                Admin
+
+                            </h3>
+                            <span>@Model.Role</span>
+
+                            <p style="float: right; margin-right: 20px;">
+                                @Model.Email
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card p-4" style="margin-top: 0px;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            @* <div class="form-floating">
+                            </div> *@
+                            <div class="form-floating ">
+                            <label class="form-label" for="Firstname">First Name</label>
+                            <input asp-for="FirstName" type="text" class="form-control" id="Firstname">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                @* <input type="email" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Email address</label> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            <label asp-for="LastName" for="Lastname" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="Lastname" asp-for="LastName">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            <label asp-for="UserName" for="Username" class="form-label">User Name</label>
+                            <input type="text" class="form-control" id="Username" asp-for="UserName">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            <label asp-for="Phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" asp-for="Phone">
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 form-floating">
+
+                            <select class="form-select" id="countrySelect" aria-label="Floating label select example"
+                                asp-for="Country">
+                            </select>
+                            <label for="countrySelect">Country</label>
+
+                        </div>
+                        <div class="col-md-4 form-floating">
+                            <select class="form-select" id="stateSelect" aria-label="Floating label select example"
+                                asp-for="State">
+
+                            </select>
+                            <label for="stateSelect">State</label>
+                        </div>
+                        <div class="col-md-4 form-floating">
+                            <select class="form-select" id="citySelect" aria-label="Floating label select example"
+                                asp-for="City">
+                            </select>
+                            <label for="citySelect">City</label>
+                        </div>
+                        <div class="col-md-8 form-floating">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" asp-for="Address">
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 form-floating">
+                            <label asp-for="ZipCode" class="form-label">Zipcode</label>
+                            <input type="text" class="form-control" asp-for="ZipCode">
+                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center justify-content-md-end mt-3">
+                        <button type="submit" class="btn btn-primary me-2">Update</button>
+                        <a asp-action="AdminHome" asp-controller="Home" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 

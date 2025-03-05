@@ -33,11 +33,11 @@ public class RoleController(IRoleService _roleService) : Controller
             RoleId = roleId,
             PermissionList = rolePermission.Select(x => new PermissionViewModel
             {
-                PermissionId = x.RolePermissionId,
+                PermissionId = x.PermissionId,
                 ModuleName = permissionList.FirstOrDefault(p => p.PermissionId == x.PermissionId).ModuleName,
                 CanView = x.CanView,
                 CanAddEdit = x.CanAddEdit,
-                CanDelete = x.CanDelete
+                CanDelete = x.CanDelete,
             }).ToList() 
         };
 
@@ -47,9 +47,8 @@ public class RoleController(IRoleService _roleService) : Controller
     [HttpPost]
     public IActionResult Permission(RoleViewModel model)
     {
-
-        
+        var updated = _roleService.UpdatePermission(model);  
         TempData["Success"] = "Permission updated successfully.";
-        return RedirectToAction("Roles");
+        return RedirectToAction("Roles", new{RoleId = model.RoleId});
     }
 }

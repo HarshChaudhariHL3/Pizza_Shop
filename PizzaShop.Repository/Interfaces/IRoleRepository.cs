@@ -10,4 +10,5 @@ public interface IRoleRepository
     List<Permission> GetPermissionListByRoleId(int roleId);
     Role GetRoleById(int roleId);
 
+    RoleViewModel UpdatePermission(RoleViewModel model);
     }
