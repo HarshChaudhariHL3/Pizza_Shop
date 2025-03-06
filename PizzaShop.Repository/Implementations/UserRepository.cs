@@ -55,7 +55,6 @@ public class UserRepository (PizzaShopDbContext _context) : IUserRepository
 
     public  List<State> GetState(int country_id)
     {
-
         return _context.States.Where(s => s.CountryId == country_id).ToList();
     }
 
@@ -98,6 +97,7 @@ public class UserRepository (PizzaShopDbContext _context) : IUserRepository
 
     public bool Update(User user)
     {
+
         _context.Users.Update(user);
         return _context.SaveChanges() > 0;
     }

@@ -48,18 +48,6 @@ builder.Services.AddAuthentication(options =>
       };
   });
 
-
-// Add authentication using cookies
-// builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//     .AddCookie(options =>
-//     {
-//         options.LoginPath = "/Validation/Login";
-//         options.LogoutPath = "/Validation/Logout";
-//         options.AccessDeniedPath = "/Validation/AccessDenied";
-//     });
-
-// builder.Services.AddAuthorization();
-
 // Add session services
 builder.Services.AddSession(options =>
 {
