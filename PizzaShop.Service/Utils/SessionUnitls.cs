@@ -6,11 +6,6 @@ namespace AuthenticationDemo.Utils
 {
     public static class SessionUtils
     {
-        /// <summary>
-        /// Method to store user details in session
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <param name="user"></param>
         public static void SetUser(HttpContext httpContext, User user)
         {
             if (user != null)
@@ -19,15 +14,10 @@ namespace AuthenticationDemo.Utils
                 httpContext.Session.SetString("UserData", userData);
 
                 // Store simple string in Session
-                //httpContext.Session.SetString("UserId", user.Id.ToString());
+                httpContext.Session.SetString("UserId", user.UserId.ToString());
             }
         }
 
-        /// <summary>
-        /// Method to retrieve user details from session
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
         public static User? GetUser(HttpContext httpContext)
         {
             // Check session first
@@ -41,11 +31,6 @@ namespace AuthenticationDemo.Utils
 
             return string.IsNullOrEmpty(userData) ? null : JsonSerializer.Deserialize<User>(userData);
         }
-
-        /// <summary>
-        /// Method to clear all Session data
-        /// </summary>
-        /// <param name="httpContext"></param>
         public static void ClearSession(HttpContext httpContext) => httpContext.Session.Clear();
 
     }

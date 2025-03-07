@@ -21,17 +21,9 @@ public class AuthService(IAuthRepository _repository) : IAuthService
         return user;
     }
 
-    public async Task<User> Useremail(string email)
+    public  User Useremail(string email)
     {
-
-        // var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
-        var user = await _repository.Useremail(email);
-        // if (user == null || !PasswordUtills.VerifyPassword(password, user.PasswordHash))
-        //     return null;
-        if ( user == null)
-        {
-            return null ;
-        }
+        var user =  _repository.Useremail(email);
         return user;
     }
 
@@ -39,7 +31,7 @@ public class AuthService(IAuthRepository _repository) : IAuthService
         if(model.NewPassword != model.ConfirmPassword){
             return (false, "Password does not match");
         }
-        var user = await _repository.Useremail(model.email);
+        var user =  _repository.Useremail(model.email);
         if(user == null){
             return (false, "User not found");
         }
@@ -54,7 +46,7 @@ public class AuthService(IAuthRepository _repository) : IAuthService
         if(model.NewPassword != model.ConfirmPassword){
             return (false, "Password does not match");
         }
-        var user = await _repository.Useremail(model.email);
+        var user =  _repository.Useremail(model.email);
         if(user == null){
             return (false, "User not found");
         }

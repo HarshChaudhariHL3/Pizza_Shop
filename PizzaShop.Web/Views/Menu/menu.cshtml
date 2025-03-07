@@ -2,31 +2,32 @@
     ViewData["Title"] = "Menu Page";
 }
 
-<main>
+<main class="">
     <!-- content-box  -->
     <!-- header  -->
-    <h3 class="text-blue font-weight-bold">Menu</h3>
+    <h1 class="text-primary">Menu</h1>
     <!-- Box Section  -->
-    <div class="bg-white border rounded shadow mt-3 p-3">
+    <div class="d-flex gap-2 flex-column">
 
         <!-- tabs -->
-        <ul class="nav tab-nav gap-2" id="myTab" role="tablist">
-            <li class="nav-item p-0" role="presentation">
-                <button class="d-flex align-items-center item-modifier-btn tabs b-none p-2" id="tab-1"
-                    data-bs-toggle="tab" data-bs-target="#tab-11" type="button" role="tab" aria-controls="tab-11"
-                    aria-selected="true">
-                    <img src="img/menu-black.svg" height="30px" alt="">
-                    <span>Items</span>
-                </button>
-                <!-- <button class="" >Tab 1</button> -->
-            </li>
-            <li class="nav-item p-0" role="presentation">
-                <button class="tabs d-flex align-items-center item-modifier-btn p-2" id="tab-2" data-bs-toggle="tab"
-                    data-bs-target="#tab-22" type="button" role="tab" aria-controls="tab-22" aria-selected="false"><img
-                        src="img/menu-black.svg" height="30px" alt="">
-                    <span>Modifiers</span></button>
-            </li>
-        </ul>
+        <div class=" d-flex flex-row bg-light shadow  mb-0 border">
+            <ul class="nav nav-tabs gap-2 ps-3 " id="myTab" role="tablist">
+                <li class="nav-item p-0" role="presentation">
+                    <button class="btn d-flex align-items-center tabs p-2  " id="tab-1" data-bs-toggle="tab"
+                        data-bs-target="#tab-11" type="button" role="tab" aria-controls="tab-11" aria-selected="true">
+                        <img src="img/menu-black.svg" height="30px" alt="">
+                        <span>Items</span>
+                    </button>
+                    <!-- <button class="" >Tab 1</button> -->
+                </li>
+                <li class="nav-item p-0" role="presentation">
+                    <button class=" btn tabs d-flex align-items-center p-2" id="tab-2" data-bs-toggle="tab"
+                        data-bs-target="#tab-22" type="button" role="tab" aria-controls="tab-22"
+                        aria-selected="false"><img src="img/menu-black.svg" height="30px" alt="">
+                        <span>Modifiers</span></button>
+                </li>
+            </ul>
+        </div>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="tab-11" role="tabpanel" aria-labelledby="tab-1">
                 <!-- category-table section  -->
@@ -36,7 +37,7 @@
                     <!-- finish category sider section  -->
 
                     <!-- table section  -->
-                    <div class="bg-white border rounded shadow flex-grow-1 p-3 overflow-auto">
+                    <div class="flex-grow-1 p-3 overflow-auto">
                         <!-- header of table  -->
                         <div class="d-flex align-items-center gap-2">
                             <div id="item-modifier-toggle">

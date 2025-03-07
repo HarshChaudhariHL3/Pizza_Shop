@@ -15,11 +15,13 @@ public class AuthRepository (PizzaShopDbContext _context) : IAuthRepository
             return user;
     }
 
-    public async Task<User> Useremail(string email)
-    {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            return user;
+    public User Useremail(string email)
+    {       
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+        return user ;
     }
+
 
     public async Task<bool> Savepassword(Entity.Models.User user)
     {

@@ -26,7 +26,7 @@ html {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 60px;
+  height: 70px;
 }
 
 .top-nav h1 {
@@ -91,7 +91,7 @@ html {
 }
 
 .menu {
-  background: #ffc107;
+  background: white;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -120,7 +120,10 @@ html {
 }
 
 .menu li:hover {
-  background: #f1bc44ed;
+  background: rgb(104, 104, 241);
+}
+.menu li span:hover{
+  color: white;
 }
 
 .menu span {
@@ -145,7 +148,7 @@ html {
   position: fixed;
   left: 0;
   top: 0;
-  height: 60px;
+  height: 70px;
   border: none;
   width: 60px;
   background: #ffc107;
@@ -177,7 +180,7 @@ html {
   width: 60px;
   background: white;
   position: fixed;
-  top: 60px;
+  top: 70px;
   left: 0;
   transition: 0.5s;
   overflow: hidden;
@@ -207,13 +210,13 @@ html {
 
 .side-nav-row:hover span {
   color: #ffc107 !important;
-  background: #1f1f1f;
+  background: #5a7ff7;
   text-decoration: none !important;
 }
 
 .side-nav-row:hover p {
   color: #ffc107 !important;
-  background: #1f1f1f;
+  background: #5a7ff7;
   text-decoration: none !important;
 }
 
@@ -256,7 +259,7 @@ html {
   }
 
   .logo {
-      font-size: 24px;
+      font-size: 30px;
       margin-bottom: auto;
   }
 
@@ -274,8 +277,8 @@ html {
   }
 
   .info-txt img {
-      width: 35px;
-      height: 35px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
   }
 
@@ -292,6 +295,32 @@ html {
       display: none;
   }
   
+}
+
+@media screen and (max-width: 584px) {
+  #addUserBtn a i {
+    display: none;
+  }
+  #addUserBtn form {
+    width: 200px;
+  }
+
+}
+
+#has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+#has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
 }
 
 /*  */

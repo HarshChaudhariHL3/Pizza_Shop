@@ -4,15 +4,14 @@ namespace PizzaShop.Entity.ViewModel;
 
 public class Login
 {
-    [Required(ErrorMessage = "The email address is required")]
-    [EmailAddress(ErrorMessage = "Invalid Email Address")]
-    // [RegularExpression]
+    [Required]
+    [EmailAddress]
     public required string email { get; set; }
+
+    [Required]
+
     public required string password { get; set; }
 
     public bool Rememberme { get; set; }
-
-
-
 
 }

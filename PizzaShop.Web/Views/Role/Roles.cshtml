@@ -2,28 +2,28 @@
     ViewData["Title"] = "Roles and Permissions";
 }
 
-<div class="row">
+<div class="row shadow bg-white mx-5 p-4 gap-4 rounded  ">
     <div class="col-lg-12 d-flex justify-content-between">
         <div>
-            <h2>Roles</h2>
+            <h1 class="text-primary">Roles</h1>
         </div>
     </div>
     <div>
         <div class="table-responsive mx-5">
-            <table class="table table-hover">
+            <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Role</th>
-                        <th scope="col">Action</th>
+                        <th>Role</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var role in ViewBag.Roles)
                     {
                         <tr>
-                            <td>@role.RoleName</td>
+                            <td >@role.RoleName</td>
                             <td>
-                                <a asp-action="Permission" asp-controller="Role" asp-route-roleId="@role.RoleId" class="btn btn-primary"><i class="bi bi-pen"></i></a>
+                                <a asp-action="Permission" asp-controller="Role" asp-route-roleId="@role.RoleId" class="btn"><i class="bi bi-pen"></i></a>
                             </td>
                         </tr>
                     }

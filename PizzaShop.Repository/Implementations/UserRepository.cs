@@ -74,7 +74,7 @@ public class UserRepository (PizzaShopDbContext _context) : IUserRepository
             .Take(page_size)
             .ToList();
         }
-        return _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower()))
+        return _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower()) || u.Email.ToLower().Contains(search.ToLower()))
             .Where(u => u.Isdeleted == false)
             .OrderBy(u => u.UserId)
             .Skip((page - 1) * page_size)
@@ -88,7 +88,7 @@ public class UserRepository (PizzaShopDbContext _context) : IUserRepository
         {
             return _context.Users.Where(u => u.Isdeleted == false).Count();
         }else{
-            var count = _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower()))
+            var count = _context.Users.Where(u => u.FirstName.ToLower().Contains(search.ToLower()) || u.LastName.ToLower().Contains(search.ToLower())|| u.Email.ToLower().Contains(search.ToLower()))
             .Where(u => u.Isdeleted == false)
             .Count();
             return count;

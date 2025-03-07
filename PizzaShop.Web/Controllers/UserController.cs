@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using AuthenticationDemo.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -17,14 +18,14 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
     {
         try
         {
-            var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
-            if (principal == null)
-            {
-                return RedirectToAction("Login", "Validation");
-            }
-            int UserId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
-
-
+            // var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
+            // if (principal == null)
+            // {
+            //     return RedirectToAction("Login", "Validation");
+            // }
+            // int UserId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
+            var User = SessionUtils.GetUser(HttpContext);
+            var UserId = User.UserId;
             if (UserId == 0)
             {
                 return BadRequest("User ID is missing.");
@@ -35,10 +36,10 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction("Error", "Error");
-        }       
-            
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
     }
 
     [HttpPost]
@@ -48,12 +49,15 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         {
 
 
-            var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
-            if (principal == null)
-            {
-                return RedirectToAction("Login", "Validation");
-            }
-            int UserId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
+            // var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
+            // if (principal == null)
+            // {
+            //     return RedirectToAction("Login", "Validation");
+            // }
+            // int UserId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
+
+            var User = SessionUtils.GetUser(HttpContext);
+            var UserId = User.UserId;
 
 
             if (UserId == 0)
@@ -82,8 +86,8 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Internal server error");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 
@@ -126,8 +130,8 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Internal server error");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 
@@ -137,6 +141,10 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         try
         {
             var data = _userService.pagination_user_list(page, pagesize, search);
+            if(data == null){
+                TempData["Error"] = "Not Valid User";
+                return RedirectToAction("Users", "User");
+            }
             ViewBag.users = data.Items;
             ViewBag.pagesize = pagesize;
             ViewBag.page = page;
@@ -145,8 +153,8 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Internal server error");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 
@@ -168,51 +176,76 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            return StatusCode(500, "Internal server error");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString()); ;
         }
     }
 
     [HttpGet]
     public IActionResult EditUser(string Email)
     {
-        if(Email == null){
-            TempData["Error"] = "Email not Found";
-            return View();
-        }
-        var user = _userService.GetUserByEmail(Email);
+        try
+        {
+            if (Email == null)
+            {
+                TempData["Error"] = "Email not Found";
+                return View();
+            }
+            var user = _userService.GetUserByEmail(Email);
 
-        return View(user);
+            return View(user);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public IActionResult EditUser(EdituserViewModel model)
     {
-        
-        var user = _userService.GetUserByEmail(model.Email);
+        try
+        {
+            var user = _userService.GetUserByEmail(model.Email);
 
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
-        user.Username = model.Username;
-        user.Status = model.Status;
-        user.Country = model.Country;
-        user.State = model.State;
-        user.City = model.City;
-        user.Phone = model.Phone;
-        user.Address = model.Address;
-        user.ZipCode = model.ZipCode;
-        _userService.UpdateUserinEdit(user);
-        TempData["Success"] = "User Updated Successfully";
-        return RedirectToAction("Users");
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Username = model.Username;
+            user.Status = model.Status;
+            user.Country = model.Country;
+            user.State = model.State;
+            user.City = model.City;
+            user.Phone = model.Phone;
+            user.Address = model.Address;
+            user.ZipCode = model.ZipCode;
+            _userService.UpdateUserinEdit(user);
+            TempData["Success"] = "User Updated Successfully";
+            return RedirectToAction("Users");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public IActionResult DeleteUser(string Email)
     {
-        _userService.DeleteUser(Email);
-        TempData["Success"] = "User Deleted Successfully";
-        return RedirectToAction("Users");
-    }
+        try
+        {
 
+
+            _userService.DeleteUser(Email);
+            TempData["Success"] = "User Deleted Successfully";
+            return RedirectToAction("Users");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
 
 }

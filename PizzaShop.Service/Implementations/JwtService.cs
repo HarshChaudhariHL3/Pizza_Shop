@@ -35,7 +35,7 @@ public class JwtService : IJwtService
                     new Claim(ClaimTypes.Role, role.ToString()),
                     //new Claim("ClaimName", "Dynamic Value for Claim") Custom Claim
                 }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddDays(30),
             Issuer = _issuer,
             Audience = _audience,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)

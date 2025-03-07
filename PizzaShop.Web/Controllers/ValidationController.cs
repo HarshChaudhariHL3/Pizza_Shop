@@ -14,7 +14,7 @@ namespace PizzaShop.Web.Controllers;
 [AllowAnonymous]
 public class ValidationController(IAuthService _authService, IJwtService _jwtService, ISendmailService _sendmail) : Controller
 {
-
+    [HttpGet]
     public IActionResult Login()
     {
         var user = SessionUtils.GetUser(HttpContext);
@@ -40,7 +40,7 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
         CookieUtils.SaveJWTToken(Response, token);
 
         if (model.Rememberme)
-        {
+        {     
             CookieUtils.SaveUserData(Response, user);
         }
 
@@ -55,14 +55,14 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
     }
 
     [HttpPost]
-    public async Task<IActionResult> Forgotpassword(Forgotpassword model)
+    public IActionResult Forgotpassword(Forgotpassword model)
     {
         if (string.IsNullOrEmpty(model.email))
         {
             TempData["Error"] = "Email is Required";
             return View(model);
         }
-
+        
         var user = _authService.Useremail(model.email);
         if (user == null)
         {

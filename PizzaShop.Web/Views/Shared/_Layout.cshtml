@@ -12,9 +12,10 @@
 <body>
     <header>
     <div class="top-nav">
-            <h2 class="logo">
-                <a href="#" class="navbar-brand" id="sidebar-toggle">
-                    <img src="~/images/logos/pizzashop_logo.png" height="50px" width="60px" alt=""></a>
+            <h2 class="logo d-flex align-items-center gap-2">
+                <span>
+                   <img src="~/images/logos/pizzashop_logo.png" height="50px" width="60px" alt="">
+                </span>
                 <span>Pizza Shop</span>
             </h2>
             <div class="info">
@@ -23,36 +24,38 @@
                         <img src="~/images/Default_pfp.svg.png" alt="" height="50px" width="50px">
                     </p>
 
-                    <div class="menu">
+                    <div class="menu p-2">
                         <ul>
                             <li>
                                 <a asp-controller="User" asp-action="Profile" >
-                                    <span class="material-symbols-outlined"></span>My Profile
+                                    <span class="material-symbols-outlined"><i class="bi bi-person"></i></span>
+                                    <span >My Profile</span>
                                 </a>
                             </li>
-                            <hr>
                             <li>
                                 <a asp-controller="Validation" asp-action="Changepassword" >
-                                    <span class="material-symbols-outlined"></span>Change Password
+                                    <span class="material-symbols-outlined"><i class="bi bi-key"></i></span>
+                                    <span >Change Password</span>
                                 </a>
                             </li>
                             <li>
                                 <a asp-controller="Validation" asp-action="Logout" >
-                                    <span class="material-symbols-outlined"><i class="bi bi-box-arrow-left"></i></span>Logout
+                                    <span class="material-symbols-outlined"><i class="bi bi-box-arrow-left"></i></span>
+                                    <span>Logout</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <span class="material-symbols-outlined info-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                @* <span class="material-symbols-outlined info-icon"><i class="fa-solid fa-chevron-down"></i></span> *@
             </div>
         </div>
 
         <!-- sidebar open and close buttons -->
 
         <button class="menu-toggle" id="menu-toggle-open">
-            <a href="#" class="navbar-brand" id="sidebar-toggle">
-                <span class="material-symbols-outlined side-open-icon"><i class="bi bi-grip-horizontal"></i></span>
+            <a class="navbar-brand ps-3" id="sidebar-toggle">
+                <span class="material-symbols-outlined side-open-icon"><i class="bi bi-justify"></i></i></span>
         </button>
         <button class="menu-toggle" id="menu-toggle-close">
 
@@ -72,7 +75,7 @@
             <p>Users</p>
         </a>
         <a asp-controller="Role" asp-action="Roles" class="side-nav-row">
-            <span class="material-symbols-outlined side-row-icon"><i class="fa-solid fa-user-gear"></i></span>
+            <span class="material-symbols-outlined side-row-icon"><i class="bi bi-person-fill-gear"></i></span>
             <p>Roles and Permission</p>
         </a>
         <a asp-controller="Menu" asp-action="Menu" class="side-nav-row">
@@ -84,11 +87,11 @@
             <p>Table and Section</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">
-            <span class="material-symbols-outlined side-row-icon"><i class="fa-solid fa-money-bill"></i></span>
+            <span class="material-symbols-outlined side-row-icon"><i class="bi bi-cash-coin"></i></span>
             <p>Taxes and Fees</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">
-            <span class="material-symbols-outlined side-row-icon"><i class="fa-solid fa-file"></i></span>
+            <span class="material-symbols-outlined side-row-icon"><i class="bi bi-clipboard-check"></i></span>
             <p>Orders</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">
@@ -118,11 +121,11 @@
             <p>Table and Section</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">
-            <span class="material-symbols-outlined side-row-icon"><i class="fa-solid fa-money-bill"></i></span>
+            <span class="material-symbols-outlined side-row-icon"><i class="bi bi-cash-coin"></i></span>
             <p>Taxes and Fees</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">
-            <span class="material-symbols-outlined side-row-icon"><i class="fa-solid fa-file"></i></span>
+            <span class="material-symbols-outlined side-row-icon"><i class="bi bi-clipboard-check"></i></span>
             <p>Orders</p>
         </a>
         <a asp-controller="" asp-action="Index" class="side-nav-row">

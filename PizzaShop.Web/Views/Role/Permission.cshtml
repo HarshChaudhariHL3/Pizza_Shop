@@ -3,7 +3,7 @@
 }
 @model PizzaShop.Entity.ViewModel.RoleViewModel
 
-<div class="row">
+<div class="row shadow bg-white mx-5 p-4 rounded ">
     <div class="col-lg-12 d-flex justify-content-between">
         <div>
             <h2>Permission</h2>
@@ -12,18 +12,19 @@
             <div class="input-group">
                 <div class="d-flex align-items-center">
                     <div class="border">
-                        <a asp-action="Roles" asp-controller="Role" class="btn border border-info" role="button"><i
-                                class="bi bi-arrow-left"></i>Back</a>
+                        <a asp-action="Roles" asp-controller="Role" class="btn" role="button">
+                            <i class="bi bi-chevron-left"></i><span>Back</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="bg-white pt-3 mt-3">
+    <div class="pt-3 mt-3">
         <div class="row">
             <div class="col-3">
                 <div class="form-floating ">
-                    <input type="text" class="form-control" id="fname" value="@ViewBag.RoleName" />
+                    <input type="text" class="form-control" id="fname" value="@ViewBag.RoleName" disabled />
 
                     <label for="role">Role</label>
                 </div>

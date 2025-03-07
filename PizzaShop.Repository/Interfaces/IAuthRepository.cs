@@ -8,7 +8,7 @@ public interface IAuthRepository
 {
     Task<User> AuthenticateUser(string email, string password);
 
-    Task<User> Useremail(string email);
+   User Useremail(string email);
 
     Task<bool> Savepassword(User user);
 
