@@ -39,11 +39,11 @@ public partial class User
 
     public string? ModifiedBy { get; set; }
 
-    public List<string>? ImgUrl { get; set; }
-
     public bool? Isdeleted { get; set; }
 
     public string? Phone { get; set; }
+
+    public string? ImgUrl { get; set; }
 
     public virtual City? City { get; set; }
 

@@ -36,6 +36,7 @@ public class UserService(IUserRepository _repository) : IUserService
             Address = user.Address,
             ZipCode = user.ZipCode,
             Role = role?.RoleName,
+            Imgurl = user.ImgUrl
         };
 
         return profileViewModel;
@@ -65,7 +66,7 @@ public class UserService(IUserRepository _repository) : IUserService
             Phone = user.Phone,
             Address = user.Address,
             ZipCode = user.ZipCode,
-            // ProfileImg = user.ProfileImg,
+            ImgUrl = user.ImgUrl
         };
 
         return edituserViewModel;
@@ -107,6 +108,7 @@ public class UserService(IUserRepository _repository) : IUserService
         user.StateId = model.State;
         user.CityId = model.City;
         user.Phone = model.Phone;
+        user.ImgUrl = model.Imgurl;
         user.Address = model.Address;
         user.ZipCode = model.ZipCode;
 
@@ -134,6 +136,7 @@ public class UserService(IUserRepository _repository) : IUserService
             user.ZipCode = model.ZipCode;
             user.Status = model.Status;
             user.UserRole = model.Role;
+            user.ImgUrl = model.ImgUrl;
 
             return _repository.Update(user);
         }
@@ -214,7 +217,7 @@ public class UserService(IUserRepository _repository) : IUserService
                 Address = model.Address,
                 ZipCode = model.ZipCode,
                 Status = model.Status,
-                // ProfileImg = model.ProfileImg,
+                ImgUrl = model.Imgurl
             };
 
             return _repository.Add(user);

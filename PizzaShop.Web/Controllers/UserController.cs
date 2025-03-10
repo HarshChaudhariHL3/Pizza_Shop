@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Implementations;
 using PizzaShop.Service.Interfaces;
+using PizzaShop.Service.Utils;
 using PizzaShop.Web.Models;
 
 namespace PizzaShop.Web.Controllers;
@@ -47,6 +48,10 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
     {
         try
         {
+            if (model.FormFile != null && model.FormFile.Length > 0)
+            {
+                model.Imgurl = await ProfileImageUploadUtils.SaveProfileImageUploadAsync(model.FormFile);
+            }
 
 
             // var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
@@ -76,6 +81,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
             user.State = model.State;
             user.City = model.City;
             user.Status = model.Status;
+            user.Imgurl = model.Imgurl;
             _userService.UpdateUser(user);
             TempData["Success"] = "Profile Updated Successfully";
             return RedirectToAction("Profile");

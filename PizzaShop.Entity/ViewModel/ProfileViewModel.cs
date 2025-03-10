@@ -11,8 +11,8 @@ public class ProfileViewModel
 
     public string? Role { get; set; }
 
-
     public string? FirstName { get; set; }
+
     public string? LastName { get; set; }
 
     public string? Username { get; set; }
@@ -24,6 +24,7 @@ public class ProfileViewModel
     public int? City { get; set; }
 
     public string? Phone { get; set; }
+    public string? Imgurl { get; set; }
 
     public bool Status { get; set; }
 

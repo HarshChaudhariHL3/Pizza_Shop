@@ -10,7 +10,9 @@ public class MenuController(IMenuService _menuService) : Controller
     public IActionResult Menu()
     {
         var data = _menuService.GetCategories();
-        if (data != null)
+        var data2 = _menuService.GetCategoryItems();
+
+        if (data != null && data2  != null)
         {
             var menu = new MenuViewModel
             {
@@ -19,7 +21,15 @@ public class MenuController(IMenuService _menuService) : Controller
                     CategoryId = p.CategoryId,
                     CategoryName = p.CategoryName,
                     Description = p.Description
-                }).ToList()
+                }).ToList(),
+
+                ItemsList = data2.Select((Func<dynamic, CategoryListViewModel>)(p => new CategoryListViewModel{
+                    CategoryItemId = p.CategoryItemId,
+                    CategoryId = p.CategoryId,
+                    ItemName = p.ItemName,
+                    Price = p.Price,
+                    Quantity = p.Quantity
+                })).ToList()
             };
             return View(menu);
         }
@@ -36,18 +46,23 @@ public class MenuController(IMenuService _menuService) : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteCategory(int catogryid)
-    {
-        _menuService.DeleteCategory(catogryid);
-        TempData["Success"] = "Deleted Successfully";
+
+    public IActionResult EditCategory(MenuViewModel model){
+        _menuService.EditCategory(model);
+        TempData["Success"] = "Category Updated successfully.";
         return RedirectToAction("Menu");
     }
 
     [HttpPost]
-    public IActionResult EditCategory(MenuViewModel model)
-    {
-        _menuService.EditCategory(model);
-        TempData["Success"] = "Edited Successfully";
+     public IActionResult DeleteCategory(MenuViewModel model){
+        _menuService.RemoveCategory(model.CategoryId);
+        TempData["Success"] = "Deleted successfully.";
         return RedirectToAction("Menu");
+    }
+
+    public IActionResult GetCategory()
+    {
+        var category = _menuService.GetCategories();
+        return Json(category);
     }
 }

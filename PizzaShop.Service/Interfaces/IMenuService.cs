@@ -7,9 +7,14 @@ public interface IMenuService
 {
     List<Category> GetCategories();
 
+    List<CategoryItem> GetCategoryItems();
+
     void AddCategory(MenuViewModel model);
 
-    void DeleteCategory(int id);
+    MenuViewModel GetCategoryById(int id);
 
-    MenuViewModel EditCategory(MenuViewModel model);
+    void EditCategory(MenuViewModel model);
+
+    void RemoveCategory(int id);
+
 }

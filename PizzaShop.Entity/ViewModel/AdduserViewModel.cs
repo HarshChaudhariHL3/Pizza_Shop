@@ -27,8 +27,8 @@ public class AdduserViewModel
     public string? Phone { get; set; }
 
     public string? Address { get; set; }
+    public string? Imgurl { get; set; }
 
     public int? ZipCode { get; set; }
 
-     public IFieldInfo? ProfileImg { get; set; }
 }

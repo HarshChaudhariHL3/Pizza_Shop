@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PizzaShop.Entity.Data;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
@@ -7,18 +8,23 @@ namespace PizzaShop.Repository.Implementations;
 
 public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
 {
-    public List<Category> CategoryList() {
-
-        var items = _context.Categories.ToList(); 
-         
-        return items;   
+    public List<Category> CategoryList()
+    {
+        var items = _context.Categories.OrderBy(c => c.CategoryName).ToList();
+        return items;
     }
 
-    public Category getCategoryById(int id){
-        return _context.Categories.FirstOrDefault(p => p.CategoryId == id);
+    public List<CategoryItem> CategoryItemList()
+    {
+        return _context.CategoryItems.Include(x => x.Category)
+        .ToList();   
     }
 
-    public void AddCategory(MenuViewModel model){
+
+
+
+    public void AddCategory(MenuViewModel model)
+    {
         var category = new Category
         {
             CategoryName = model.CategoryName,
@@ -26,10 +32,19 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         };
         _context.Categories.Add(category);
         _context.SaveChanges();
-        
     }
 
-    public void DeleteCategory(int id){
+    public Category GetCategoryById(int id){
+        return _context.Categories.FirstOrDefault(p => p.CategoryId == id);
+    }
+
+    public void UpdateCategory(Category category){
+        _context.Categories.Update(category);
+        _context.SaveChanges();
+    }
+
+    public void DeleteCategory(int id)
+    {
         var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
 
         if (category != null)
@@ -37,17 +52,6 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             _context.Categories.Remove(category);
             _context.SaveChanges();
         }
-    }
-
-    public MenuViewModel EditCategory(Category category){
-        _context.Categories.Update(category);
-        _context.SaveChanges();
-        
-        return new MenuViewModel
-        {
-            CategoryName = category.CategoryName,
-            Description = category.Description
-        };
     }
 
 }
