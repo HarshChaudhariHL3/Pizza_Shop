@@ -2,7 +2,6 @@ namespace PizzaShop.Entity.ViewModel;
 
 public class CategoryListViewModel
 {
-
     public int CategoryItemId { get; set; }
 
     public int? CategoryId { get; set; }
@@ -21,12 +20,5 @@ public class CategoryListViewModel
 
     public string? ImageUrl { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
-
-    public DateTime? ModifiedAt { get; set; }
-
-    public string? CreatedBy { get; set; }
-
-    public string? ModifiedBy { get; set; }
 
 }

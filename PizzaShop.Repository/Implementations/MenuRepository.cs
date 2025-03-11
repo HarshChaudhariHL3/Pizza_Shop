@@ -14,12 +14,13 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         return items;
     }
 
-    public List<CategoryItem> CategoryItemList()
+    public List<CategoryItem> CategoryItemList(int categoryId)
     {
-        return _context.CategoryItems.Include(x => x.Category)
-        .ToList();   
+        var items =  _context.CategoryItems
+            .Where(x => x.CategoryId == categoryId)
+            .ToList();
+        return items;
     }
-
 
 
 
@@ -34,11 +35,13 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.SaveChanges();
     }
 
-    public Category GetCategoryById(int id){
+    public Category GetCategoryById(int id)
+    {
         return _context.Categories.FirstOrDefault(p => p.CategoryId == id);
     }
 
-    public void UpdateCategory(Category category){
+    public void UpdateCategory(Category category)
+    {
         _context.Categories.Update(category);
         _context.SaveChanges();
     }

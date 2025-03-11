@@ -18,9 +18,30 @@ public class MenuService : IMenuService
     public List<Category> GetCategories(){
         return _menuRepository.CategoryList();
     }
-    public List<CategoryItem> GetCategoryItems(){
-        return _menuRepository.CategoryItemList();
-    }
+
+    public List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId)
+{
+    // Fetch category items from the repository by categoryId
+    var categoryItems = _menuRepository.CategoryItemList(categoryId);
+
+    // Map category items to the CategoryListViewModel
+    var categoryItemViewModels = categoryItems.Select(item => new CategoryListViewModel
+    {
+        CategoryItemId = item.CategoryItemId,
+        CategoryId = item.CategoryId,
+        ItemName = item.ItemName,
+        Description = item.Description,
+        Quantity = item.Quantity,
+        Price = item.Price,
+        IsAvailable = item.IsAvailable,
+        ShortCode = item.ShortCode,
+        ImageUrl = item.ImageUrl
+    }).ToList();
+
+    return categoryItemViewModels;
+}
+
+    
 
     public void AddCategory(MenuViewModel model){
         _menuRepository.AddCategory(model);

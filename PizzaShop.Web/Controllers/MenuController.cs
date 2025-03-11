@@ -7,12 +7,13 @@ namespace PizzaShop.Web.Controllers;
 public class MenuController(IMenuService _menuService) : Controller
 {
     [HttpGet]
+
+    [HttpGet]
     public IActionResult Menu()
     {
         var data = _menuService.GetCategories();
-        var data2 = _menuService.GetCategoryItems();
 
-        if (data != null && data2  != null)
+        if (data != null)
         {
             var menu = new MenuViewModel
             {
@@ -22,19 +23,17 @@ public class MenuController(IMenuService _menuService) : Controller
                     CategoryName = p.CategoryName,
                     Description = p.Description
                 }).ToList(),
-
-                ItemsList = data2.Select((Func<dynamic, CategoryListViewModel>)(p => new CategoryListViewModel{
-                    CategoryItemId = p.CategoryItemId,
-                    CategoryId = p.CategoryId,
-                    ItemName = p.ItemName,
-                    Price = p.Price,
-                    Quantity = p.Quantity
-                })).ToList()
             };
             return View(menu);
         }
-        return null;
+        return View(new MenuViewModel());
+    }
+    [HttpGet]
+    public IActionResult CategoryItems(int categoryId)
+    {
+        var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
 
+        return Json(categoryItems);
     }
 
     [HttpPost]
@@ -47,14 +46,16 @@ public class MenuController(IMenuService _menuService) : Controller
 
     [HttpPost]
 
-    public IActionResult EditCategory(MenuViewModel model){
+    public IActionResult EditCategory(MenuViewModel model)
+    {
         _menuService.EditCategory(model);
         TempData["Success"] = "Category Updated successfully.";
         return RedirectToAction("Menu");
     }
 
     [HttpPost]
-     public IActionResult DeleteCategory(MenuViewModel model){
+    public IActionResult DeleteCategory(MenuViewModel model)
+    {
         _menuService.RemoveCategory(model.CategoryId);
         TempData["Success"] = "Deleted successfully.";
         return RedirectToAction("Menu");

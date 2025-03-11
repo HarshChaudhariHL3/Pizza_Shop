@@ -7,7 +7,7 @@ public interface IMenuRepository
 {
     List<Category> CategoryList();
 
-    List<CategoryItem> CategoryItemList();
+    List<CategoryItem> CategoryItemList(int categoryId);
 
     void AddCategory(MenuViewModel model);
 

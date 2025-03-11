@@ -7,7 +7,7 @@ public class MenuViewModel
     public string Description {get; set;}
     public string Category {get; set;}
 
-    public List<CategoryViewModel> CategoriesList {get; set;}
-
-    public List<CategoryListViewModel> ItemsList {get; set;} = new List<CategoryListViewModel>();
+    public List<CategoryViewModel> CategoriesList { get; set; } = new List<CategoryViewModel>();
+    public List<CategoryListViewModel> ItemsList { get; set; } = new List<CategoryListViewModel>();
 }
+

@@ -1,0 +1,456 @@
+@model PizzaShop.Entity.ViewModel.MenuViewModel
+
+<style>
+    #scrollbar {
+        height: 550px;
+        overflow: auto;
+    }
+
+    #category-items {
+        font-size: 20px;
+        color: black;
+    }
+
+    #category-items #buttons {
+        visibility: hidden;
+    }
+
+    #category-items:hover #buttons {
+        transition: all 0.8s ease-in-out;
+        visibility: visible;
+    }
+</style>
+
+<aside class=" d-block  rounded "> <!-- style="width: 240px;" -->
+    <div class=" pt-2 d-flex align-items-center justify-content-between mx-4 mb-2">
+        <h4 id="category-header">Category</h4>
+        <a class="btn blue-outline d-flex align-items-center" data-bs-target="#staticBackdrop" data-bs-toggle="modal">
+            <h3><i class="bi bi-plus"></i></h3>
+        </a>
+    </div>
+    <div id="scrollbar">
+        <ul class="tab-nav d-flex flex-column gap-3 p-3" id="myTab" role="tablist" style="list-style-type: none;">
+            @foreach (var item in Model.CategoriesList)
+            {
+                <li class="mb-2 parent d-flex gap-2 list-group-item-action pt-3 pe-3 pb-3">
+                    <i class="bi bi-grid-3x2-gap-fill" style="transform: rotate(90deg);"></i>
+                    <span class="category-item" data-category-id="@item.CategoryId" style="cursor: pointer;">@item.CategoryName</span>
+                    <div class="gap-1 d-flex notvisible">
+                        <button class="border-0" data-bs-toggle="modal" data-bs-target="#editmodal"
+                            onclick="openEditModal(@item.CategoryId,'@item.CategoryName', '@item.Description')">
+                            <i class="bi bi-pen  "></i></button>
+                        <button class="border-0" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            onclick="openDeleteModal(@item.CategoryId,'@item.CategoryName')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            }
+        </ul>   
+
+    </div>
+</aside>
+<div class="flex-grow-1 p-3 overflow-auto">
+    <!-- header of table  -->
+    <div class="d-flex align-items-center gap-2">
+        <div id="item-modifier-toggle">
+            <button class="btn" style="box-shadow: none;">
+                <img src="img/menu-black.svg" height="30px" alt="">
+            </button>
+        </div>
+        <h1 id="header">Items</h1>
+    </div>
+    <!-- search-add-item section  -->
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="search-div">
+            <input class="me-2 input-search px-2 " type="search" placeholder="Search">
+            <span class="search-icon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+        <a href="" class="btn border d-flex justify-content-center " data-bs-target="#model-delete"
+            data-bs-toggle="modal">
+            <i class="bi bi-trash h5"></i></a>
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+            <i class="btn bg-primary bi bi-plus-square text-white">New Item</i>
+        </button>
+    </div>
+    <!-- finish search-add-item section -->
+    <!-- table  -->
+    <div class="table-responsive " id="category-items">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="selectAll">
+                        </div>
+                    </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">ItemType</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Available</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="itemsTable">
+
+            </tbody>
+        </table>
+    </div>
+    <!-- pagination  -->
+
+    <!-- finish pagination  -->
+</div>
+
+
+@* Model Start *@
+
+<form method="post" asp-action="AddCategory" asp-controller="Menu">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Add Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" required placeholder="Name"
+                                asp-for="CategoryName">
+                            <label for="floatingInput">Name*</label>
+
+                        </div>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"
+                                asp-for="Description"></textarea>
+                            <label for="floatingTextarea">Description</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="btnsubmit" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post" asp-action="DeleteCategory" asp-controller="Menu">
+
+    <input type="hidden" id="deleteCategoryId" asp-for="CategoryId">
+
+    <div class="modal fade" id="deleteModal" data-bs-backdrop="delete" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteBackdropLabel">
+                        Delete Confirmation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column ">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                        <p> Are you sure you want to delete <span id="deleteCategoryName"></span>?</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form method="post" asp-action="EditCategory" asp-controller="Menu">
+    <input type="hidden" asp-for="CategoryId" id="editCategoryId">
+
+    <div class="modal fade" id="editmodal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Edit Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" asp-for="CategoryName" id="editCategoryName" required>
+                        <label for="editCategoryName">Name*</label>
+                    </div>
+                    <div class="form-floating">
+                        <textarea class="form-control" asp-for="Description" id="editCategoryDescription"></textarea>
+                        <label for="editCategoryDescription">Description</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+@* Model End *@
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+<Script type="text/javascript">
+
+    function openDeleteModal(CategoryId, CategoryName) {
+        debugger;
+        document.getElementById('deleteCategoryId').value = CategoryId;
+        document.getElementById('deleteCategoryName').textContent = CategoryName;
+
+        var deleteModel = new bootstrap.Model(document.getElementById('deleteModal'));
+        deleteModel.show();
+    }
+
+    function openEditModal(CategoryId, CategoryName, Description) {
+        document.getElementById('editCategoryId').value = CategoryId;
+        document.getElementById('editCategoryName').value = CategoryName;
+        document.getElementById('editCategoryDescription').textContent = Description;
+
+        var editModel = new bootstrap.Model(document.getElementById('editmodal'));
+        editModel.show();
+    }      
+</Script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $('#submitButton').click(function () {
+            var selectedItems = [];
+            $('.item-checkbox:checked').each(function () {
+                selectedItems.push($(this).data('item-id'));
+            });
+            console.log('Selected Items:', selectedItems);
+        });
+
+        // When a category is clicked
+        $('.category-item').click(function () {
+            var categoryId = $(this).data('category-id');  // Should be categoryId
+            if (categoryId) {
+                fetchCategoryItems(categoryId);
+            } else {
+                console.error("Category ID is undefined.");
+            }
+        });
+        function fetchCategoryItems(categoryId) {
+            $.ajax({
+                url: '/Menu/CategoryItems',
+                type: 'GET',
+                data: { categoryId: categoryId },
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    if (data && data.length > 0) {
+                        var itemsHtml = '';
+                        $.each(data, function (index, item) {
+                            itemsHtml += '<tr>';
+                            itemsHtml += '<td><input type="checkbox" class="item-checkbox" data-item-id="' + item.CategoryItemId + '"></td>';
+                            itemsHtml += '<td>' + item.ItemName + '</td>';
+                            itemsHtml += '<td>' + item.Description + '</td>';
+                            itemsHtml += '<td>' + item.Quantity + '</td>';
+                            itemsHtml += '<td>' + item.Price + '</td>';
+                            itemsHtml += '</tr>';
+                        });
+                        $('#itemsTable').html(itemsHtml);
+                    } else {
+                        $('#itemsTable').html('<tr><td colspan="4">No items available for this category.</td></tr>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                    $('#itemsTable').html('<tr><td colspan="4">Error loading items.</td></tr>');
+                }
+            });
+        }
+
+        $.ajax({
+            url: '/Menu/GetCategory',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select a country</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].categoryId + '">' + data[i].categoryName + '</option>'
+                }
+                $("#category").html(s);
+            }
+        });
+
+
+    });
+
+
+
+</script>
+
+
+
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form ap-action="" method="post">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Add New Menu Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="category"
+                                                aria-label="Floating label select example" asp-for="Category">
+                                            </select>
+                                            <label for="category">Categories*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="floatingInput6"
+                                                placeholder="Name*">
+                                            <label for="floatingInput6">Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="itemtype"
+                                                aria-label="Floating label select example">
+                                            </select>
+                                            <label for="itemtype">Item
+                                                Type*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="rate" placeholder="Rate"
+                                                value="0">
+                                            <label for="rate">Rate*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="quantity" placeholder="Quantity"
+                                                value="0">
+                                            <label for="quantity">Quantity*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="itemtype"
+                                                aria-label="Floating label select example">
+
+                                            </select>
+                                            <label for="itemtype">Item
+                                                Type*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex align-items-center justify-content-center">
+                                        <h5>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="available">
+                                                <label class="form-check-label" for="available">Available</label>
+                                            </div>
+
+                                    </div>
+                                    <div class="col d-flex align-items-center justify-content-center">
+                                        <h5>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="tax">
+                                                <label class="form-check-label" for="tax">Default
+                                                    Tax</label>
+                                            </div>
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="taxpercentage"
+                                                placeholder="Tax Percentage">
+                                            <label for="taxpercentage">Tax
+                                                Percentage </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="code" placeholder="Short Code">
+                                            <label for="code">Short
+                                                Code</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="floatingTextarea2" style="height: 100px"></textarea>
+                                        <label for="floatingTextarea2">Description</label>
+                                    </div>
+                                </div>
+                                <div class="row ms-1">
+                                    <h6>Upload Image</h6>
+                                    <div class="border form-control ">
+                                        <label for="formfile"
+                                            class="form-label d-flex gap-2 justify-content-center align-items-center pt-3 ">
+                                            <h3><i class="bi bi-cloud-arrow-up-fill"></i>
+                                            </h3>
+                                            <img src="images/cloud-upload-icon.svg" alt="">
+                                            <span class="pb-2">
+                                                Drag and Drop or Browse
+                                                Files
+                                            </span>
+                                        </label>
+                                        <input type="file" class="form-control d-none" id="formfile">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 pt-3" style="background-color: antiquewhite;">
+                                <div>
+                                    <select class="form-select" aria-label="Default select example">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-white border border-primary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

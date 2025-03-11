@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Ir45EANaXUj4yVNZhu878qc+fBloasIW/jAauHP7fIo=",
+  "Hash": "Fmg+e3462UZellfhi6uBM9voyaJo7oxjqqv5kucP19M=",
   "Source": "PizzaShop.Web",
   "BasePath": "_content/PizzaShop.Web",
   "Mode": "Default",
@@ -454,6 +454,25 @@
       "OriginalItemSpec": "wwwroot\\images\\profile_div_bg.jpg"
     },
     {
+      "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\images\\profile\\3e4c756e-e71b-44f7-a633-f9385ee68f4f.jpg",
+      "SourceId": "PizzaShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\",
+      "BasePath": "_content/PizzaShop.Web",
+      "RelativePath": "images/profile/3e4c756e-e71b-44f7-a633-f9385ee68f4f.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profile\\3e4c756e-e71b-44f7-a633-f9385ee68f4f.jpg"
+    },
+    {
       "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\images\\profile\\80cfd5a5-7675-4b45-a4e7-1b864a0cf83d.png",
       "SourceId": "PizzaShop.Web",
       "SourceType": "Discovered",
@@ -509,6 +528,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\profile\\85276123-8479-4777-9be0-5c924551f7a0.png"
+    },
+    {
+      "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\images\\profile\\8a5c1e1a-bf2d-4197-b1d6-ace368544fa7.jfif",
+      "SourceId": "PizzaShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\",
+      "BasePath": "_content/PizzaShop.Web",
+      "RelativePath": "images/profile/8a5c1e1a-bf2d-4197-b1d6-ace368544fa7.jfif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profile\\8a5c1e1a-bf2d-4197-b1d6-ace368544fa7.jfif"
     },
     {
       "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\images\\profile\\cdde8408-d227-4bdc-a184-aa1c50273c63.jfif",
