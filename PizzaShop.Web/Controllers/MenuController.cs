@@ -28,6 +28,8 @@ public class MenuController(IMenuService _menuService) : Controller
         }
         return View(new MenuViewModel());
     }
+
+    // for categoryList View
     [HttpGet]
     public IActionResult CategoryItems(int categoryId)
     {
@@ -35,6 +37,19 @@ public class MenuController(IMenuService _menuService) : Controller
 
         return Json(categoryItems);
     }
+
+// for edit categoryItems
+    [HttpGet]
+    public IActionResult GetItemDetails(int itemId)
+    {
+        var item = _menuService.GetItemById(itemId); 
+        if (item == null)
+        {
+            return NotFound();
+        }
+        return Json(item); 
+    }
+
 
     [HttpPost]
     public IActionResult AddCategory(MenuViewModel model)
@@ -66,4 +81,27 @@ public class MenuController(IMenuService _menuService) : Controller
         var category = _menuService.GetCategories();
         return Json(category);
     }
+
+    public IActionResult GetUnitList(){
+        var list = _menuService.UnitList();
+        return Json(list);
+    }
+
+    [HttpPost]
+    public IActionResult DeleteCategoryItem(int itemId)
+    {
+        var result = _menuService.DeleteCategoryItem(itemId); 
+        
+        if (result)
+        {
+            TempData["Success"] = "Category item deleted successfully.";
+        }
+        else
+        {
+            TempData["Error"] = "Failed to delete category item.";
+        }
+
+        return RedirectToAction("Menu"); 
+    }
+
 }

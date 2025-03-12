@@ -14,15 +14,36 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         return items;
     }
 
+    public List<Unit> UnitList(){
+        return _context.Units.ToList();
+    }
+
     public List<CategoryItem> CategoryItemList(int categoryId)
     {
-        var items =  _context.CategoryItems
+        var items = _context.CategoryItems
             .Where(x => x.CategoryId == categoryId)
+            .OrderBy(x => x.CategoryItemId)
             .ToList();
         return items;
     }
 
+    public CategoryItem GetItemById(int itemId)
+    {
+        return _context.CategoryItems.FirstOrDefault(x => x.CategoryItemId == itemId)!;
+    }
+    
 
+
+    // Delete category item from the database
+    public void DeleteCategoryItem(int itemId)
+    {
+        var categoryItem = _context.CategoryItems.FirstOrDefault(x => x.CategoryItemId == itemId);
+        if (categoryItem != null)
+        {
+            _context.CategoryItems.Remove(categoryItem);
+            _context.SaveChanges();
+        }
+    }
 
     public void AddCategory(MenuViewModel model)
     {
@@ -56,5 +77,15 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             _context.SaveChanges();
         }
     }
+    public CategoryItem GetCategoryItemById(int id)
+    {
+        return _context.CategoryItems.FirstOrDefault(ci => ci.CategoryItemId == id);
+    }
 
+    public void UpdateCategoryItem(CategoryItem categoryItem)
+    {
+        _context.CategoryItems.Update(categoryItem);
+        _context.SaveChanges();
+    }
 }
+

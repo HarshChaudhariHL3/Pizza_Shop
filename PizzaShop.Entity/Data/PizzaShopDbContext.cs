@@ -119,6 +119,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
+            entity.Property(e => e.DefaultTax)
+                .HasDefaultValue(true)
+                .HasColumnName("default_tax");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl).HasColumnName("image_url");
             entity.Property(e => e.IsAvailable)
@@ -127,6 +130,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ItemName)
                 .HasMaxLength(255)
                 .HasColumnName("item_name");
+            entity.Property(e => e.ItemType)
+                .HasDefaultValue(true)
+                .HasColumnName("item_type");
             entity.Property(e => e.ModifiedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -139,10 +145,15 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ShortCode)
                 .HasMaxLength(50)
                 .HasColumnName("short_code");
+            entity.Property(e => e.UnitId).HasColumnName("unit_id");
 
             entity.HasOne(d => d.Category).WithMany(p => p.CategoryItems)
                 .HasForeignKey(d => d.CategoryId)
                 .HasConstraintName("category_item_category_id_fkey");
+
+            entity.HasOne(d => d.Unit).WithMany(p => p.CategoryItems)
+                .HasForeignKey(d => d.UnitId)
+                .HasConstraintName("category_item_unit_id_fkey");
         });
 
         modelBuilder.Entity<CategoryModifierMapping>(entity =>
@@ -877,7 +888,6 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.UnitName)
                 .HasMaxLength(50)
                 .HasColumnName("unit_name");

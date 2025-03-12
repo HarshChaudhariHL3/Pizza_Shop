@@ -31,9 +31,17 @@ public partial class CategoryItem
 
     public string? ModifiedBy { get; set; }
 
+    public bool ItemType { get; set; }
+
+    public bool DefaultTax { get; set; }
+
+    public int? UnitId { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+    public virtual Unit? Unit { get; set; }
 }

@@ -9,12 +9,17 @@ public class CategoryListViewModel
     public string ItemName { get; set; } = null!;
 
     public string? Description { get; set; }
+    public bool DefaultTax { get; set; }
+
+    public int? UnitId { get; set; }
+
 
     public int? Quantity { get; set; }
 
     public float? Price { get; set; }
 
-    public bool? IsAvailable { get; set; }
+    public bool ItemType { get; set; }
+    public bool IsAvailable { get; set; }
 
     public string? ShortCode { get; set; }
 

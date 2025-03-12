@@ -7,6 +7,11 @@ public interface IMenuRepository
 {
     List<Category> CategoryList();
 
+     List<Unit> UnitList();
+    CategoryItem GetItemById(int itemId);
+
+    void DeleteCategoryItem(int itemId);
+
     List<CategoryItem> CategoryItemList(int categoryId);
 
     void AddCategory(MenuViewModel model);
@@ -15,4 +20,7 @@ public interface IMenuRepository
     void UpdateCategory(Category category);
 
     void DeleteCategory(int id);
+
+    void UpdateCategoryItem(CategoryItem categoryItem);
+    CategoryItem GetCategoryItemById(int id);
 }

@@ -9,8 +9,6 @@ public partial class Unit
 
     public string UnitName { get; set; } = null!;
 
-    public int? Quantity { get; set; }
-
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? ModifiedAt { get; set; }
@@ -18,6 +16,8 @@ public partial class Unit
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public virtual ICollection<CategoryItem> CategoryItems { get; set; } = new List<CategoryItem>();
 
     public virtual ICollection<ModifierItem> ModifierItems { get; set; } = new List<ModifierItem>();
 }
