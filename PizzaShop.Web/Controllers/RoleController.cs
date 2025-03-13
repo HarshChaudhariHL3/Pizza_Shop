@@ -11,7 +11,7 @@ public class RoleController(IRoleService _roleService) : Controller
     [HttpGet]
     public IActionResult Roles()
     {
-        
+
         ViewBag.Roles = _roleService.GetRoles();
 
         return View();
@@ -20,35 +20,50 @@ public class RoleController(IRoleService _roleService) : Controller
     [HttpGet]
     public IActionResult Permission(int roleId)
     {
-
-        ViewBag.Roles = roleId;
-        ViewBag.RoleName = _roleService.GetRoleById(roleId).RoleName;
-
-        var rolePermission = _roleService.GetPermissionByroleId(roleId);
-
-        var permissionList = _roleService.GetPermissionListByRoleId(roleId);
-
-        var model = new RoleViewModel
+        try
         {
-            RoleId = roleId,
-            PermissionList = rolePermission.Select(x => new PermissionViewModel
-            {
-                PermissionId = x.PermissionId,
-                ModuleName = permissionList.FirstOrDefault(p => p.PermissionId == x.PermissionId).ModuleName,
-                CanView = x.CanView,
-                CanAddEdit = x.CanAddEdit,
-                CanDelete = x.CanDelete,
-            }).ToList() 
-        };
+            ViewBag.Roles = roleId;
+            ViewBag.RoleName = _roleService.GetRoleById(roleId).RoleName;
 
-        return View(model);
+            var rolePermission = _roleService.GetPermissionByroleId(roleId);
+
+            var permissionList = _roleService.GetPermissionListByRoleId(roleId);
+
+            var model = new RoleViewModel
+            {
+                RoleId = roleId,
+                PermissionList = rolePermission.Select(x => new PermissionViewModel
+                {
+                    PermissionId = x.PermissionId,
+                    ModuleName = permissionList.FirstOrDefault(p => p.PermissionId == x.PermissionId).ModuleName,
+                    CanView = x.CanView,
+                    CanAddEdit = x.CanAddEdit,
+                    CanDelete = x.CanDelete,
+                }).ToList()
+            };
+
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public IActionResult Permission(RoleViewModel model)
     {
-        var updated = _roleService.UpdatePermission(model);  
-        TempData["Success"] = "Permission updated successfully.";
-        return RedirectToAction("Roles", new{RoleId = model.RoleId});
+        try
+        {
+            var updated = _roleService.UpdatePermission(model);
+            TempData["Success"] = "Permission updated successfully.";
+            return RedirectToAction("Roles", new { RoleId = model.RoleId });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 }

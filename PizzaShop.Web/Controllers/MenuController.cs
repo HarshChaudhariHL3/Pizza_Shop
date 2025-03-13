@@ -11,97 +11,201 @@ public class MenuController(IMenuService _menuService) : Controller
     [HttpGet]
     public IActionResult Menu()
     {
-        var data = _menuService.GetCategories();
-
-        if (data != null)
+        try
         {
-            var menu = new MenuViewModel
+            var data = _menuService.GetCategories();
+
+            if (data != null)
             {
-                CategoriesList = data.Select(p => new CategoryViewModel
+                var menu = new MenuViewModel
                 {
-                    CategoryId = p.CategoryId,
-                    CategoryName = p.CategoryName,
-                    Description = p.Description
-                }).ToList(),
-            };
-            return View(menu);
+                    CategoriesList = data.Select(p => new CategoryViewModel
+                    {
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.CategoryName,
+                        Description = p.Description
+                    }).ToList(),
+                };
+                return View(menu);
+            }
+            return View(new MenuViewModel());
         }
-        return View(new MenuViewModel());
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     // for categoryList View
     [HttpGet]
     public IActionResult CategoryItems(int categoryId)
     {
-        var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
+        try
+        {
+            var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
 
-        return Json(categoryItems);
+            return Json(categoryItems);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
-// for edit categoryItems
+    // for edit categoryItems
     [HttpGet]
     public IActionResult GetItemDetails(int itemId)
     {
-        var item = _menuService.GetItemById(itemId); 
-        if (item == null)
+        try
         {
-            return NotFound();
+            var item = _menuService.GetItemById(itemId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return Json(item);
         }
-        return Json(item); 
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpPost]
+    public IActionResult UpdateCategoryItem(CategoryListViewModel model)
+    {
+        try
+        {
+            _menuService.EditCategoryItem(model);
+            TempData["Success"] = "CategoryItem Edited Successfully";
+            return Json(new { Success = true });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+    [HttpPost]
+    public IActionResult AddCategoryItem(CategoryListViewModel model)
+    {
+        try
+        {
+            _menuService.AddCategoryItem(model);
+            TempData["Success"] = "CategoryItem Edited Successfully";
+            return Json(new { Success = true });
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
 
     [HttpPost]
     public IActionResult AddCategory(MenuViewModel model)
     {
-        _menuService.AddCategory(model);
-        TempData["Success"] = "Added Category Successfully";
-        return RedirectToAction("Menu");
+        try
+        {
+            _menuService.AddCategory(model);
+            TempData["Success"] = "Added Category Successfully";
+            return RedirectToAction("Menu");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
 
     public IActionResult EditCategory(MenuViewModel model)
     {
-        _menuService.EditCategory(model);
-        TempData["Success"] = "Category Updated successfully.";
-        return RedirectToAction("Menu");
+        try
+        {
+            _menuService.EditCategory(model);
+            TempData["Success"] = "Category Updated successfully.";
+            return RedirectToAction("Menu");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public IActionResult DeleteCategory(MenuViewModel model)
     {
-        _menuService.RemoveCategory(model.CategoryId);
-        TempData["Success"] = "Deleted successfully.";
-        return RedirectToAction("Menu");
+        try
+        {
+            _menuService.RemoveCategory(model.CategoryId);
+            TempData["Success"] = "Deleted successfully.";
+            return RedirectToAction("Menu");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     public IActionResult GetCategory()
     {
-        var category = _menuService.GetCategories();
-        return Json(category);
+        try
+        {
+            var category = _menuService.GetCategories();
+            return Json(category);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
-    public IActionResult GetUnitList(){
-        var list = _menuService.UnitList();
-        return Json(list);
+    public IActionResult GetUnitList()
+    {
+        try
+        {
+            var list = _menuService.UnitList();
+            return Json(list);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public IActionResult DeleteCategoryItem(int itemId)
     {
-        var result = _menuService.DeleteCategoryItem(itemId); 
-        
-        if (result)
+        try
         {
-            TempData["Success"] = "Category item deleted successfully.";
-        }
-        else
-        {
-            TempData["Error"] = "Failed to delete category item.";
-        }
+            var result = _menuService.DeleteCategoryItem(itemId);
 
-        return RedirectToAction("Menu"); 
+            if (result)
+            {
+                TempData["Success"] = "Category item deleted successfully.";
+                return Json(result);
+            }
+            else
+            {
+                TempData["Error"] = "Failed to delete category item.";
+                return Json(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
 }

@@ -116,9 +116,6 @@ public class MenuService : IMenuService
         return false;
     }
 
-
-
-
     public void EditCategoryItem(CategoryListViewModel model)
     {
         var categoryItem = _menuRepository.GetCategoryItemById(model.CategoryItemId);
@@ -138,6 +135,10 @@ public class MenuService : IMenuService
 
             _menuRepository.UpdateCategoryItem(categoryItem);
         }
+    }
+    public void AddCategoryItem(CategoryListViewModel model)
+    {
+            _menuRepository.AddCategoryItem(model);
     }
 }
 

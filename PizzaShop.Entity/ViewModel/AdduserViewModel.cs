@@ -1,4 +1,5 @@
 using System.Runtime.Serialization.Formatters;
+using Microsoft.AspNetCore.Http;
 
 namespace PizzaShop.Entity.ViewModel;
 
@@ -28,6 +29,8 @@ public class AdduserViewModel
 
     public string? Address { get; set; }
     public string? Imgurl { get; set; }
+
+    public IFormFile FormFile { get; set; }
 
     public int? ZipCode { get; set; }
 

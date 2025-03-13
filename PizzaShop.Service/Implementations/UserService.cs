@@ -1,4 +1,3 @@
-using System.Threading.RateLimiting;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
@@ -183,8 +182,8 @@ public class UserService(IUserRepository _repository) : IUserService
 
             user_view.FirstName = user.FirstName;
             user_view.LastName = user.LastName;
+            user_view.Imgurl = user.ImgUrl;
             user_view.Email = user.Email;
-            // user_view.ProfileImg = string.Join(", ", user.ImgUrl);
             user_view.Phone = user.Phone?.ToString();
             user_view.Status = user.Status ?? false;
             user_view.RoleName = role?.RoleName;

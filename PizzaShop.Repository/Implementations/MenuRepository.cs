@@ -56,6 +56,25 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.SaveChanges();
     }
 
+    public void AddCategoryItem(CategoryListViewModel model){
+
+        var categoryItem = new CategoryItem
+        {
+            CategoryId = model.CategoryId,
+            ItemName = model.ItemName,
+            Description = model.Description,
+            Quantity = model.Quantity,
+            Price = model.Price,
+            DefaultTax = model.DefaultTax,
+            UnitId = model.UnitId,
+            IsAvailable = model.IsAvailable,
+            ItemType = model.ItemType,
+            ShortCode = model.ShortCode,
+        };
+        _context.CategoryItems.Add(categoryItem);
+        _context.SaveChanges();
+    }
+
     public Category GetCategoryById(int id)
     {
         return _context.Categories.FirstOrDefault(p => p.CategoryId == id);

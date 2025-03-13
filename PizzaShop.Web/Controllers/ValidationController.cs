@@ -17,37 +17,53 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
     [HttpGet]
     public IActionResult Login()
     {
-        var user = SessionUtils.GetUser(HttpContext);
-        if (user == null)
-            return View();
-        else
+        try
         {
-            return RedirectToAction("Index", "Home");
+            var user = SessionUtils.GetUser(HttpContext);
+            if (user == null)
+                return View();
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 
     [HttpPost]
     public async Task<IActionResult> Login(Login model)
     {
-        var user = await _authService.AuthenticateUser(model.email, model.password);
-        if (user == null)
+        try
         {
-            TempData["Error"] = "Invalid email or password";
-            return View(model);
+            var user = await _authService.AuthenticateUser(model.email, model.password);
+            if (user == null)
+            {
+                TempData["Error"] = "Invalid email or password";
+                return View(model);
+            }
+
+            var token = _jwtService.GenerateJwtToken(user.FirstName + " " + user.LastName, user.Email, user.UserRole ?? 0, user.UserId);
+            CookieUtils.SaveJWTToken(Response, token);
+
+            if (model.Rememberme)
+            {
+                CookieUtils.SaveUserData(Response, user);
+            }
+
+            SessionUtils.SetUser(HttpContext, user);
+
+            TempData["Success"] = "Login Successfull";
+            return RedirectToAction("Index", "Home");
         }
-
-        var token = _jwtService.GenerateJwtToken(user.FirstName + " " + user.LastName, user.Email, user.UserRole ?? 0 , user.UserId);
-        CookieUtils.SaveJWTToken(Response, token);
-
-        if (model.Rememberme)
-        {     
-            CookieUtils.SaveUserData(Response, user);
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-
-        SessionUtils.SetUser(HttpContext, user);
-
-        TempData["Success"] = "Login Successfull";
-        return RedirectToAction("Index", "Home");
     }
     public IActionResult Forgotpassword()
     {
@@ -57,94 +73,137 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
     [HttpPost]
     public IActionResult Forgotpassword(Forgotpassword model)
     {
-        if (string.IsNullOrEmpty(model.email))
+        try
         {
-            TempData["Error"] = "Email is Required";
-            return View(model);
+            if (string.IsNullOrEmpty(model.email))
+            {
+                TempData["Error"] = "Email is Required";
+                return View(model);
+            }
+
+            var user = _authService.Useremail(model.email);
+            if (user == null)
+            {
+                TempData["Error"] = "Email not Found";
+                return View(model);
+            }
+
+            var resetLink = Url.Action("Resetpassword", "Validation", new { user_Email = model.email }, Request.Scheme);
+
+            Console.WriteLine(resetLink);
+            Task task = _sendmail.SendMail(model.email, resetLink);
+
+
+            TempData["Success"] = "Email has been sent to reset your password";
+            return RedirectToAction("Login", "Validation");
         }
-        
-        var user = _authService.Useremail(model.email);
-        if (user == null)
+        catch (Exception ex)
         {
-            TempData["Error"] = "Email not Found";
-            return View(model);
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-
-        var resetLink = Url.Action("Resetpassword", "Validation", new { user_Email = model.email }, Request.Scheme);
-
-        Console.WriteLine(resetLink);
-        Task task = _sendmail.SendMail(model.email, resetLink);
-
-
-        TempData["Success"] = "Email has been sent to reset your password";
-        return RedirectToAction("Login", "Validation");
-
     }
 
     [HttpGet]
     public IActionResult Resetpassword(string user_Email)
     {
-        Resetpassword change = new();
-        change.email = user_Email;
-        return View(change);
+        try
+        {
+            Resetpassword change = new();
+            change.email = user_Email;
+            return View(change);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> Resetpassword(Resetpassword model)
     {
-
-        var (success, error) = await _authService.ChangePassword(model);
-
-        if (error != null)
+        try
         {
-            TempData["Error"] = error ?? "Invalid";
+            var (success, error) = await _authService.ChangePassword(model);
+
+            if (error != null)
+            {
+                TempData["Error"] = error ?? "Invalid";
+                return RedirectToAction("ResetPassword", "Validation");
+            }
+            if (success)
+            {
+                TempData["Success"] = "Password is Change Successfully";
+                return RedirectToAction("Login", "Validation");
+            }
+
             return RedirectToAction("ResetPassword", "Validation");
         }
-        if (success)
+        catch (Exception ex)
         {
-            TempData["Success"] = "Password is Change Successfully";
-            return RedirectToAction("Login", "Validation");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-
-        return RedirectToAction("ResetPassword", "Validation");
     }
 
-    public IActionResult Changepassword(){
-        var useremail = SessionUtils.GetUser(HttpContext);
-        Changepassword change = new();
-        change.email = useremail?.Email ?? string.Empty;
-        return View(change);
+    public IActionResult Changepassword()
+    {
+        try
+        {
+            var useremail = SessionUtils.GetUser(HttpContext);
+            Changepassword change = new();
+            change.email = useremail?.Email ?? string.Empty;
+            return View(change);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
-        [HttpPost]
+    [HttpPost]
     public async Task<IActionResult> Changepassword(Changepassword model)
     {
-
-        var (success, error) = await _authService.ChangePassword(model);
-
-        if (error != null)
+        try
         {
-            TempData["Error"] = error ?? "Invalid";
+            var (success, error) = await _authService.ChangePassword(model);
+
+            if (error != null)
+            {
+                TempData["Error"] = error ?? "Invalid";
+                return RedirectToAction("ResetPassword", "Validation");
+            }
+            if (success)
+            {
+                TempData["Success"] = "Password is Change Successfully";
+                return RedirectToAction("Login", "Validation");
+            }
+
             return RedirectToAction("ResetPassword", "Validation");
         }
-        if (success)
+        catch (Exception ex)
         {
-            TempData["Success"] = "Password is Change Successfully";
-            return RedirectToAction("Login", "Validation");
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-
-        return RedirectToAction("ResetPassword", "Validation");
     }
 
     public IActionResult Logout()
     {
-        // Clear out all the Cookie data
-        CookieUtils.ClearCookies(HttpContext);
+        try
+        {
+            CookieUtils.ClearCookies(HttpContext);
+            SessionUtils.ClearSession(HttpContext);
 
-        // Clear out all the Session data
-        SessionUtils.ClearSession(HttpContext);
-
-        return RedirectToAction("Login");
+            return RedirectToAction("Login");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     public IActionResult AccessDenied()
@@ -152,10 +211,10 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
         return View();
     }
 
-[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-public IActionResult Error()
-{
-    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-}
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 }
 

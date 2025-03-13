@@ -99,26 +99,58 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
 
     public ActionResult GetCountries()
     {
-        var countries = _userService.GetCountries();
-        return Json(countries);
+        try
+        {
+            var countries = _userService.GetCountries();
+            return Json(countries);
+        }
+        catch (Exception ex)
+        {
+           TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     public IActionResult GetRoles()
     {
-        var roles = _userService.GetRoles();
-        return Json(roles);
+        try
+        {
+            var roles = _userService.GetRoles();
+            return Json(roles);
+        }
+        catch (Exception ex)
+        {
+           TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     public IActionResult GetStates(int CountryId)
     {
-        var states = _userService.GetStates(CountryId);
-        return Json(states);
+        try
+        {
+            var states = _userService.GetStates(CountryId);
+            return Json(states);
+        }
+        catch (Exception ex)
+        {
+           TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     public IActionResult GetCities(int StateId)
     {
-        var cities = _userService.GetCities(StateId);
-        return Json(cities);
+        try
+        {
+            var cities = _userService.GetCities(StateId);
+            return Json(cities);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpGet]
@@ -147,7 +179,8 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         try
         {
             var data = _userService.pagination_user_list(page, pagesize, search);
-            if(data == null){
+            if (data == null)
+            {
                 TempData["Error"] = "Not Valid User";
                 return RedirectToAction("Users", "User");
             }
@@ -241,8 +274,6 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
     {
         try
         {
-
-
             _userService.DeleteUser(Email);
             TempData["Success"] = "User Deleted Successfully";
             return RedirectToAction("Users");
@@ -252,6 +283,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
             TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
+        
     }
 
 }

@@ -12,6 +12,8 @@ public interface IMenuRepository
 
     void DeleteCategoryItem(int itemId);
 
+     void AddCategoryItem(CategoryListViewModel model);
+
     List<CategoryItem> CategoryItemList(int categoryId);
 
     void AddCategory(MenuViewModel model);

@@ -11,6 +11,7 @@ public interface IMenuService
     List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId);
 
     void AddCategory(MenuViewModel model);
+    void AddCategoryItem(CategoryListViewModel model);
 
     CategoryListViewModel GetItemById(int itemId);
 
