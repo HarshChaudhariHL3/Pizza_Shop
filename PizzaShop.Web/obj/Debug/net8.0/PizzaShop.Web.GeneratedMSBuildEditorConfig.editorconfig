@@ -46,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxWaWV3XENhdGVnb3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[d:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Shared/PartialView/Modifier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxWaWV3XE1vZGlmaWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [d:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Shared/_LoginLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -56,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [d:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[d:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/TaxesAndFees/TaxesAndFees.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGF4ZXNBbmRGZWVzXFRheGVzQW5kRmVlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [d:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/User/Adduser.cshtml]

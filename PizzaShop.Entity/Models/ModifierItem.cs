@@ -9,7 +9,7 @@ public partial class ModifierItem
 
     public int? ModifierGroupId { get; set; }
 
-    public string ModifierName { get; set; } = null!;
+    public string ModifierItemName { get; set; } = null!;
 
     public float? Rate { get; set; }
 
@@ -26,6 +26,10 @@ public partial class ModifierItem
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public int? Quantity { get; set; }
+
+    public string? Description { get; set; }
 
     public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
 

@@ -21,12 +21,15 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<ITaxesAndFeesRepository, TaxesAndFeesRepository>();
 builder.Services.AddScoped<ISendmailService, SendmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<ITaxesAndFeesService, TaxesAndFeesService>();
+
 
 builder.Services.AddAuthentication(options =>
 {

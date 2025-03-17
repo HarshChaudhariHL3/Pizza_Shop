@@ -421,6 +421,7 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.ImageUrl).HasColumnName("image_url");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
@@ -433,9 +434,10 @@ public partial class PizzaShopDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
             entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
-            entity.Property(e => e.ModifierName)
+            entity.Property(e => e.ModifierItemName)
                 .HasMaxLength(255)
-                .HasColumnName("modifier_name");
+                .HasColumnName("modifier_item_name");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.Rate).HasColumnName("rate");
             entity.Property(e => e.UnitId).HasColumnName("unit_id");
 
@@ -845,6 +847,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
+            entity.Property(e => e.IsDefault)
+                .HasDefaultValue(true)
+                .HasColumnName("is_default");
             entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.IsEnabled)
                 .HasDefaultValue(true)

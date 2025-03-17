@@ -13,7 +13,7 @@ public partial class TaxesAndFee
 
     public decimal? TaxValue { get; set; }
 
-    public bool? IsEnabled { get; set; }
+    public bool IsEnabled { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -24,6 +24,8 @@ public partial class TaxesAndFee
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public bool IsDefault { get; set; }
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 
