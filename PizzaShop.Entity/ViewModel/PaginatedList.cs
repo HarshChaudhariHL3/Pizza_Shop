@@ -1,19 +1,23 @@
-using System;
 
 namespace PizzaShop.Entity.ViewModel;
 
 public class PaginatedList<T>
 {
-    public List<T> Items { get; set; }
-    public int PageIndex { get; set; }
 
-    public int TotalPages { get; set; }
+    public List<T> Items { get; }
+    public int PageIndex { get; }
 
-    public PaginatedList(List<T> items, int PageIndex , int TotalPages)
+    public int PageSize { get; }
+    public int TotalPages { get; }
+
+    public string Search { get;}
+   
+    public PaginatedList(List<T> items, int pageIndex, int totalPages , int pagesize , string search="")
     {
-        this.Items = items;
-        this.PageIndex = PageIndex;
-        this.TotalPages = TotalPages;
+        Items = items;
+        PageSize = pagesize;
+        PageIndex = pageIndex;
+        TotalPages = totalPages;
+        Search = search;
     }
-
 }

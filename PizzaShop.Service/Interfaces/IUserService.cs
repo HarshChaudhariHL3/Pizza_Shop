@@ -27,6 +27,5 @@ public interface IUserService
 
     List<City> GetCities(int StateId);
 
-    PaginatedList<UserlistViewModel> pagination_user_list(int page, int pageSize, string search);
 
 }

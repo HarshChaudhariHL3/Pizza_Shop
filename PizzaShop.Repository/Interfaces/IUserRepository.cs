@@ -19,10 +19,6 @@ public interface IUserRepository
 
    List<City> GetCity(int state_id);
 
-   List<User> pagination_user_list(int page, int page_size, string search);
-
-
-    int get_usercount(string search);
 
     bool Update(User user);
 

@@ -367,8 +367,76 @@
     </div>
 </div>
 
+@* add existing modifier  *@
+<div class="modal fade" id="ExistingModifier" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div>Hello</div>
+            <form method="post" asp-controller="Admin" asp-action="AddExistingModifier">
+              
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Select Existing Modifier </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="responsive-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th><input id="selectModifierAll" class="form-check-input main-checkbox"
+                                            type="checkbox"></th>
+                                    <th>Name</th>
+                                    <th>Unit</th>
+                                    <th>Rate</th>
+                                    <th>Quantity</th>
+                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @* @if (Model.Any())
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input class="form-check-input main-checkbox row-checkbox" type="checkbox"></td>
 
+                                            <td class="d-flex gap-2 align-content-center">
+                                                <p>@item.ModifierName</p>
+                                            </td>
+                                            <td class="">
+                                                <p>@item.UnitName</p>
+                                            </td>
+                                            <td>@item.Rate</td>
+                                            <td>@item.Quantity</td>
 
+                                           
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7">No items found for this Modifier.</td>
+                                    </tr>
+                                } *@
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-white border border-primary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+            </form>
+        </div>
+                 <input type="hidden" id="addItemId"> 
+    </div>
+</div>
 
 
 
@@ -648,7 +716,7 @@
         });
 
         $(document).on('click', '.addExistingModifier-btn', function () {
-            $('#editModifierItem').modal('show');
+            $('#ExistingModifier').modal('show');
         });
     });
 </script>

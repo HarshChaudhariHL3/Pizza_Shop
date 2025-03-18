@@ -15,4 +15,6 @@ public class UserlistViewModel
     public bool Status { get; set; }
 
     public string? RoleName { get; set; }
+
+    
 }

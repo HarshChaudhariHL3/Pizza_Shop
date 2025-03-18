@@ -13,8 +13,6 @@ public class MenuViewModel
 
     public string? DescriptionModifier { get; set; }
 
-
-
     public List<CategoryViewModel> CategoriesList { get; set; } = new List<CategoryViewModel>();
     public List<ModifierViewModel> ModifierList { get; set; } = new List<ModifierViewModel>();
 

@@ -3,7 +3,7 @@
 }
 
 
-@model PizzaShop.Entity.ViewModel.UserlistViewModel
+@model PizzaShop.Entity.ViewModel.PaginatedList<PizzaShop.Entity.ViewModel.UserlistViewModel>
 <div >
     <!-- user nav -->
     <div class="d-flex  justify-content-between mb-4">
@@ -46,7 +46,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ViewBag.users)
+                    @foreach (var item in @Model.Items)
                     {
                         <tr>
                             <td class="d-flex gap-2 align-items-center">
@@ -101,19 +101,18 @@
                             </select>
                         </li>
                         <li class=" page-item m-2">
-                            Showing @ViewBag.page of @ViewBag.totalpages
+                            Showing @Model.PageIndex of @Model.TotalPages
                         </li>
 
                         <!-- Previous Button -->
                         <li class="page-item m-2 pt-3">
                             <p class="page-link" aria-label="Previous" id="previous_page">
-                                @* <span aria-hidden="true">&laquo;</span> *@
+                               
                                 <i class="fa-solid fa-backward" aria-hidden="true"></i>
                             </p>
                         </li>
                         <li class="page-item m-2 pt-3">
                             <p class="page-link" aria-label="Next" id="next_page">
-                                @* <span aria-hidden="true">&raquo;</span> *@
                                 <i class="fa-solid fa-forward" aria-hidden="true"></i>
                             </p>
                         </li>
@@ -162,7 +161,7 @@
         $(document).ready(function () {
 
             // Set selected option from ViewBag.pageSize
-            let opt_value = '@ViewBag.pagesize';
+            let opt_value = '@Model.PageSize';
             if (opt_value == 3) {
                 $('#opt3').attr('selected', 'selected');
             } else if (opt_value == 5) {
@@ -174,8 +173,8 @@
             }
 
             // Previous Page Click Handler
-            let currentPage = @ViewBag.page;
-            let totalPages = @ViewBag.totalpages;
+            let currentPage = @Model.PageIndex;
+            let totalPages = @Model.TotalPages;
 
             if (currentPage > 1) {
                 $('#previous_page').on('click', function () {
@@ -204,7 +203,6 @@
 
 
             $('.openmodel').on("click", function () {
-                debugger;
                 var email = $(this).data('id');
                 console.log(email)
                 $("#model-email").val(email);

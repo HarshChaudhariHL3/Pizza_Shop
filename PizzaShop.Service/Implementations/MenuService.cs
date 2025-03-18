@@ -15,18 +15,11 @@ public class MenuService : IMenuService
         _menuRepository = menuRepository;
     }
 
+    #region Category
     public List<Category> GetCategories()
     {
         return _menuRepository.CategoryList();
     }
-
-    public List<ModifierGroup> GetModifierGroups(){
-        return _menuRepository.ModifierList();
-    }
-    public  List<Unit> UnitList(){
-        return _menuRepository.UnitList();
-    }
-
     public List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId)
     {
         var categoryItems = _menuRepository.CategoryItemList(categoryId);
@@ -48,25 +41,7 @@ public class MenuService : IMenuService
 
         return categoryItemViewModels;
     }
-    
-    public List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId)
-    {
-        var modifierItems = _menuRepository.ModifierItemList(ModifierGroupId);
 
-        var modifierListViewModel = modifierItems.Select(item => new ModifierListViewModel{
-            ModifierItemId = item.ModifierItemId,
-            ModifierItemName = item.ModifierItemName,
-            Quantity = item.Quantity,
-            UnitName = item.Unit?.UnitName,
-            Rate = item.Rate,
-            ModifierGroupId = item.ModifierGroupId
-            
-        }).ToList();
-
-        return modifierListViewModel;
-    }
-    
-    // Fetch item details by ItemId
     public CategoryListViewModel GetItemById(int itemId)
     {
         var item = _menuRepository.GetItemById(itemId);
@@ -91,34 +66,10 @@ public class MenuService : IMenuService
             ImageUrl = item.ImageUrl
         };
     }
-    public ModifierListViewModel GetModifierItemById(int itemId)
-    {
-        var item = _menuRepository.GetModifierItemById(itemId);
-        if (item == null)
-            return null;
-
-        // Map data from entity to ViewModel
-        return new ModifierListViewModel
-        {
-            ModifierGroupId = item.ModifierGroupId,
-            ModifierItemName = item.ModifierItemName,
-            ModifierItemId = item.ModifierItemId,
-            Rate = item.Rate,
-            Quantity = item.Quantity,
-            UnitId = item.UnitId,
-            ImageUrl = item.ImageUrl,
-            Description = item.Description
-        };
-    }
-
 
     public void AddCategory(MenuViewModel model)
     {
         _menuRepository.AddCategory(model);
-    }
-    public void AddModifier(MenuViewModel model)
-    {
-        _menuRepository.AddModifier(model);
     }
 
     public MenuViewModel GetCategoryById(int id)
@@ -143,43 +94,12 @@ public class MenuService : IMenuService
             _menuRepository.UpdateCategory(category);
         }
     }
-
-    public void EditModifier(MenuViewModel model)
-    {
-        var modifier = _menuRepository.GetModifierGroupById(model.ModifierGroupId);
-        if (modifier != null)
-        {
-            modifier.ModifierName = model.ModifierName;
-            modifier.Description = model.DescriptionModifier;
-            _menuRepository.UpdateModifier(modifier);
-        }
-    }
-
-    public void RemoveCategory(int id)
-    {
-        _menuRepository.DeleteCategory(id);
-    }
-    public void RemoveModifier(int id)
-    {
-        _menuRepository.DeleteModifier(id);
-    }
-
     public bool DeleteCategoryItem(int itemId)
     {
         var categoryItem = _menuRepository.GetCategoryItemById(itemId);
         if (categoryItem != null)
         {
             _menuRepository.DeleteCategoryItem(itemId);
-            return true;
-        }
-        return false;
-    }
-    public bool DeleteModifierItem(int ModifierItemId)
-    {
-        var Item = _menuRepository.GetModifierItemById(ModifierItemId);
-        if (Item != null)
-        {
-            _menuRepository.DeleteModifierItem(ModifierItemId);
             return true;
         }
         return false;
@@ -205,6 +125,108 @@ public class MenuService : IMenuService
             _menuRepository.UpdateCategoryItem(categoryItem);
         }
     }
+
+    public void AddCategoryItem(CategoryListViewModel model)
+    {
+            _menuRepository.AddCategoryItem(model);
+    }
+
+    #endregion
+    #region Modifier
+    
+
+
+    public List<ModifierGroup> GetModifierGroups(){
+        return _menuRepository.ModifierList();
+    }
+    public  List<Unit> UnitList(){
+        return _menuRepository.UnitList();
+    }
+    public void RemoveCategory(int id)
+    {
+        _menuRepository.DeleteCategory(id);
+    }
+
+    
+    public List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId)
+    {
+        var modifierItems = _menuRepository.ModifierItemList(ModifierGroupId);
+
+        var modifierListViewModel = modifierItems.Select(item => new ModifierListViewModel{
+            ModifierItemId = item.ModifierItemId,
+            ModifierItemName = item.ModifierItemName,
+            Quantity = item.Quantity,
+            UnitName = item.Unit?.UnitName,
+            Rate = item.Rate,
+            ModifierGroupId = item.ModifierGroupId
+            
+        }).ToList();
+
+        return modifierListViewModel;
+    }
+    
+    // Fetch item details by ItemId
+    public ModifierListViewModel GetModifierItemById(int itemId)
+    {
+        var item = _menuRepository.GetModifierItemById(itemId);
+        if (item == null)
+            return null;
+
+        // Map data from entity to ViewModel
+        return new ModifierListViewModel
+        {
+            ModifierGroupId = item.ModifierGroupId,
+            ModifierItemName = item.ModifierItemName,
+            ModifierItemId = item.ModifierItemId,
+            Rate = item.Rate,
+            Quantity = item.Quantity,
+            UnitId = item.UnitId,
+            ImageUrl = item.ImageUrl,
+            Description = item.Description
+        };
+    }
+
+
+    
+    public void AddModifier(MenuViewModel model)
+    {
+        _menuRepository.AddModifier(model);
+    }
+
+    
+
+    
+
+    public void EditModifier(MenuViewModel model)
+    {
+        var modifier = _menuRepository.GetModifierGroupById(model.ModifierGroupId);
+        if (modifier != null)
+        {
+            modifier.ModifierName = model.ModifierName;
+            modifier.Description = model.DescriptionModifier;
+            _menuRepository.UpdateModifier(modifier);
+        }
+    }
+
+    
+    public void RemoveModifier(int id)
+    {
+        _menuRepository.DeleteModifier(id);
+    }
+
+    
+    public bool DeleteModifierItem(int ModifierItemId)
+    {
+        var Item = _menuRepository.GetModifierItemById(ModifierItemId);
+        if (Item != null)
+        {
+            _menuRepository.DeleteModifierItem(ModifierItemId);
+            return true;
+        }
+        return false;
+    }
+
+    
     public void EditModifierItem(ModifierListViewModel model)
     {
         var item = _menuRepository.GetModifierItemById(model.ModifierItemId);
@@ -220,14 +242,12 @@ public class MenuService : IMenuService
             _menuRepository.UpdateModifierItem(item);
         }
     }
-    public void AddCategoryItem(CategoryListViewModel model)
-    {
-            _menuRepository.AddCategoryItem(model);
-    }
+   
     public void AddModifierItem(ModifierListViewModel model)
     {
             _menuRepository.AddModifierItem(model);
     }
+    #endregion
 }
 
 

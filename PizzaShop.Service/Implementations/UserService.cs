@@ -72,7 +72,7 @@ public class UserService(IUserRepository _repository) : IUserService
     }
 
 
-    public List<Country> GetCountries()
+    public System.Collections.Generic.List<Country> GetCountries()
     {
         return _repository.GetCountry();
     }
@@ -155,44 +155,6 @@ public class UserService(IUserRepository _repository) : IUserService
     //     return _repository.Update(user);
     // }
 
-    public PaginatedList<UserlistViewModel> pagination_user_list(int page, int pageSize, string search)
-    {
-        var userlist = new List<User>();
-        var count = 0;
-        if (string.IsNullOrEmpty(search))
-        {
-            count = _repository.get_usercount(search);
-            userlist = _repository.pagination_user_list(page, pageSize, search);
-
-        }
-        else
-        {
-            count = _repository.get_usercount(search);
-            if(count == 0){
-                return null;
-            }
-            userlist = _repository.pagination_user_list(page, pageSize, search);
-        }
-
-        List<UserlistViewModel> user_data = new List<UserlistViewModel>();
-        foreach (var user in userlist)
-        {
-            var role = user.UserRole.HasValue ? _repository.GetRole(user.UserId) : null;
-            UserlistViewModel user_view = new UserlistViewModel();
-
-            user_view.FirstName = user.FirstName;
-            user_view.LastName = user.LastName;
-            user_view.Imgurl = user.ImgUrl;
-            user_view.Email = user.Email;
-            user_view.Phone = user.Phone?.ToString();
-            user_view.Status = user.Status ?? false;
-            user_view.RoleName = role?.RoleName;
-
-            user_data.Add(user_view);
-        }
-        int totalPages = (int)Math.Ceiling(count / (double)pageSize);
-        return new PaginatedList<UserlistViewModel>(user_data, page, totalPages);
-    }
 
     public bool AddUser(AdduserViewModel model)
     {

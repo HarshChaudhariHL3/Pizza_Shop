@@ -12,7 +12,7 @@ using PizzaShop.Web.Models;
 
 namespace PizzaShop.Web.Controllers;
 
-public class UserController(IUserService _userService, IJwtService _jwtService) : Controller
+public class UserController(IUserService _userService, IJwtService _jwtService, IPaginationService _paginationService) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Profile()
@@ -159,12 +159,9 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
         try
         {
             string search = null;
-            var data = _userService.pagination_user_list(page, pagesize, search);
-            ViewBag.users = data.Items;
-            ViewBag.pagesize = pagesize;
-            ViewBag.page = page;
-            ViewBag.totalpages = data.TotalPages;
-            return View();
+            var data = _paginationService.pagination_user_list(page, pagesize, search);
+            return View(data);
+            
         }
         catch (Exception ex)
         {
@@ -178,17 +175,17 @@ public class UserController(IUserService _userService, IJwtService _jwtService) 
     {
         try
         {
-            var data = _userService.pagination_user_list(page, pagesize, search);
+            var data = _paginationService.pagination_user_list(page, pagesize, search);
             if (data == null)
             {
                 TempData["Error"] = "Not Valid User";
                 return RedirectToAction("Users", "User");
             }
-            ViewBag.users = data.Items;
-            ViewBag.pagesize = pagesize;
-            ViewBag.page = page;
-            ViewBag.totalpages = data.TotalPages;
-            return View();
+            // ViewBag.users = data.Items;
+            // ViewBag.pagesize = pagesize;
+            // ViewBag.page = page;
+            // ViewBag.totalpages = data.TotalPages;
+            return View(data);
         }
         catch (Exception ex)
         {
