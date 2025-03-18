@@ -68,9 +68,13 @@
                 <i class="bi bi-search"></i>
             </span>
         </div>
-        <a href="" class="btn d-flex justify-content-center " data-bs-target="#model-delete"
+        @* <a href="" class="btn d-flex justify-content-center " data-bs-target="#model-delete"
             data-bs-toggle="modal">
-            <i class="bi bi-trash h5"></i></a>
+            <i class="bi bi-trash h5"></i></a> *@
+
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteMultipleItems">
+             <i class="bi bi-trash h5"></i>
+        </button>
         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addCategoryItems">
             <i class="btn bg-primary bi bi-plus-square text-white">New Item</i>
         </button>
@@ -83,7 +87,7 @@
                 <tr>
                     <th>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="selectAll">
+                            <input class="form-check-input" type="checkbox" id="selectAll">
                         </div>
                     </th>
                     <th scope="col">Name</th>
@@ -356,7 +360,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" id="deleteForm">
-                <div class="modal-body">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
                     <p>Are you sure you want to delete <strong id="deleteItemName"></strong>?</p>
                     <input type="text" id="deleteItemId">
                 </div>
@@ -516,7 +523,31 @@
     </div>
 </div>
 
+@* delete multiple items *@
 
+<div class="modal fade" id="deleteMultipleItems" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteMultipleItemForm">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                    <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
+                    <p>Are you sure you want to delete?</p>
+                    <input type="text" id="deleteItemId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @* Model End *@
 
@@ -555,6 +586,7 @@
 
         // When a category is clicked
         $('.category-item').click(function () {
+            $('#selectAll').prop('checked', false);
             var categoryId = $(this).data('category-id');
             if (categoryId) {
                 fetchCategoryItems(categoryId);
@@ -575,7 +607,7 @@
 
                         $.each(data, function (index, item) {
                             itemsHtml += '<tr>';
-                            itemsHtml += '<td><input type="checkbox" class="item-checkbox" data-item-id="' + item.categoryItemId + '"></td>';
+                            itemsHtml += '<td><input type="checkbox" class="deleteItemCheckbox" data-item-id="' + item.categoryItemId + '"></td>';
                             itemsHtml += '<td>' + item.itemName + '</td>';
                             @* itemsHtml += '<td>' + item.itemType + '</td>'; *@
                             itemsHtml += '<td><div data-item-id="' + item.itemType + '">' + (item.itemType == true ? '@{<img src="~/images/icons/vegan-icon.svg" height="20" width="20" alt="Veg" /> }' : '@{<img src="~/images/icons/non-veg-icon.svg" height="20" width="20" alt="Non-veg" />}') + ' </ div ></ td > ';
@@ -600,6 +632,32 @@
                 }
             });
         }
+        
+        $('#selectAll').click(function () {
+       
+        if ($(this).prop('checked')) {
+            $('.deleteItemCheckbox').prop('checked', true);
+        } else {
+            
+            $('.deleteItemCheckbox').prop('checked', false);
+        }
+        });
+
+        $('#selectAll').click(function (){
+            let selectedIds = [];
+
+            $('.deleteItemCheckbox').each(function(){
+                let id = parseInt($(this).val());
+                console.log("id" +id);  
+            if(!isNaN(id)){
+                selectedIds.push(id);
+            }
+            console.log(selectedIds);
+            });
+
+
+
+        });
 
         $(document).on('click', '.edit-btn', function () {
             var itemId = $(this).data('item-id');

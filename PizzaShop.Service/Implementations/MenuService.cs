@@ -139,6 +139,9 @@ public class MenuService : IMenuService
     public List<ModifierGroup> GetModifierGroups(){
         return _menuRepository.ModifierList();
     }
+    public List<ModifierItem> GetModifierItems(){
+        return _menuRepository.ModifierItemsList();
+    }
     public  List<Unit> UnitList(){
         return _menuRepository.UnitList();
     }

@@ -44,5 +44,5 @@ public interface IMenuRepository
 
     void UpdateModifierItem(ModifierItem modifierItem);
     CategoryItem GetCategoryItemById(int id);
-    
+    List<ModifierItem> ModifierItemsList();
 }

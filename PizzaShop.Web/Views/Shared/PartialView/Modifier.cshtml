@@ -47,8 +47,7 @@
                 <i class="bi bi-search"></i>
             </span>
         </div>
-        <a href="" class="btn d-flex justify-content-center " data-bs-target="#model-delete"
-            data-bs-toggle="modal">
+        <a href="" class="btn d-flex justify-content-center " data-bs-target="#model-delete" data-bs-toggle="modal">
             <i class="bi bi-trash h5"></i></a>
         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addModifierItem">
             <i class="btn bg-primary bi bi-plus-square text-white">New Modifier</i>
@@ -110,7 +109,8 @@
                                 asp-for="DescriptionModifier"></textarea>
                             <label for="floatingTextarea">Description</label>
                         </div>
-                        <button class="border border-0 bg-white mt-3 text-primary addExistingModifier-btn"> + Add Existing Modifier</button>
+                        <button class="border border-0 bg-white mt-3 text-primary addExistingModifier-btn"> + Add
+                            Existing Modifier</button>
                     </div>
                 </div>
 
@@ -182,7 +182,7 @@
 </form>
 
 @* add modifier item *@
-<div class="modal fade" id="addModifierItem"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="addModifierItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -199,8 +199,8 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-floating">
-                                            <select class="form-select" 
-                                                aria-label="Floating label select example" id="addModifierId">
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="addModifierId">
                                             </select>
                                             <label for="addModifierId">Modifier Group*</label>
                                         </div>
@@ -208,36 +208,36 @@
                                     <div class="col">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="addModifierItemName"
-                                                placeholder="Name*" >
-                                            <label for="addModifierItemName" >Name</label>
+                                                placeholder="Name*">
+                                            <label for="addModifierItemName">Name</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="addModifierItemRate" placeholder="Rate" 
-                                                value="0">
+                                            <input type="text" class="form-control" id="addModifierItemRate"
+                                                placeholder="Rate" value="0">
                                             <label for="addModifierItemRate">Rate*</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="addModifierQuantity"  placeholder="Quantity"
-                                                value="0">
+                                            <input type="text" class="form-control" id="addModifierQuantity"
+                                                placeholder="Quantity" value="0">
                                             <label for="addModifierQuantity">Quantity*</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-floating">
-                                            <select class="form-select" 
-                                                    aria-label="Floating label select example"  id="addModifierUnitId">
-                                                </select>
-                                                <label for="addModifierUnitId">Unit*</label>
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="addModifierUnitId">
+                                            </select>
+                                            <label for="addModifierUnitId">Unit*</label>
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div class="row">
                                     <div class="form-floating">
                                         <textarea class="form-control" placeholder="Leave a comment here"
@@ -245,9 +245,9 @@
                                         <label for="addModifierItemDescription">Description</label>
                                     </div>
                                 </div>
-                             
+
                             </div>
-                          
+
                         </div>
                     </div>
                 </div>
@@ -264,7 +264,8 @@
 </div>
 
 @* delete modifier item *@
-<div class="modal fade" id="deleteModifierItemModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModifierItemModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -286,7 +287,7 @@
 </div>
 
 @* edit modifier item *@
-<div class="modal fade" id="editModifierItem"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="editModifierItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -303,8 +304,8 @@
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-floating">
-                                            <select class="form-select" 
-                                                aria-label="Floating label select example" id="editModifierId" disabled>
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="editModifierId" disabled>
                                             </select>
                                             <label for="editModifierId">Modifier Group*</label>
                                         </div>
@@ -312,36 +313,36 @@
                                     <div class="col">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="editModifierItemName"
-                                                placeholder="Name*" >
-                                            <label for="editModifierItemName" >Name</label>
+                                                placeholder="Name*">
+                                            <label for="editModifierItemName">Name</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="editRate" placeholder="Rate" 
+                                            <input type="text" class="form-control" id="editRate" placeholder="Rate"
                                                 value="0">
                                             <label for="editRate">Rate*</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="editModifierQuantity"  placeholder="Quantity"
-                                                value="0">
+                                            <input type="text" class="form-control" id="editModifierQuantity"
+                                                placeholder="Quantity" value="0">
                                             <label for="editModifierQuantity">Quantity*</label>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-floating">
-                                            <select class="form-select" 
-                                                    aria-label="Floating label select example"  id="editModifierUnitId">
-                                                </select>
-                                                <label for="editModifierUnitId">Unit*</label>
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="editModifierUnitId">
+                                            </select>
+                                            <label for="editModifierUnitId">Unit*</label>
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div class="row">
                                     <div class="form-floating">
                                         <textarea class="form-control" placeholder="Leave a comment here"
@@ -349,9 +350,9 @@
                                         <label for="editModifierItemDescription">Description</label>
                                     </div>
                                 </div>
-                             
+
                             </div>
-                          
+
                         </div>
                     </div>
                 </div>
@@ -372,9 +373,9 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div>Hello</div>
-            <form method="post" asp-controller="Admin" asp-action="AddExistingModifier">
-              
+
+            <form method="post" id="existingModifierItemForm">
+
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">
                         Select Existing Modifier </h1>
@@ -391,36 +392,11 @@
                                     <th>Unit</th>
                                     <th>Rate</th>
                                     <th>Quantity</th>
-                        
+
                                 </tr>
                             </thead>
-                            <tbody>
-                                @* @if (Model.Any())
-                                {
-                                    foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td><input class="form-check-input main-checkbox row-checkbox" type="checkbox"></td>
-
-                                            <td class="d-flex gap-2 align-content-center">
-                                                <p>@item.ModifierName</p>
-                                            </td>
-                                            <td class="">
-                                                <p>@item.UnitName</p>
-                                            </td>
-                                            <td>@item.Rate</td>
-                                            <td>@item.Quantity</td>
-
-                                           
-                                        </tr>
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td colspan="7">No items found for this Modifier.</td>
-                                    </tr>
-                                } *@
+                            <tbody id="ExistingModifierItems">
+                                
                             </tbody>
                         </table>
 
@@ -434,7 +410,7 @@
 
             </form>
         </div>
-                 <input type="hidden" id="addItemId"> 
+        <input type="hidden" id="addItemId">
     </div>
 </div>
 
@@ -490,8 +466,6 @@
                 type: 'GET',
                 data: { ModifierGroupId: ModifierGroupId },
                 success: function (data) {
-
-                    console.log(data);
                     if (data && data.length > 0) {
                         var itemsHtml = '';
 
@@ -545,7 +519,6 @@
             url: '/Menu/GetModifier',
             type: 'GET',
             success: function (data) {
-                debugger;   
                 console.log(data);
                 var s = '<option value="-1">Please select Modifier</option>';
                 for (var i = 0; i < data.length; i++) {
@@ -609,9 +582,7 @@
             });
         });
 
-        $(document).on('click', '.deleteModifier-btn', function () 
-        {
-            debugger;
+        $(document).on('click', '.deleteModifier-btn', function () {
             var ModifierItemId = $(this).data('modifieritem-id');
             var ModifierItemName = $(this).data('item-name');
             $('#deleteModifierItemName').text(ModifierItemName);
@@ -623,14 +594,14 @@
         $('#deleteModifierItemForm').submit(function (e) {
             e.preventDefault();
 
-            var ModifierItemId = $('#deleteModifierItemId').val();        
+            var ModifierItemId = $('#deleteModifierItemId').val();
             var ModifierItemName = $('#deleteModifierItemName').val();
 
             // Send data to the server using AJAX
             $.ajax({
                 url: '/Menu/DeleteModifierItem',
                 type: 'POST',
-                data: {ModifierItemId:ModifierItemId},
+                data: { ModifierItemId: ModifierItemId },
                 success: function (response) {
                     // Handle success
                     if (response == true) {
@@ -651,7 +622,6 @@
             url: '/Menu/GetModifier',
             type: 'GET',
             success: function (data) {
-                debugger;   
                 console.log(data);
                 var s = '<option value="-1">Please select Modifier</option>';
                 for (var i = 0; i < data.length; i++) {
@@ -675,7 +645,6 @@
 
         $('#addItemForm').submit(function (e) {
             e.preventDefault();
-            debugger;
             var modifierItemId = $('#addItemId').val();
             var modifierGroupId = $('#addModifierId').val();
             var unitId = $('#addModifierUnitId').val();
@@ -716,7 +685,35 @@
         });
 
         $(document).on('click', '.addExistingModifier-btn', function () {
-            $('#ExistingModifier').modal('show');
+            debugger;
+            fetchExistingModifierList();
         });
+        function fetchExistingModifierList(){
+            
+            $.ajax({
+                url: '/Menu/GetALLModifierItemDetails',
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var itemsHtml = '';
+
+                    $.each(data,function(index, item){
+                        itemsHtml += '<tr>';
+                        itemsHtml += '<td><input type="checkbox" class="item-checkbox" data-id="' + item.modifierItemId + '"></td>';
+                        itemsHtml += '<td>' + item.modifierItemName + '</td>' ;
+                        itemsHtml += '<td>' + item.unitId + '</td>' ;
+                        itemsHtml += '<td>' + item.rate + '</td>' ;
+                        itemsHtml += '<td>' + item.quantity + '</td>' ;
+                        itemsHtml += '</tr>';
+                    });
+                    $('#ExistingModifierItems').html(itemsHtml);
+                    $('#ExistingModifier').modal('show');
+
+                },
+                error: function (error) {
+                    console.error('Error fetching item details:', error);
+                }
+            });
+        }
     });
 </script>

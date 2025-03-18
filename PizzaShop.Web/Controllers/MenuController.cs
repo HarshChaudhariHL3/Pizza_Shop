@@ -47,7 +47,7 @@ public class MenuController(IMenuService _menuService) : Controller
     }
     #region Category
 
-    
+
     // for categoryList View
     [HttpGet]
     public IActionResult CategoryItems(int categoryId)
@@ -384,6 +384,12 @@ public class MenuController(IMenuService _menuService) : Controller
             TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
+    }
+
+    [HttpGet]
+    public IActionResult GetALLModifierItemDetails(){
+        var modifierItemsList = _menuService.GetModifierItems();
+        return Json(modifierItemsList);
     }
     #endregion
 }

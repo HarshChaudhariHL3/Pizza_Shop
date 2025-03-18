@@ -111,6 +111,11 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         return item;
     }
 
+    public List<ModifierItem> ModifierItemsList(){
+        var item = _context.ModifierItems.OrderBy(x => x.ModifierItemId).ToList();
+        return item;
+    }
+
     public List<Unit> UnitList(){
         return _context.Units.ToList();
     }
