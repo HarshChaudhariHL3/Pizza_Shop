@@ -96,13 +96,20 @@ public class MenuService : IMenuService
     }
     public bool DeleteCategoryItem(int itemId)
     {
-        var categoryItem = _menuRepository.GetCategoryItemById(itemId);
-        if (categoryItem != null)
+        if (itemId != null)
         {
             _menuRepository.DeleteCategoryItem(itemId);
             return true;
         }
         return false;
+    }
+    public bool DeleteMultipleCategoryItem(List<int> dataId)
+    {
+       
+        
+            _menuRepository.DeleteMultipleCategoryItem(dataId);
+            return true;
+        
     }
 
     public void EditCategoryItem(CategoryListViewModel model)

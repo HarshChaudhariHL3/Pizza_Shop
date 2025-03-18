@@ -34,6 +34,7 @@ public interface IMenuService
     void RemoveModifier(int id);
 
     bool DeleteCategoryItem(int itemId);
+    bool DeleteMultipleCategoryItem(List<int> dataId);
     bool DeleteModifierItem(int itemId);
 
     void EditCategoryItem(CategoryListViewModel model);

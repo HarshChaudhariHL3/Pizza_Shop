@@ -72,7 +72,7 @@
             data-bs-toggle="modal">
             <i class="bi bi-trash h5"></i></a> *@
 
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteMultipleItems">
+        <button type="button" class="btn deleteMultipleCategoryItems" data-bs-toggle="modal">
              <i class="bi bi-trash h5"></i>
         </button>
         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addCategoryItems">
@@ -538,7 +538,7 @@
                     <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
                     </div>
                     <p>Are you sure you want to delete?</p>
-                    <input type="text" id="deleteItemId">
+                    <div id="arrayResult"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -635,27 +635,63 @@
         
         $('#selectAll').click(function () {
        
-        if ($(this).prop('checked')) {
+            if ($(this).prop('checked')) {
             $('.deleteItemCheckbox').prop('checked', true);
-        } else {
+            } else {
             
             $('.deleteItemCheckbox').prop('checked', false);
-        }
+            }
         });
 
-        $('#selectAll').click(function (){
+        $('.deleteMultipleCategoryItems').click(function (){
+            debugger;
             let selectedIds = [];
 
-            $('.deleteItemCheckbox').each(function(){
-                let id = parseInt($(this).val());
-                console.log("id" +id);  
-            if(!isNaN(id)){
+            $('.deleteItemCheckbox:checked').each(function(){
+                let id = $(this).data("item-id");
+                console.log(id);
                 selectedIds.push(id);
-            }
-            console.log(selectedIds);
             });
+            console.log(selectedIds);
 
+            $.each(selectedIds, function(index,value){
+                $("#arrayResult").append('<span class="deleteCategoryItemIds">' + value + '</span>')
+            })
+            $('#deleteMultipleItems').modal('show');
+        });
 
+        $("#deleteMultipleItems").submit(function (e) {
+            e.preventDefault();
+            debugger;
+
+            var dataId = [];
+            $('.deleteCategoryItemIds').each(function(){
+
+                let ids =parseInt($(this).text());
+                dataId.push(ids); 
+            })
+            console.log(dataId);
+
+            var data1 = { "dataId": dataId}
+
+            $.ajax({
+                url: '/Menu/DeleteMultipleCategoryItem',
+                type: 'POST',
+                data: data1 ,
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        $('#deleteMultipleItems').modal('hide');
+                        location.reload();
+                    } else {
+                        $('#deleteMultipleItems').modal('hide');
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
 
         });
 
@@ -697,6 +733,7 @@
                 $("#editId").html(s);
             }
         });
+
         $.ajax({
             url: '/Menu/GetUnitList',
             type: 'GET',

@@ -204,6 +204,31 @@ public class MenuController(IMenuService _menuService) : Controller
         }
     }
 
+    [HttpPost]
+    public IActionResult DeleteMultipleCategoryItem(List<int> dataId){
+        try
+        {
+            // var result = _menuService.DeleteCategoryItem(itemId);
+            var result = _menuService.DeleteMultipleCategoryItem(dataId);
+
+            if (result)
+            {
+                TempData["Success"] = "Category item deleted successfully.";
+                return Json(result);
+            }
+            else
+            {
+                TempData["Error"] = "Failed to delete category item.";
+                return Json(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
 
     #endregion
 

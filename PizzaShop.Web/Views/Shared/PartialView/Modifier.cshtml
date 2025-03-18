@@ -1,5 +1,24 @@
 @model PizzaShop.Entity.ViewModel.MenuViewModel
+<style>
+    #scrollbar {
+        height: 550px;
+        overflow: auto;
+    }
 
+    #modifier-items {
+        font-size: 20px;
+        color: black;
+    }
+
+    #modifier-items  #modifierBtn {
+        visibility: hidden;
+    }
+
+    #modifier-items:hover #modifierBtn {
+        transition: all 0.8s ease-in-out;
+        visibility: visible;
+    }
+</style>
 <aside class=" d-block  rounded "> <!-- style="width: 240px;" -->
     <div class=" pt-2 d-flex align-items-center justify-content-between mx-4 mb-2">
         <h4 id="category-header">Modifier</h4>
@@ -14,7 +33,7 @@
                 <li class="mb-2 parent d-flex gap-2 list-group-item-action pt-3 pe-3 pb-3" id="modifier-items">
                     <span class="modifier-item" data-id="@item.ModifierGroupId"
                         style="cursor: pointer;">@item.ModifierName</span>
-                    <div class="gap-1 d-flex notvisible" id="categoryBtn">
+                    <div class="gap-1 d-flex notvisible" id="modifierBtn">
                         <button class="border-0" data-bs-toggle="modal" data-bs-target="#editModifierModal"
                             onclick="openEditModal(@item.ModifierGroupId,'@item.ModifierName', '@item.Description')">
                             <i class="bi bi-pen  "></i></button>
