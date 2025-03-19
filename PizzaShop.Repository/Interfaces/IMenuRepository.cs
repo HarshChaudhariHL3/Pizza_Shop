@@ -47,4 +47,5 @@ public interface IMenuRepository
     List<ModifierItem> ModifierItemsList();
 
     void  DeleteMultipleCategoryItem(List<int> dataId);
+    void  DeleteMultipleModifierItem(List<int> dataId);
 }

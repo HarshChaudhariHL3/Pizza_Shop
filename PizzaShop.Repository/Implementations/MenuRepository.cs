@@ -217,6 +217,19 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.ModifierItems.Update(modifierItem);
         _context.SaveChanges();
     }
+
+        public void  DeleteMultipleModifierItem(List<int> dataId)
+    {
+        // var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
+        var itemToDelete = _context.ModifierItems.Where(item => dataId.Contains(item.ModifierItemId)).ToList();
+
+        if (itemToDelete != null)
+        {
+            _context.ModifierItems.RemoveRange(itemToDelete);
+            _context.SaveChanges();
+        }
+    }
+
     #endregion
 }
 

@@ -1,0 +1,577 @@
+@model List<PizzaShop.Entity.ViewModel.ModifierListViewModel>
+@{
+    ViewData["Title"] = "Menu Page";
+}
+
+<div class="flex-grow-1 p-3 overflow-auto">
+    <!-- header of table  -->
+    <div class="d-flex align-items-center gap-2">
+        <div id="item-modifier-toggle">
+            <button class="btn" style="box-shadow: none;">
+                <img src="img/menu-black.svg" height="30px" alt="">
+            </button>
+        </div>
+        <h1 id="header">Items</h1>
+    </div>
+    <!-- search-add-item section  -->
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="search-div">
+            <input class="me-2 input-search px-2 " type="search" placeholder="Search">
+            <span class="search-icon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+        <a href="" class="btn d-flex justify-content-center deleteMultipleCategoryItems  " data-bs-target="#model-delete" data-bs-toggle="modal">
+            <i class="bi bi-trash h5"></i></a>
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addModifierItem">
+            <i class="btn bg-primary bi bi-plus-square text-white">New Modifier</i>
+        </button>
+    </div>
+    <!-- finish search-add-item section -->
+    <!-- table  -->
+    <div class="table-responsive " id="modifier-items">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="selectAllMod">
+                        </div>
+                    </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><input class="form-check-input main-checkbox row-checkbox deleteModifierItemCheckbox " data-modifierItem-id="@item.ModifierItemId" type="checkbox"></td>
+
+                            <td class="d-flex gap-2 align-content-center">
+                                <p>@item.ModifierItemName</p>
+                            </td>
+                            <td class="">
+                                <p>@item.UnitName</p>
+                            </td>
+                            <td>@item.Rate</td>
+                            <td>@item.Quantity</td>
+
+                            <td class="gap-3">
+                                <button class="btn  editModifier-btn" data-modifierItem-id="@item.ModifierItemId" data-bs-toggle="modal"
+                                    data-bs-target="#editModifierItem"><i class="bi bi-pen"></i> </button>
+                                <button class="btn  deleteModifier-btn" data-modifierItem-id="@item.ModifierItemId"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModifierItemModal"><i
+                                        class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No items found for this Modifier.</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <!-- pagination  -->
+
+    <!-- finish pagination  -->
+</div>
+
+
+@* model start *@
+@* delete modifier item *@
+<div class="modal fade" id="deleteModifierItemModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteModifierItemForm">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete <strong id="deleteModifierItemName"></strong>?</p>
+                    <input type="text" id="deleteModifierItemId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* edit modifier item *@
+<div class="modal fade" id="editModifierItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="editItemForm" method="post">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Edit ModifierItem</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="editModifierId" disabled>
+                                            </select>
+                                            <label for="editModifierId">Modifier Group*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="editModifierItemName"
+                                                placeholder="Name*">
+                                            <label for="editModifierItemName">Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="editRate" placeholder="Rate"
+                                                value="0">
+                                            <label for="editRate">Rate*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="editModifierQuantity"
+                                                placeholder="Quantity" value="0">
+                                            <label for="editModifierQuantity">Quantity*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="editModifierUnitId">
+                                            </select>
+                                            <label for="editModifierUnitId">Unit*</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="editModifierItemDescription" style="height: 100px"></textarea>
+                                        <label for="editModifierItemDescription">Description</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-white border border-primary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+                <input type="hidden" id="editItemId">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* add modifier item *@
+<div class="modal fade" id="addModifierItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="addItemForm" method="post">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Add New Modifier</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="addModifierId">
+                                            </select>
+                                            <label for="addModifierId">Modifier Group*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addModifierItemName"
+                                                placeholder="Name*">
+                                            <label for="addModifierItemName">Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addModifierItemRate"
+                                                placeholder="Rate" value="0">
+                                            <label for="addModifierItemRate">Rate*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addModifierQuantity"
+                                                placeholder="Quantity" value="0">
+                                            <label for="addModifierQuantity">Quantity*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" aria-label="Floating label select example"
+                                                id="addModifierUnitId">
+                                            </select>
+                                            <label for="addModifierUnitId">Unit*</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="addModifierItemDescription" style="height: 100px"></textarea>
+                                        <label for="addModifierItemDescription">Description</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-white border border-primary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+                <input type="hidden" id="addItemId">
+            </form>
+        </div>
+    </div>
+</div>
+
+@* delete multiple items *@
+
+<div class="modal fade" id="deleteMultipleModifierItems" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteMultipleModifierItemForm">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
+                    <p>Are you sure you want to delete?</p>
+                    <div id="arrayResult" hidden></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* model end *@
+
+
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
+<script>
+    $(document).ready(function () {
+
+        $(document).on('click', '.editModifier-btn', function () {
+            var itemId = $(this).data('modifieritem-id');
+            $.ajax({
+                url: '/Menu/GetModifierItemDetails',
+                type: 'GET',
+                data: { itemId: itemId },
+                success: function (data) {
+                    $('#editItemId').val(data.modifierItemId);
+                    $('#editModifierId').val(data.modifierGroupId);
+                    $('#editModifierUnitId').val(data.unitId);
+                    $('#editModifierItemName').val(data.modifierItemName);
+                    $('#editModifierItemDescription').val(data.description);
+                    $('#editModifierQuantity').val(data.quantity);
+                    $('#editRate').val(data.rate);
+                    $('#editModifierItem').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error fetching item details:', error);
+                }
+            });
+        });
+        $.ajax({
+            url: '/Menu/GetModifier',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Modifier</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].modifierGroupId + '">' + data[i].modifierName + '</option>'
+                }
+                $("#editModifierId").html(s);
+            }
+        });
+        $.ajax({
+            url: '/Menu/GetUnitList',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Unit</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].unitId + '">' + data[i].unitName + '</option>'
+                }
+                $("#editModifierUnitId").html(s);
+            }
+        });
+
+        $('#editItemForm').submit(function (e) {
+            e.preventDefault();
+
+            var modifierItemId = $('#editItemId').val();
+            var modifierGroupId = $('#editModifierId').val();
+            var unitId = $('#editModifierUnitId').val();
+            var modifierItemName = $('#editModifierItemName').val();
+            var description = $('#editModifierItemDescription').val();
+            var quantity = $('#editModifierQuantity').val();
+            var rate = $('#editRate').val();
+
+
+            var formData = {
+                ModifierItemId: modifierItemId,
+                ModifierGroupId: modifierGroupId,
+                ModifierItemName: modifierItemName,
+                Description: description,
+                Quantity: quantity,
+                UnitId: unitId,
+                Rate: rate,
+            };
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/UpdateModifierItem',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    // Handle success
+                    if (response.success) {
+                        @* $('#editModifierUnitId').modal('hide'); *@
+                        $("#editModifierUnitId").hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+        $(document).on('click', '.deleteModifier-btn', function () {
+            var ModifierItemId = $(this).data('modifieritem-id');
+            var ModifierItemName = $(this).data('item-name');
+            $('#deleteModifierItemName').text(ModifierItemName);
+            $('#deleteModifierItemId').val(ModifierItemId);
+
+            $('#deleteModifierItemModal').modal('show');;
+        });
+
+        $('#deleteModifierItemForm').submit(function (e) {
+            e.preventDefault();
+
+            var ModifierItemId = $('#deleteModifierItemId').val();
+            var ModifierItemName = $('#deleteModifierItemName').val();
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/DeleteModifierItem',
+                type: 'POST',
+                data: { ModifierItemId: ModifierItemId },
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        @* $('#deleteModifierItemModal').modal('hide'); *@
+                        $("#deleteModifierItemModal").hide();
+                        location.reload();
+                    } else {
+                        @* $('#deleteModifierItemModal').modal('hide'); *@
+                        $("#deleteModifierItemModal").hide();
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+        $.ajax({
+            url: '/Menu/GetModifier',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Modifier</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].modifierGroupId + '">' + data[i].modifierName + '</option>'
+                }
+                $("#addModifierId").html(s);
+            }
+        });
+        $.ajax({
+            url: '/Menu/GetUnitList',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Unit</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].unitId + '">' + data[i].unitName + '</option>'
+                }
+                $("#addModifierUnitId").html(s);
+            }
+        });
+
+        $('#addItemForm').submit(function (e) {
+            e.preventDefault();
+            var modifierItemId = $('#addItemId').val();
+            var modifierGroupId = $('#addModifierId').val();
+            var unitId = $('#addModifierUnitId').val();
+            var modifierItemName = $('#addModifierItemName').val();
+            var description = $('#addModifierItemDescription').val();
+            var quantity = $('#addModifierQuantity').val();
+            var rate = $('#addModifierItemRate').val();
+
+
+            var formData = {
+                ModifierItemId: modifierItemId,
+                ModifierGroupId: modifierGroupId,
+                ModifierItemName: modifierItemName,
+                Description: description,
+                Quantity: quantity,
+                UnitId: unitId,
+                Rate: rate,
+            };
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/AddModifierItem',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    // Handle success
+                    if (response.success) {
+                        @* $('#editModifierUnitId').modal('hide'); *@
+                        $("#editModifierUnitId").hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+
+        $('#selectAllMod').click(function () {
+       
+            if ($(this).prop('checked')) {
+            $('.deleteModifierItemCheckbox').prop('checked', true);
+            } else {
+            
+            $('.deleteModifierItemCheckbox').prop('checked', false);
+            }
+        });
+
+        $('.deleteMultipleCategoryItems').click(function (){
+            
+            let selectedIds = [];
+
+            $('.deleteModifierItemCheckbox:checked').each(function(){
+                let id = $(this).data("modifieritem-id");
+                console.log(id);
+                selectedIds.push(id);
+            });
+            console.log(selectedIds);
+
+            $.each(selectedIds, function(index,value){
+                $("#arrayResult").append('<span class="deleteModifierItemIds">' + value + '</span>')
+            })
+            const modal = new bootstrap.Modal('#deleteMultipleModifierItems');
+            modal.show();
+            @* $('#deleteMultipleItems').modal('show'); *@
+        });
+
+        $("#deleteMultipleModifierItemForm").submit(function (e) {
+            e.preventDefault();
+
+
+            var dataId = [];
+            $('.deleteModifierItemIds').each(function(){
+
+                let ids =parseInt($(this).text());
+                dataId.push(ids); 
+            })
+            console.log(dataId);
+
+            var data1 = { "dataId": dataId}
+
+            $.ajax({
+                url: '/Menu/DeleteMultipleModifierItem',
+                type: 'POST',
+                data: data1 ,
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        @* $('#deleteMultipleItems').modal('hide'); *@
+                        $("#deleteMultipleModifierItems").hide();
+                        location.reload();
+                    } else {
+                        @* $('#deleteMultipleItems').modal('hide'); *@
+                        $("#deleteMultipleModifierItems").hide();
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+
+        });
+
+    });
+</script>

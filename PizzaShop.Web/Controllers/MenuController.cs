@@ -4,7 +4,7 @@ using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
 
-public class MenuController(IMenuService _menuService) : Controller
+public class MenuController(IMenuService _menuService, IPaginationService _paginationService) : Controller
 {
 
     [HttpGet]
@@ -56,7 +56,9 @@ public class MenuController(IMenuService _menuService) : Controller
         {
             var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
 
-            return Json(categoryItems);
+            // return Json(categoryItems);
+            // return PartialView(categoryItems);
+            return PartialView("./PartialView/CategoryList", categoryItems);
         }
         catch (Exception ex)
         {
@@ -64,6 +66,7 @@ public class MenuController(IMenuService _menuService) : Controller
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
+
     // for edit categoryItems
     [HttpGet]
     public IActionResult GetItemDetails(int itemId)
@@ -205,22 +208,72 @@ public class MenuController(IMenuService _menuService) : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteMultipleCategoryItem(List<int> dataId){
+    public IActionResult DeleteMultipleCategoryItem(List<int> dataId)
+    {
         try
         {
-            // var result = _menuService.DeleteCategoryItem(itemId);
-            var result = _menuService.DeleteMultipleCategoryItem(dataId);
-
-            if (result)
+            if (dataId.Count != 0)
             {
-                TempData["Success"] = "Category item deleted successfully.";
-                return Json(result);
+
+                var result = _menuService.DeleteMultipleCategoryItem(dataId);
+
+                if (result)
+                {
+                    TempData["Success"] = "Category item deleted successfully.";
+                    return Json(result);
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to delete category item.";
+                    return Json(result);
+                }
             }
             else
             {
-                TempData["Error"] = "Failed to delete category item.";
-                return Json(result);
+                TempData["Error"] = "Please select Category Item";
+                return RedirectToAction("Menu", "Menu");
             }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpGet]
+    public IActionResult CategoryListPagination(int pagesize = 3, int page = 1)
+    {
+        try
+        {
+            string search = null;
+            var data = _paginationService.pagination_category_list(page, pagesize, search);
+            return View(data);
+
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpPost]
+    public IActionResult CategoryListPagination(int pagesize = 3, int page = 1, string search = null)
+    {
+        try
+        {
+            var data = _paginationService.pagination_category_list(page, pagesize, search);
+            if (data == null)
+            {
+                TempData["Error"] = "Not Valid User";
+                return RedirectToAction("Users", "User");
+            }
+            // ViewBag.users = data.Items;
+            // ViewBag.pagesize = pagesize;
+            // ViewBag.page = page;
+            // ViewBag.totalpages = data.TotalPages;
+            return View(data);
         }
         catch (Exception ex)
         {
@@ -240,7 +293,8 @@ public class MenuController(IMenuService _menuService) : Controller
         {
             var modifierItems = _menuService.GetModifierItemsByModifierId(ModifierGroupId);
 
-            return Json(modifierItems);
+            // return Json(modifierItems);
+            return PartialView("./PartialView/ModifierList", modifierItems);
         }
         catch (Exception ex)
         {
@@ -412,9 +466,48 @@ public class MenuController(IMenuService _menuService) : Controller
     }
 
     [HttpGet]
-    public IActionResult GetALLModifierItemDetails(){
+    public IActionResult GetALLModifierItemDetails()
+    {
         var modifierItemsList = _menuService.GetModifierItems();
         return Json(modifierItemsList);
     }
+
+    [HttpPost]
+    public IActionResult DeleteMultipleModifierItem(List<int> dataId)
+    {
+        try
+        {
+            if (dataId.Count != 0)
+            {
+
+                var result = _menuService.DeleteMultipleModifierItem(dataId);
+
+                if (result)
+                {
+                    TempData["Success"] = "Category item deleted successfully.";
+                    return Json(result);
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to delete category item.";
+                    return Json(result);
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Please select Category Item";
+                return RedirectToAction("Menu", "Menu");
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+
+
+
     #endregion
 }

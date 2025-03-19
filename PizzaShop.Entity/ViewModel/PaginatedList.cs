@@ -20,4 +20,5 @@ public class PaginatedList<T>
         TotalPages = totalPages;
         Search = search;
     }
+
 }

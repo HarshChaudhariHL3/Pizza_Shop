@@ -138,6 +138,8 @@ public class MenuService : IMenuService
             _menuRepository.AddCategoryItem(model);
     }
 
+    
+
     #endregion
     #region Modifier
     
@@ -257,6 +259,18 @@ public class MenuService : IMenuService
     {
             _menuRepository.AddModifierItem(model);
     }
+
+
+    public bool DeleteMultipleModifierItem(List<int> dataId)
+    {
+       
+        
+            _menuRepository.DeleteMultipleModifierItem(dataId);
+            return true;
+        
+    }
+
+
     #endregion
 }
 

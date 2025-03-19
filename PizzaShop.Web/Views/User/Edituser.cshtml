@@ -228,7 +228,7 @@
             url: '/User/GetStates',
             data: { CountryId: countryId },
             success: function (data) {
-                debugger;
+             
                 console.log(data);
                 var s = '<option value="-1">Please select a state</option>';
                 for (var i = 0; i < data.length; i++) {

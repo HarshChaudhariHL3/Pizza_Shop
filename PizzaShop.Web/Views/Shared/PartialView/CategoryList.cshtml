@@ -1,0 +1,753 @@
+@model List<PizzaShop.Entity.ViewModel.CategoryListViewModel>
+@{
+    ViewData["Title"] = "Menu Page";
+}
+
+<div class="flex-grow-1 p-3 overflow-auto">
+    <!-- header of table  -->
+    <div class="d-flex align-items-center gap-2">
+        <div id="item-modifier-toggle">
+            <button class="btn" style="box-shadow: none;">
+                <img src="img/menu-black.svg" height="30px" alt="">
+            </button>
+        </div>
+        <h1 id="header">Items</h1>
+    </div>
+    <!-- search-add-item section  -->
+    <div class="d-flex align-items-center justify-content-end">
+        <div class="search-div">
+            <input class="me-2 input-search px-2 " type="search" placeholder="Search">
+            <span class="search-icon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+        @* <a href="" class="btn d-flex justify-content-center " data-bs-target="#model-delete"
+            data-bs-toggle="modal">
+            <i class="bi bi-trash h5"></i></a> *@
+
+        <button type="button" class="btn deleteMultipleCategoryItems" data-bs-toggle="modal">
+            <i class="bi bi-trash h5"></i>
+        </button>
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addCategoryItems">
+            <i class="btn bg-primary bi bi-plus-square text-white">New Item</i>
+        </button>
+    </div>
+    <!-- finish search-add-item section -->
+    <!-- table  -->
+    <div class="table-responsive " id="category-items">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectAll">
+                        </div>
+                    </th>
+                    <th scope="col">Name</th>
+                    <th scope="col">ItemType</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Available</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><input value="@item.CategoryItemId" data-categoryItem-id="@item.CategoryItemId" class="form-check-input main-checkbox row-checkbox deleteItemCheckbox" type="checkbox"></td>
+
+                            <td class="d-flex gap-2 align-content-center">
+                                <img src="~/images/dining-menu.png" alt="" height="25">
+                                <p>@item.ItemName</p>
+                            </td>
+                            <td class="">
+                                @if (item.ItemType == true)
+                                {
+                                    <img src="~/images/icons/vegan-icon.svg" height="20" width="20"  alt="Veg">
+                                }
+                                else
+                                {
+                                    <img src="~/images/icons/non-veg-icon.svg" height="20" width="20" alt="Non-veg">
+                                }
+                        </td>
+                        <td>@item.Price</td>
+                        <td>@item.Quantity</td>
+                        <td class="text-center">
+                            <div class="form-check form-switch">
+                            <input class="form-check-input toggle-switch" type="checkbox" @(item.IsAvailable ? "checked" : "") disabled >
+                            </div>
+                        </td>
+                        <td class="gap-3">
+                            <button class="btn  edit-btn" data-item-id="@item.CategoryItemId" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pen"></i></button>
+                            <button class="btn delete-btn" data-item-id="@item.CategoryItemId" data-bs-toggle="modal" data-bs-target="#deleteItemModal"><i class="bi bi-trash"></i></button>
+                        </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7">No items found for this Category.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- pagination  -->
+
+    <!-- finish pagination  -->
+</div>
+
+
+
+@* Model start*@
+
+@* delete items *@
+<div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteForm">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
+                    <p>Are you sure you want to delete <strong id="deleteItemName"></strong>?</p>
+                    <input type="text" id="deleteItemId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* edit Category Items *@
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST">
+                    <div class="modal-body">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <select class="form-select" id="editId"
+                                                    aria-label="Floating label select example" disabled>
+                                                </select>
+                                                <label for="editId">Categories*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="editItemName"
+                                                    placeholder="Name*">
+                                                <label for="editItemName">Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <select class="form-select" id="itemType"
+                                                    aria-label="Floating label select example">
+                                                    <option value="true">Veg</option>
+                                                    <option value="false">Non-veg</option>
+                                                </select>
+
+                                                <label for="itemType">Item Type*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="editPrice"
+                                                    placeholder="Rate" value="0">
+                                                <label for="editPrice">Rate*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="editQuantity"
+                                                    placeholder="Quantity" value="0">
+                                                <label for="editQuantity">Quantity*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating">
+                                                <select class="form-select" id="editUnitId"
+                                                    aria-label="Floating label select example">
+                                                </select>
+                                                <label for="editUnitId">Unit*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <h5>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="available">
+                                                    <label class="form-check-label" for="available">Available</label>
+                                                </div>
+
+                                        </div>
+                                        <div class="col d-flex align-items-center justify-content-center">
+                                            <h5>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="tax">
+                                                    <label class="form-check-label" for="tax">Default
+                                                        Tax</label>
+                                                </div>
+                                            </h5>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="taxpercentage"
+                                                    placeholder="Tax Percentage">
+                                                <label for="taxpercentage">Tax
+                                                    Percentage </label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control" id="code"
+                                                    placeholder="Short Code">
+                                                <label for="code">Short
+                                                    Code</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Leave a comment here"
+                                                id="editDescription" style="height: 100px"></textarea>
+                                            <label for="editDescription"> Description</label>
+                                        </div>
+                                    </div>
+                                    <div class="row ms-1">
+                                        <h6>Upload Image</h6>
+                                        <div class="border form-control ">
+                                            <label for="formfile"
+                                                class="form-label d-flex gap-2 justify-content-center align-items-center pt-3 ">
+                                                <h3><i class="bi bi-cloud-arrow-up-fill"></i>
+                                                </h3>
+                                                <img src="images/cloud-upload-icon.svg" alt="">
+                                                <span class="pb-2">
+                                                    Drag and Drop or Browse
+                                                    Files
+                                                </span>
+                                            </label>
+                                            <input type="file" class="form-control d-none" id="formfile">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 pt-3" style="background-color: antiquewhite;">
+                                    <div>
+                                        <select class="form-select" aria-label="Default select example">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden field to store item ID -->
+                    <input type="hidden" id="editItemId">
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* Add Category Items *@
+
+<div class="modal fade" id="addCategoryItems" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="addCategoryItemForm" method="post">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Add New Menu Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="AddCategoryId"
+                                                aria-label="Floating label select example">
+                                            </select>
+                                            <label for="AddCategoryId">Categories*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addCategoryItemName"
+                                                placeholder="Name*">
+                                            <label for="addCategoryItemName">Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="addItemType"
+                                                aria-label="Floating label select example">
+                                                <option value="true">Veg</option>
+                                                <option value="false">Non-veg</option>
+                                            </select>
+                                            <label for="addItemType">Item Type*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addRate" placeholder="Rate"
+                                                value="0">
+                                            <label for="addRate">Rate*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addCategoryItemQuantity"
+                                                placeholder="Quantity" value="0">
+                                            <label for="addCategoryItemQuantity">Quantity*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="addUnitId"
+                                                aria-label="Floating label select example">
+                                            </select>
+                                            <label for="addUnitId">Unit*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex align-items-center justify-content-center">
+                                        <h5>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="addAvailable">
+                                                <label class="form-check-label" for="addAvailable">Available</label>
+                                            </div>
+
+                                    </div>
+                                    <div class="col d-flex align-items-center justify-content-center">
+                                        <h5>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="addTax">
+                                                <label class="form-check-label" for="addTax">Default
+                                                    Tax</label>
+                                            </div>
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="taxpercentage"
+                                                placeholder="Tax Percentage">
+                                            <label for="taxpercentage">Tax
+                                                Percentage </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="addCode"
+                                                placeholder="Short Code">
+                                            <label for="addCode">Short
+                                                Code</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="addCategoryItemDescription" style="height: 100px"></textarea>
+                                        <label for="addCategoryItemDescription">Description</label>
+                                    </div>
+                                </div>
+                                <div class="row ms-1">
+                                    <h6>Upload Image</h6>
+                                    <div class="border form-control ">
+                                        <label for="formfile"
+                                            class="form-label d-flex gap-2 justify-content-center align-items-center pt-3 ">
+                                            <h3><i class="bi bi-cloud-arrow-up-fill"></i>
+                                            </h3>
+                                            <img src="images/cloud-upload-icon.svg" alt="">
+                                            <span class="pb-2">
+                                                Drag and Drop or Browse
+                                                Files
+                                            </span>
+                                        </label>
+                                        <input type="file" class="form-control d-none" id="formfile">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 pt-3" style="background-color: antiquewhite;">
+                                <div>
+                                    <select class="form-select" aria-label="Default select example">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-white border border-primary"
+                        data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+                <input type="hidden" id="addItemId">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* delete multiple items *@
+
+<div class="modal fade" id="deleteMultipleItems" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteMultipleItemForm">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
+                    <p>Are you sure you want to delete?</p>
+                    <div id="arrayResult" hidden></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@* model end *@
+
+
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+
+<script>
+    $(document).ready(function () {
+
+        $(document).on('click', '.delete-btn', function () {
+            var itemId = $(this).data('item-id');
+            var itemName = $(this).data('item-name');
+            $('#deleteItemName').text(itemName);
+            $('#deleteItemId').val(itemId);
+            $('#deleteItemModal').modal('show');
+        });
+
+        $('#deleteForm').submit(function (e) {
+            e.preventDefault();
+
+            var itemId = $('#deleteItemId').val();
+            var itemName = $('#deleteItemName').val();
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/DeleteCategoryItem',
+                type: 'POST',
+                data: { itemId: itemId },
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        @* $('#deleteItemModal').modal('hide'); *@
+                        $("#deleteItemModal").hide();
+
+                        location.reload();
+                    } else {
+                        @* $('#deleteItemModal').modal('hide'); *@
+                        $("#deleteItemModal").hide();
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+        $(document).on('click', '.edit-btn', function () {
+            var itemId = $(this).data('item-id');
+            $.ajax({
+                url: '/Menu/GetItemDetails',
+                type: 'GET',
+                data: { itemId: itemId },
+                success: function (data) {
+                    $('#editItemId').val(data.categoryItemId);
+                    $('#editId').val(data.categoryId);
+                    $('#editUnitId').val(data.unitId);
+                    $('#editItemName').val(data.itemName);
+                    $('#editDescription').val(data.description);
+                    $('#editQuantity').val(data.quantity);
+                    $('#editPrice').val(data.price);
+                    $('#itemType').val(data.itemType.toString());
+                    $('#available').prop('checked', data.isAvailable);
+                    $('#tax').prop('checked', data.defaultTax);
+                    $('#code').val(data.shortCode);
+                    $('#editModal').modal('show');
+                },
+                error: function (error) {
+                    console.error('Error fetching item details:', error);
+                }
+            });
+        });
+
+        $.ajax({
+            url: '/Menu/GetCategory',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Category</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].categoryId + '">' + data[i].categoryName + '</option>'
+                }
+                $("#editId").html(s);
+            }
+        });
+
+        $.ajax({
+            url: '/Menu/GetUnitList',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Unit</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].unitId + '">' + data[i].unitName + '</option>'
+                }
+                $("#editUnitId").html(s);
+            }
+        });
+
+        $('#editForm').submit(function (e) {
+            e.preventDefault();
+
+            var itemId = $('#editItemId').val();
+            var categoryId = $('#editId').val();
+            var itemName = $('#editItemName').val();
+            var description = $('#editDescription').val();
+            var quantity = $('#editQuantity').val();
+            var price = $('#editPrice').val();
+            var unitId = $('#editUnitId').val();
+            var itemType = $('#itemType').val();
+            var isAvailable = $('#available').prop('checked');
+            var defaultTax = $('#tax').prop('checked');
+            var shortCode = $('#code').val();
+
+
+            var formData = {
+                CategoryItemId: itemId,
+                CategoryId: categoryId,
+                ItemName: itemName,
+                Description: description,
+                Quantity: quantity,
+                Price: price,
+                UnitId: unitId,
+                ItemType: itemType,
+                IsAvailable: isAvailable,
+                DefaultTax: defaultTax,
+                ShortCode: shortCode
+            };
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/UpdateCategoryItem',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    // Handle success
+                    if (response.success) {
+                        @* $('#editModal').modal('hide'); *@
+                        $("#editModal").hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+        $.ajax({
+            url: '/Menu/GetCategory',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Category</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].categoryId + '">' + data[i].categoryName + '</option>'
+                }
+                $("#AddCategoryId").html(s);
+            }
+        });
+        $.ajax({
+            url: '/Menu/GetUnitList',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Unit</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].unitId + '">' + data[i].unitName + '</option>'
+                }
+                $("#addUnitId").html(s);
+            }
+        });
+
+        $('#addCategoryItemForm').submit(function (e) {
+            e.preventDefault();
+
+            var itemId = $('#addItemId').val();
+            var categoryId = $('#AddCategoryId').val();
+            var itemName = $('#addCategoryItemName').val();
+            var itemType = $('#addItemType').val();
+            var price = $('#addRate').val();
+            var quantity = $('#addCategoryItemQuantity').val();
+            var unitId = $('#addUnitId').val();
+            var isAvailable = $('#addAvailable').prop('checked');
+            var defaultTax = $('#addTax').prop('checked');
+            var shortCode = $('#addCode').val();
+            var description = $('#addCategoryItemDescription').val();
+
+
+            var formData = {
+                CategoryItemId: itemId,
+                CategoryId: categoryId,
+                ItemName: itemName,
+                Description: description,
+                Quantity: quantity,
+                Price: price,
+                UnitId: unitId,
+                ItemType: itemType,
+                IsAvailable: isAvailable,
+                DefaultTax: defaultTax,
+                ShortCode: shortCode
+            };
+
+            // Send data to the server using AJAX
+            $.ajax({
+                url: '/Menu/AddCategoryItem',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    // Handle success
+                    if (response.success) {
+                        @* $('#addCategoryItems').modal('hide'); *@
+                        $("#addCategoryItems").hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+        });
+
+        $('#selectAll').click(function () {
+       
+            if ($(this).prop('checked')) {
+            $('.deleteItemCheckbox').prop('checked', true);
+            } else {
+            
+            $('.deleteItemCheckbox').prop('checked', false);
+            }
+        });
+
+        $('.deleteMultipleCategoryItems').click(function (){
+            let selectedIds = [];
+
+            $('.deleteItemCheckbox:checked').each(function(){
+                let id = $(this).data("categoryitem-id");
+                console.log(id);
+                selectedIds.push(id);
+            });
+            console.log(selectedIds);
+
+            $.each(selectedIds, function(index,value){
+                $("#arrayResult").append('<span class="deleteCategoryItemIds">' + value + '</span>')
+            })
+            const modal = new bootstrap.Modal('#deleteMultipleItems');
+            modal.show();
+            @* $('#deleteMultipleItems').modal('show'); *@
+        });
+
+        $("#deleteMultipleItemForm").submit(function (e) {
+            e.preventDefault();
+
+
+            var dataId = [];
+            $('.deleteCategoryItemIds').each(function(){
+
+                let ids =parseInt($(this).text());
+                dataId.push(ids); 
+            })
+            console.log(dataId);
+
+            var data1 = { "dataId": dataId}
+
+            $.ajax({
+                url: '/Menu/DeleteMultipleCategoryItem',
+                type: 'POST',
+                data: data1 ,
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        @* $('#deleteMultipleItems').modal('hide'); *@
+                        $("#deleteMultipleItems").hide();
+                        location.reload();
+                    } else {
+                        @* $('#deleteMultipleItems').modal('hide'); *@
+                        $("#deleteMultipleItems").hide();
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+
+        }); 
+
+
+
+    });
+</script>

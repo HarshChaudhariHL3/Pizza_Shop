@@ -16,6 +16,8 @@ public class MenuViewModel
     public List<CategoryViewModel> CategoriesList { get; set; } = new List<CategoryViewModel>();
     public List<ModifierViewModel> ModifierList { get; set; } = new List<ModifierViewModel>();
 
-    public List<CategoryListViewModel> ItemsList { get; set; } = new List<CategoryListViewModel>();
+    public List<CategoryListViewModel> ItemsList { get; set; } 
+    public List<ModifierListViewModel> ModifierItemsList { get; set; } 
+
 }
 
