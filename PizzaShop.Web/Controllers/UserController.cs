@@ -181,10 +181,6 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
                 TempData["Error"] = "Not Valid User";
                 return RedirectToAction("Users", "User");
             }
-            // ViewBag.users = data.Items;
-            // ViewBag.pagesize = pagesize;
-            // ViewBag.page = page;
-            // ViewBag.totalpages = data.TotalPages;
             return View(data);
         }
         catch (Exception ex)

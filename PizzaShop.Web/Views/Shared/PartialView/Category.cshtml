@@ -35,7 +35,8 @@
             <ul class="tab-nav d-flex flex-column gap-3" id="myTab" role="tablist" style="list-style-type: none;">
                 @foreach (var item in Model.CategoriesList)
                 {
-                    <li class="mb-2 d-flex gap-2 list-catGroup-item-action pt-3 pe-3 pb-3" id="category-items-@item.CategoryId">
+                    <li class="mb-2 d-flex gap-2 list-catGroup-item-action pt-3 pe-3 pb-3"
+                        id="category-items-@item.CategoryId">
                         <span class="category-item" data-category-id="@item.CategoryId"
                             style="cursor: pointer;">@item.CategoryName</span>
                         <div class="gap-1 d-flex notvisible" id="categoryBtn">
@@ -57,7 +58,6 @@
     </div>
 </div>
 
-@* <partial name="./PartialView/CategoryList" model="new List<PizzaShop.Entity.ViewModel.CategoryListViewModel>()">     *@
 
 
 
@@ -164,7 +164,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
 
 <Script type="text/javascript">
@@ -187,41 +186,51 @@
 
 <script>
 
-    $(document).ready(function () {
+    var currentPage = 1;
+    var pageSize = 5; 
+    var search = "";
+    var currentCategoryId = null;
 
+    function fetchCategoryItems(categoryId, currentPage,pageSize) {
+        $.ajax({
+            url: '/Menu/CategoryItems',
+            type: 'GET',
+            data: {
+                categoryId: categoryId,
+                page: currentPage,
+                pageSize: pageSize,
+            },
+            success: function (data) {
+                $("#categoryItems").html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                $('#categoryItems').html('<tr><td colspan="4">Error loading items.</td></tr>');
+            }
+        });
+    }
+    
+    $(document).ready(function () {
         // When a category is clicked
         $('.category-item').click(function () {
-
             var categoryId = $(this).data('category-id');
+            currentCategoryId = $(this).data('category-id');
+
             if (categoryId) {
-                fetchCategoryItems(categoryId);
+                fetchCategoryItems(categoryId, currentPage,pageSize);
             } else {
                 console.error("Category ID is undefined.");
             }
         });
 
         const firstCategoryLink = document.querySelector('.category-item');
+
         if (firstCategoryLink) {
-           
             const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
-            fetchCategoryItems(firstCategoryId);
+            console.log(firstCategoryId);
+            fetchCategoryItems(firstCategoryId,currentPage,pageSize);
         }
 
-
-        function fetchCategoryItems(categoryId) {
-            $.ajax({
-                url: '/Menu/CategoryItems',
-                type: 'GET',
-                data: { categoryId: categoryId },
-                success: function (data) {
-                    $("#categoryItems").html(data);
-                },
-                error: function (xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    $('#categoryItems').html('<tr><td colspan="4">Error loading items.</td></tr>');
-                }
-            });
-        }
 
     });
 

@@ -233,38 +233,21 @@
 </Script>
 
 <script>
+    var currentPageModifier = 1;
+    var pageSizeModifier = 5; 
+    var search = "";
+    var currentModifierId = null;
 
-    $(document).ready(function () {
-        
-    // When a Modifier is clicked
-
-    $('.modifier-item').click(function () {
-        var ModifierGroupId = $(this).data('modifier-id');
-        if (ModifierGroupId) {
-            fetchModifierItems(ModifierGroupId);
-        } else {
-            console.error("ModifierGroup ID is undefined.");
-        }
-    });
-        const firstModifierLink = document.querySelector('.modifier-item');
-        if (firstModifierLink) {
-       
-            const firstModifierId = firstModifierLink.getAttribute('data-modifier-id');
-            console.log("Auto-loading first modifier:", firstModifierId);
-            fetchModifierItems(firstModifierId);
-        }
-        @* const firstCategoryLink = document.querySelector('.category-item');
-        if (firstCategoryLink) {
-        
-            const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
-            fetchCategoryItems(firstCategoryId);
-        } *@
-
-    function fetchModifierItems(ModifierGroupId) {
+    function fetchModifierItems(ModifierGroupId, currentPageModifier , pageSizeModifier) {
+        debugger;
         $.ajax({
             url: '/Menu/ModifierItems',
             type: 'GET',
-            data: { ModifierGroupId: ModifierGroupId },
+            data: {
+                ModifierGroupId: ModifierGroupId,
+                page: currentPageModifier,
+                pageSize: pageSizeModifier, 
+            },
             success: function (data) {
                 $("#modifierItems").html(data);
             },
@@ -275,6 +258,33 @@
         });
 
     }
+
+    $(document).ready(function () {
+        
+    // When a Modifier is clicked
+
+    $('.modifier-item').click(function () {
+        var ModifierGroupId = $(this).data('modifier-id');
+        if (ModifierGroupId) {
+            fetchModifierItems(ModifierGroupId,currentPageModifier , pageSizeModifier);
+        } else {
+            console.error("ModifierGroup ID is undefined.");
+        }
+    });
+        const firstModifierLink = document.querySelector('.modifier-item');
+        if (firstModifierLink) {
+       
+            const firstModifierId = firstModifierLink.getAttribute('data-modifier-id');
+            console.log("Auto-loading first modifier:", firstModifierId);
+            fetchModifierItems(firstModifierId,currentPageModifier , pageSizeModifier);
+        }
+        @* const firstCategoryLink = document.querySelector('.category-item');
+        if (firstCategoryLink) {
+        
+            const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
+            fetchCategoryItems(firstCategoryId);
+        } *@
+
 
     $(document).on('click', '.addExistingModifier-btn', function () {
         fetchExistingModifierList();

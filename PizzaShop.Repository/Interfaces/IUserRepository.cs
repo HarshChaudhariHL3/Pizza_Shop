@@ -3,6 +3,9 @@ namespace PizzaShop.Repository.Interfaces;
 
 public interface IUserRepository
 {
+
+    List<User> GetAllUser();
+    string GetRoleName(int id);
      User GetAll(int id);
 
      User GetAllByEmail(string email);

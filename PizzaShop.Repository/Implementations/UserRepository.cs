@@ -7,6 +7,24 @@ namespace PizzaShop.Repository.Implementations;
 
 public class UserRepository (PizzaShopDbContext _context) : IUserRepository
 {
+
+    public List<User> GetAllUser(){
+        
+        return   _context.Users
+                    .ToList();
+    }
+
+     public string GetRoleName(int id)
+        {
+            var role = _context.Roles.Find(id);
+
+            if (role == null)
+            {
+                return "Role not found";
+            }
+            return role.RoleName;
+        }
+
     public  User GetAll(int id)
     {
         var user = _context.Users.FirstOrDefault(u => u.UserId == id);

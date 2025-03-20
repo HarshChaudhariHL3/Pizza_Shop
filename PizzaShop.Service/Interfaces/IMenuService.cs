@@ -9,9 +9,11 @@ public interface IMenuService
     List<ModifierGroup> GetModifierGroups();
      List<Unit> UnitList();
 
-    List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId);
+    Task<PaginationViewModel<CategoryListViewModel>> GetCategoryItems(int categoryId, int page , int pageSize, string search);
+    // List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId);
 
-    List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId);
+    // List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId);
+    Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page , int pageSize, string search ="");
 
     void AddCategory(MenuViewModel model);
 
@@ -43,6 +45,7 @@ public interface IMenuService
     void EditModifierItem(ModifierListViewModel model);
 
     List<ModifierItem> GetModifierItems();
+
 }
 
 

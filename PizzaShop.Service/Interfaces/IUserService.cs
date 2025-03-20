@@ -27,5 +27,6 @@ public interface IUserService
 
     List<City> GetCities(int StateId);
 
+    // Task<PaginationViewModel<UserlistViewModel>> GetUserList(string searchUser, string sort, int page, int pageSize);
 
 }

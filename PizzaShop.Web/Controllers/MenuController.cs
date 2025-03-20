@@ -50,11 +50,12 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
 
     // for categoryList View
     [HttpGet]
-    public IActionResult CategoryItems(int categoryId)
+    public async Task<IActionResult> CategoryItems(int categoryId, int page , int pageSize, string search ="")
     {
         try
         {
-            var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
+            PaginationViewModel<CategoryListViewModel> categoryItems = await _menuService.GetCategoryItems(categoryId,page,pageSize,search);
+            // var categoryItems = _menuService.GetCategoryItemsByCategoryId(categoryId);
 
             // return Json(categoryItems);
             // return PartialView(categoryItems);
@@ -94,7 +95,7 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
         {
             _menuService.EditCategoryItem(model);
             TempData["Success"] = "CategoryItem Edited Successfully";
-            return Json(new { Success = true });
+            return PartialView("./PartialView/MenuController");
         }
         catch (Exception ex)
         {
@@ -287,11 +288,13 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
 
     #region Modifier
     [HttpGet]
-    public IActionResult ModifierItems(int ModifierGroupId)
+    public async Task<IActionResult> ModifierItems(int ModifierGroupId, int page , int pageSize, string search ="")
     {
         try
         {
-            var modifierItems = _menuService.GetModifierItemsByModifierId(ModifierGroupId);
+            PaginationViewModel<ModifierListViewModel> modifierItems = await _menuService.GetModifierItems(ModifierGroupId,page,pageSize,search);
+
+            // var modifierItems = _menuService.GetModifierItemsByModifierId(ModifierGroupId);
 
             // return Json(modifierItems);
             return PartialView("./PartialView/ModifierList", modifierItems);

@@ -23,6 +23,14 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             .ToList();
         return items;
     }
+    // public List<ModifierItem> ModifierItemList(int ModifierGroupId)
+    // {
+    //     var items = _context.ModifierItems
+    //         .Where(x => x.ModifierGroupId == ModifierGroupId)
+    //         .OrderBy(x => x.ModifierGroupId)
+    //         .ToList();
+    //     return items;
+    // }
     public CategoryItem GetItemById(int itemId)
     {
         return _context.CategoryItems.FirstOrDefault(x => x.CategoryItemId == itemId)!;

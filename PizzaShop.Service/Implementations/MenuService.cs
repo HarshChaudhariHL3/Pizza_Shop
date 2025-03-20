@@ -20,27 +20,75 @@ public class MenuService : IMenuService
     {
         return _menuRepository.CategoryList();
     }
-    public List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId)
+
+    public async Task<PaginationViewModel<CategoryListViewModel>> GetCategoryItems(int categoryId, int page , int pageSize, string search ="")
     {
-        var categoryItems = _menuRepository.CategoryItemList(categoryId);
+        // if(page == 0){
+        //     page = 1;
+        // }
 
-        var categoryItemViewModels = categoryItems.Select(item => new CategoryListViewModel
+        // if(pageSize == 0){
+        //     pageSize = 5;
+        // }
+
+        List<CategoryItem> categoryItems = _menuRepository.CategoryItemList(categoryId);
+        List<CategoryListViewModel> categoryListViews = new List<CategoryListViewModel>();
+
+        foreach (CategoryItem item in categoryItems)
         {
-            CategoryItemId = item.CategoryItemId,
-            CategoryId = item.CategoryId,
-            ItemName = item.ItemName,
-            Description = item.Description,
-            Quantity = item.Quantity,
-            Price = item.Price,
-            ItemType = item.ItemType,
-            IsAvailable = item.IsAvailable ?? false,
-            ShortCode = item.ShortCode,
-            ImageUrl = item.ImageUrl,
-            UnitId = item.UnitId
-        }).ToList();
+            categoryListViews.Add(new CategoryListViewModel
+            {
+                CategoryItemId = item.CategoryItemId,
+                CategoryId = item.CategoryId,
+                ItemName = item.ItemName,
+                Description = item.Description,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                ItemType = item.ItemType,
+                IsAvailable = item.IsAvailable ?? false,
+                ShortCode = item.ShortCode,
+                ImageUrl = item.ImageUrl,
+                UnitId = item.UnitId
+            });
+        }
+        if(!string.IsNullOrEmpty(search)){
+            categoryListViews = categoryListViews.Where(u => u.ItemName.Contains(search)).ToList();
+        }
 
-        return categoryItemViewModels;
+        int catItemCount = categoryListViews.Count;
+        categoryListViews = categoryListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        return new PaginationViewModel<CategoryListViewModel> 
+        {
+            Items = categoryListViews,
+            TotalItems = catItemCount,
+            CurrentPage = page,
+            PageSize = pageSize,
+        };
+
     }
+
+    // public List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId)
+    // {
+    //     var categoryItems = _menuRepository.CategoryItemList(categoryId);
+
+    //     var categoryItemViewModels = categoryItems.Select(item => new CategoryListViewModel
+    //     {
+    //         CategoryItemId = item.CategoryItemId,
+    //         CategoryId = item.CategoryId,
+    //         ItemName = item.ItemName,
+    //         Description = item.Description,
+    //         Quantity = item.Quantity,
+    //         Price = item.Price,
+    //         ItemType = item.ItemType,
+    //         IsAvailable = item.IsAvailable ?? false,
+    //         ShortCode = item.ShortCode,
+    //         ImageUrl = item.ImageUrl,
+    //         UnitId = item.UnitId
+    //     }).ToList();
+
+    //     return categoryItemViewModels;
+    // }
 
     public CategoryListViewModel GetItemById(int itemId)
     {
@@ -105,11 +153,11 @@ public class MenuService : IMenuService
     }
     public bool DeleteMultipleCategoryItem(List<int> dataId)
     {
-       
-        
-            _menuRepository.DeleteMultipleCategoryItem(dataId);
-            return true;
-        
+
+
+        _menuRepository.DeleteMultipleCategoryItem(dataId);
+        return true;
+
     }
 
     public void EditCategoryItem(CategoryListViewModel model)
@@ -135,23 +183,26 @@ public class MenuService : IMenuService
 
     public void AddCategoryItem(CategoryListViewModel model)
     {
-            _menuRepository.AddCategoryItem(model);
+        _menuRepository.AddCategoryItem(model);
     }
 
-    
+
 
     #endregion
     #region Modifier
-    
 
 
-    public List<ModifierGroup> GetModifierGroups(){
+
+    public List<ModifierGroup> GetModifierGroups()
+    {
         return _menuRepository.ModifierList();
     }
-    public List<ModifierItem> GetModifierItems(){
+    public List<ModifierItem> GetModifierItems()
+    {
         return _menuRepository.ModifierItemsList();
     }
-    public  List<Unit> UnitList(){
+    public List<Unit> UnitList()
+    {
         return _menuRepository.UnitList();
     }
     public void RemoveCategory(int id)
@@ -159,24 +210,67 @@ public class MenuService : IMenuService
         _menuRepository.DeleteCategory(id);
     }
 
-    
+        public async Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page , int pageSize, string search ="")
+    {
+        // if(page == 0){
+        //     page = 1;
+        // }
+
+        // if(pageSize == 0){
+        //     pageSize = 5;
+        // }
+
+        List<ModifierItem> categoryItems = _menuRepository.ModifierItemList(ModifierGroupId);
+        List<ModifierListViewModel> categoryListViews = new List<ModifierListViewModel>();
+
+        foreach (ModifierItem item in categoryItems)
+        {
+            categoryListViews.Add(new ModifierListViewModel
+            {
+                ModifierItemId = item.ModifierItemId,
+            ModifierItemName = item.ModifierItemName,
+            Quantity = item.Quantity,
+            UnitName = item.Unit?.UnitName,
+            Rate = item.Rate,
+            ModifierGroupId = item.ModifierGroupId
+            });
+        }
+        if(!string.IsNullOrEmpty(search)){
+            categoryListViews = categoryListViews.Where(u => u.ModifierItemName.Contains(search)).ToList();
+        }
+
+        int catItemCount = categoryListViews.Count;
+        categoryListViews = categoryListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        return new PaginationViewModel<ModifierListViewModel> 
+        {
+            Items = categoryListViews,
+            TotalItems = catItemCount,
+            CurrentPage = page,
+            PageSize = pageSize,
+        };
+
+    }
+
+
     public List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId)
     {
         var modifierItems = _menuRepository.ModifierItemList(ModifierGroupId);
 
-        var modifierListViewModel = modifierItems.Select(item => new ModifierListViewModel{
+        var modifierListViewModel = modifierItems.Select(item => new ModifierListViewModel
+        {
             ModifierItemId = item.ModifierItemId,
             ModifierItemName = item.ModifierItemName,
             Quantity = item.Quantity,
             UnitName = item.Unit?.UnitName,
             Rate = item.Rate,
             ModifierGroupId = item.ModifierGroupId
-            
+
         }).ToList();
 
         return modifierListViewModel;
     }
-    
+
     // Fetch item details by ItemId
     public ModifierListViewModel GetModifierItemById(int itemId)
     {
@@ -199,15 +293,11 @@ public class MenuService : IMenuService
     }
 
 
-    
+
     public void AddModifier(MenuViewModel model)
     {
         _menuRepository.AddModifier(model);
     }
-
-    
-
-    
 
     public void EditModifier(MenuViewModel model)
     {
@@ -220,13 +310,13 @@ public class MenuService : IMenuService
         }
     }
 
-    
+
     public void RemoveModifier(int id)
     {
         _menuRepository.DeleteModifier(id);
     }
 
-    
+
     public bool DeleteModifierItem(int ModifierItemId)
     {
         var Item = _menuRepository.GetModifierItemById(ModifierItemId);
@@ -238,7 +328,7 @@ public class MenuService : IMenuService
         return false;
     }
 
-    
+
     public void EditModifierItem(ModifierListViewModel model)
     {
         var item = _menuRepository.GetModifierItemById(model.ModifierItemId);
@@ -254,20 +344,17 @@ public class MenuService : IMenuService
             _menuRepository.UpdateModifierItem(item);
         }
     }
-   
+
     public void AddModifierItem(ModifierListViewModel model)
     {
-            _menuRepository.AddModifierItem(model);
+        _menuRepository.AddModifierItem(model);
     }
 
 
     public bool DeleteMultipleModifierItem(List<int> dataId)
     {
-       
-        
-            _menuRepository.DeleteMultipleModifierItem(dataId);
-            return true;
-        
+        _menuRepository.DeleteMultipleModifierItem(dataId);
+        return true;
     }
 
 
