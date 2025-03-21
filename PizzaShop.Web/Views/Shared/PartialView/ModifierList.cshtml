@@ -17,7 +17,7 @@
     <div class="d-flex align-items-center justify-content-end">
             <div id="has-search">
             <span class="fa fa-search form-control-feedback"></span>
-            <input class="form-control " type="search" placeholder="Search" name="search" id="search"
+            <input class="form-control " type="search" placeholder="Search" name="search" id="searchModifierList"
                         aria-label="Search">
         </div>
         <a href="" class="btn d-flex justify-content-center deleteMultipleCategoryItems  " data-bs-target="#model-delete" data-bs-toggle="modal">
@@ -92,18 +92,18 @@
                                         <span id="totalUser">@Model.TotalItems</span>   
                                     </span>
                                 </div>
-                                <div class="m-2 pt-3">
-                                <p class="page-link" id="prev"  onclick="pageChange('prev')" @(Model.CurrentPage
+                                <div class="m-2">
+                                <button class="page-link" id="prev"  onclick="pageChange('prev')" @(Model.CurrentPage
                                                     == 1 ? "disabled" : "") aria-label="Previous" id="previous_page">
                                
                                 <i class="fa-solid fa-backward" aria-hidden="true"></i>
-                                </p>
+                                </button>
                                 </div>
-                                <div class="m-2 pt-3">
-                                    <p class="page-link" id="next" onclick="pageChange('next')" @((Model.CurrentPage
+                                <div class="m-2">
+                                    <button class="page-link" id="next" onclick="pageChange('next')" @((Model.CurrentPage
                                                     *Model.PageSize >= Model.TotalItems) ? "disabled" : "") aria-label="Next" id="next_page">
                                         <i class="fa-solid fa-forward" aria-hidden="true"></i>
-                                    </p>
+                                    </button>
                                 </div>
                             </div>
                             </div>
@@ -348,26 +348,32 @@
 @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
 <script>
+    $('#searchModifierList').on('search', function() {
+    debugger;
+    search = $(this).val();  
+
+    fetchModifierItems(currentModifierId, currentPage, pageSize, search); 
+    });
     function pagination() {
-        debugger;
+
         var value =parseInt($("#PageSize").val());
         pageSize = value;
         let totalPages = Math.ceil(@Model.TotalItems / pageSize);
         if (currentPage > totalPages) {
             currentPage = totalPages > 0 ? totalPages : 1;
         }
-        fetchCategoryItems(currentModifierId,currentPage,pageSize);
+        fetchModifierItems(currentModifierId,currentPage,pageSize,search);
     }
 
     function pageChange(pageAction) {
-        debugger;
+
         if (pageAction == 'prev') {
             currentPage = currentPage === 1 ? 1 : --currentPage;
         }
         else {
             currentPage = (currentPage * pageSize) > @Model.TotalItems ? currentPage : ++currentPage;
         }
-        fetchCategoryItems(currentModifierId, currentPage, pageSize);
+        fetchModifierItems(currentModifierId, currentPage, pageSize,search);
     }
     
     $(document).ready(function () {

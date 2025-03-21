@@ -19,5 +19,7 @@ public partial class Section
 
     public string? ModifiedBy { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual ICollection<TableDetail> TableDetails { get; set; } = new List<TableDetail>();
 }

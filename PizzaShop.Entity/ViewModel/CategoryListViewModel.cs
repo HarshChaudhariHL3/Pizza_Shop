@@ -26,7 +26,6 @@ public class CategoryListViewModel
     public string? ImageUrl { get; set; }
 
 
-    // public PaginatedList<CategoryListViewModel> PageList { get; set; } 
 
 
 }

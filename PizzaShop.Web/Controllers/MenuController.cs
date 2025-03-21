@@ -95,7 +95,7 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
         {
             _menuService.EditCategoryItem(model);
             TempData["Success"] = "CategoryItem Edited Successfully";
-            return PartialView("./PartialView/MenuController");
+            return PartialView("./PartialView/Category");
         }
         catch (Exception ex)
         {

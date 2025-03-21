@@ -199,6 +199,7 @@
                 categoryId: categoryId,
                 page: currentPage,
                 pageSize: pageSize,
+                search:search
             },
             success: function (data) {
                 $("#categoryItems").html(data);
@@ -227,6 +228,7 @@
 
         if (firstCategoryLink) {
             const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
+             currentCategoryId = firstCategoryId;
             console.log(firstCategoryId);
             fetchCategoryItems(firstCategoryId,currentPage,pageSize);
         }

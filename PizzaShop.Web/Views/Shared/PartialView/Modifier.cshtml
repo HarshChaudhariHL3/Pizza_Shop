@@ -239,7 +239,7 @@
     var currentModifierId = null;
 
     function fetchModifierItems(ModifierGroupId, currentPageModifier , pageSizeModifier) {
-        debugger;
+
         $.ajax({
             url: '/Menu/ModifierItems',
             type: 'GET',
@@ -247,6 +247,7 @@
                 ModifierGroupId: ModifierGroupId,
                 page: currentPageModifier,
                 pageSize: pageSizeModifier, 
+                search:search,
             },
             success: function (data) {
                 $("#modifierItems").html(data);
@@ -266,7 +267,7 @@
     $('.modifier-item').click(function () {
         var ModifierGroupId = $(this).data('modifier-id');
         if (ModifierGroupId) {
-            fetchModifierItems(ModifierGroupId,currentPageModifier , pageSizeModifier);
+            fetchModifierItems(ModifierGroupId,currentPageModifier , pageSizeModifier, search);
         } else {
             console.error("ModifierGroup ID is undefined.");
         }
@@ -275,15 +276,10 @@
         if (firstModifierLink) {
        
             const firstModifierId = firstModifierLink.getAttribute('data-modifier-id');
-            console.log("Auto-loading first modifier:", firstModifierId);
-            fetchModifierItems(firstModifierId,currentPageModifier , pageSizeModifier);
+            currentModifierId = firstModifierId;
+            fetchModifierItems(firstModifierId,currentPageModifier , pageSizeModifier, search);
         }
-        @* const firstCategoryLink = document.querySelector('.category-item');
-        if (firstCategoryLink) {
-        
-            const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
-            fetchCategoryItems(firstCategoryId);
-        } *@
+
 
 
     $(document).on('click', '.addExistingModifier-btn', function () {
@@ -308,11 +304,9 @@
                     itemsHtml += '</tr>';
                 });
                 $('#ExistingModifierItems').html(itemsHtml);
-                @* const modal2 = new bootstrap.Modal('#ExistingModifier');
-                modal2.show(); *@
 
                 $('#ExistingModifier').modal('show');
-                @* $('#ExistingModifier').show(); *@
+
 
 
             },

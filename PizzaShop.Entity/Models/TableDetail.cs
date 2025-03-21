@@ -13,7 +13,7 @@ public partial class TableDetail
 
     public int? Capacity { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -22,6 +22,8 @@ public partial class TableDetail
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 

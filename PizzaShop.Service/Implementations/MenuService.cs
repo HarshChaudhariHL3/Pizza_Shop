@@ -52,7 +52,7 @@ public class MenuService : IMenuService
             });
         }
         if(!string.IsNullOrEmpty(search)){
-            categoryListViews = categoryListViews.Where(u => u.ItemName.Contains(search)).ToList();
+            categoryListViews = categoryListViews.Where(u => u.ItemName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         int catItemCount = categoryListViews.Count;
@@ -210,24 +210,17 @@ public class MenuService : IMenuService
         _menuRepository.DeleteCategory(id);
     }
 
-        public async Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page , int pageSize, string search ="")
+    public async Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page , int pageSize, string search ="")
     {
-        // if(page == 0){
-        //     page = 1;
-        // }
 
-        // if(pageSize == 0){
-        //     pageSize = 5;
-        // }
+        List<ModifierItem> modifierItem = _menuRepository.ModifierItemList(ModifierGroupId);
+        List<ModifierListViewModel> modifierListViews = new List<ModifierListViewModel>();
 
-        List<ModifierItem> categoryItems = _menuRepository.ModifierItemList(ModifierGroupId);
-        List<ModifierListViewModel> categoryListViews = new List<ModifierListViewModel>();
-
-        foreach (ModifierItem item in categoryItems)
+        foreach (ModifierItem item in modifierItem)
         {
-            categoryListViews.Add(new ModifierListViewModel
+            modifierListViews.Add(new ModifierListViewModel
             {
-                ModifierItemId = item.ModifierItemId,
+            ModifierItemId = item.ModifierItemId,
             ModifierItemName = item.ModifierItemName,
             Quantity = item.Quantity,
             UnitName = item.Unit?.UnitName,
@@ -236,39 +229,20 @@ public class MenuService : IMenuService
             });
         }
         if(!string.IsNullOrEmpty(search)){
-            categoryListViews = categoryListViews.Where(u => u.ModifierItemName.Contains(search)).ToList();
+            modifierListViews = modifierListViews.Where(u => u.ModifierItemName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
-        int catItemCount = categoryListViews.Count;
-        categoryListViews = categoryListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        int catItemCount = modifierListViews.Count;
+        modifierListViews = modifierListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
         return new PaginationViewModel<ModifierListViewModel> 
         {
-            Items = categoryListViews,
+            Items = modifierListViews,
             TotalItems = catItemCount,
             CurrentPage = page,
             PageSize = pageSize,
         };
 
-    }
-
-
-    public List<ModifierListViewModel> GetModifierItemsByModifierId(int ModifierGroupId)
-    {
-        var modifierItems = _menuRepository.ModifierItemList(ModifierGroupId);
-
-        var modifierListViewModel = modifierItems.Select(item => new ModifierListViewModel
-        {
-            ModifierItemId = item.ModifierItemId,
-            ModifierItemName = item.ModifierItemName,
-            Quantity = item.Quantity,
-            UnitName = item.Unit?.UnitName,
-            Rate = item.Rate,
-            ModifierGroupId = item.ModifierGroupId
-
-        }).ToList();
-
-        return modifierListViewModel;
     }
 
     // Fetch item details by ItemId
