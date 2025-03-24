@@ -49,6 +49,10 @@ public partial class User
 
     public virtual Country? Country { get; set; }
 
+    public virtual ICollection<MappingItemModifier> MappingItemModifierCreatedByNavigations { get; set; } = new List<MappingItemModifier>();
+
+    public virtual ICollection<MappingItemModifier> MappingItemModifierModifiedByNavigations { get; set; } = new List<MappingItemModifier>();
+
     public virtual State? State { get; set; }
 
     public virtual Role? UserRoleNavigation { get; set; }

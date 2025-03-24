@@ -19,15 +19,19 @@ public interface IMenuRepository
     void DeleteModifierItem(int itemId);
 
      void AddCategoryItem(CategoryListViewModel model);
-     void AddModifierItem(ModifierListViewModel model);
+     ModifierItem  AddModifierItem(ModifierListViewModel model);
+
+     public MappingItemModifier GetMappingModifierItemById(int itemId);
 
     List<CategoryItem> CategoryItemList(int categoryId);
 
-    List<ModifierItem> ModifierItemList(int ModifierGroupId);
+    Task<List<ModifierItem>> ModifierItemList(int ModifierGroupId);
+    // List<ModifierItem> ModifierItemListByModifierGroupId(int ModifierGroupId);
 
     void AddCategory(MenuViewModel model);
 
-    void AddModifier(MenuViewModel model);
+    ModifierGroup AddModifier(ModifierGroup modifier);
+    MappingItemModifier AddModifierMapping(MappingItemModifier modifier);
 
     Category GetCategoryById(int id);
 

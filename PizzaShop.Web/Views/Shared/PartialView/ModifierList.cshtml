@@ -62,7 +62,7 @@
                             <td>@item.Quantity</td>
 
                             <td class="gap-3">
-                                <button class="btn  editModifier-btn" data-modifierItem-id="@item.ModifierItemId" data-bs-toggle="modal"
+                                <button class="btn  editModifier-btn" data-modifierItem-id="@item.ModifierItemId" data-modifiergroup-id="@item.ModifierGroupId" data-bs-toggle="modal"
                                     data-bs-target="#editModifierItem"><i class="bi bi-pen"></i> </button>
                                 <button class="btn  deleteModifier-btn" data-modifierItem-id="@item.ModifierItemId"
                                     data-bs-toggle="modal" data-bs-target="#deleteModifierItemModal"><i
@@ -349,7 +349,7 @@
 
 <script>
     $('#searchModifierList').on('search', function() {
-    debugger;
+
     search = $(this).val();  
 
     fetchModifierItems(currentModifierId, currentPage, pageSize, search); 
@@ -379,12 +379,17 @@
     $(document).ready(function () {
 
         $(document).on('click', '.editModifier-btn', function () {
+            debugger
             var itemId = $(this).data('modifieritem-id');
+            var modifierGroupId = $(this).data('modifiergroup-id');
+
+
             $.ajax({
                 url: '/Menu/GetModifierItemDetails',
                 type: 'GET',
                 data: { itemId: itemId },
                 success: function (data) {
+                    debugger;
                     $('#editItemId').val(data.modifierItemId);
                     $('#editModifierId').val(data.modifierGroupId);
                     $('#editModifierUnitId').val(data.unitId);

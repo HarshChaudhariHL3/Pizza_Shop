@@ -31,7 +31,7 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
         }
         if (search == "")
         {
-             tableCount = tableListViews.Count;
+            tableCount = tableListViews.Count;
         }
         else
         {
@@ -46,7 +46,6 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
             CurrentPage = page,
             PageSize = pageSize,
         };
-
     }
     public List<Section> GetSections()
     {

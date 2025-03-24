@@ -4,7 +4,7 @@ public class ModifierListViewModel
 {
     public int ModifierItemId { get; set; }
 
-    public int? ModifierGroupId { get; set; }
+    public int ModifierGroupId { get; set; }
 
     public string ModifierItemName { get; set; } = null!;
 

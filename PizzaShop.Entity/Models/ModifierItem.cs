@@ -7,8 +7,6 @@ public partial class ModifierItem
 {
     public int ModifierItemId { get; set; }
 
-    public int? ModifierGroupId { get; set; }
-
     public string ModifierItemName { get; set; } = null!;
 
     public float? Rate { get; set; }
@@ -32,8 +30,6 @@ public partial class ModifierItem
     public string? Description { get; set; }
 
     public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
-
-    public virtual ModifierGroup? ModifierGroup { get; set; }
 
     public virtual ICollection<OrderItemModifier> OrderItemModifiers { get; set; } = new List<OrderItemModifier>();
 

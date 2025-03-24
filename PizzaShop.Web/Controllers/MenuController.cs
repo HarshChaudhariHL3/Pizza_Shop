@@ -294,9 +294,7 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
         {
             PaginationViewModel<ModifierListViewModel> modifierItems = await _menuService.GetModifierItems(ModifierGroupId,page,pageSize,search);
 
-            // var modifierItems = _menuService.GetModifierItemsByModifierId(ModifierGroupId);
-
-            // return Json(modifierItems);
+           
             return PartialView("./PartialView/ModifierList", modifierItems);
         }
         catch (Exception ex)
@@ -362,10 +360,15 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
 
 
     [HttpPost]
-    public IActionResult AddModifier(MenuViewModel model)
+    public IActionResult AddModifier(MenuViewModel model, string SelectedModifierIds, string selectedModifierName)
     {
         try
         {
+            if (!string.IsNullOrEmpty(SelectedModifierIds))
+        {
+            model.SelectedModifierIds = SelectedModifierIds.Split(',').Select(int.Parse).ToList();
+            model.SelectedModifierName = selectedModifierName.Split(',').ToList();
+        }
             _menuService.AddModifier(model);
             TempData["Success"] = "Added Modifier Successfully";
             return RedirectToAction("Menu");
@@ -376,6 +379,18 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
+
+    //  public async Task<IActionResult> AddModifierGroup(AddModifierGroupViewModel model, string SelectedModifierIds, string selectedModifierName)
+    // {
+    //     if (!string.IsNullOrEmpty(SelectedModifierIds))
+    //     {
+    //         model.SelectedModifierIds = SelectedModifierIds.Split(',').Select(int.Parse).ToList();
+    //         model.selectedModifierName = selectedModifierName.Split(',').ToList();
+    //     }
+    //     _categoryService.AddModifierGroupAsync(model);
+    //     TempData["succses"] = "Add Modifier Group";
+    //     return RedirectToAction("Menupage");
+    // }
 
 
 

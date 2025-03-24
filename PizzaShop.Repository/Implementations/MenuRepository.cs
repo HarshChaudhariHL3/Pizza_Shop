@@ -23,7 +23,7 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             .ToList();
         return items;
     }
-    // public List<ModifierItem> ModifierItemList(int ModifierGroupId)
+    // public List<ModifierItem> ModifierItemListByModifierGroupId(int ModifierGroupId)
     // {
     //     var items = _context.ModifierItems
     //         .Where(x => x.ModifierGroupId == ModifierGroupId)
@@ -38,6 +38,10 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     public ModifierItem GetModifierItemById(int itemId)
     {
         return _context.ModifierItems.FirstOrDefault(x => x.ModifierItemId == itemId)!;
+    }
+    public MappingItemModifier GetMappingModifierItemById(int itemId)
+    {
+        return _context.MappingItemModifiers.FirstOrDefault(x => x.ModifierId == itemId)!;
     }
     // Delete category item from the database
     public void DeleteCategoryItem(int itemId)
@@ -60,7 +64,8 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.Categories.Add(category);
         _context.SaveChanges();
     }
-    public void AddCategoryItem(CategoryListViewModel model){
+    public void AddCategoryItem(CategoryListViewModel model)
+    {
 
         var categoryItem = new CategoryItem
         {
@@ -97,7 +102,7 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             _context.SaveChanges();
         }
     }
-    public void  DeleteMultipleCategoryItem(List<int> dataId)
+    public void DeleteMultipleCategoryItem(List<int> dataId)
     {
         // var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
         var itemToDelete = _context.CategoryItems.Where(item => dataId.Contains(item.CategoryItemId)).ToList();
@@ -109,7 +114,7 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         }
     }
 
-    
+
     public CategoryItem GetCategoryItemById(int id)
     {
         return _context.CategoryItems.FirstOrDefault(ci => ci.CategoryItemId == id);
@@ -121,43 +126,51 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.SaveChanges();
     }
 
-    
 
-    
+
+
 
     #endregion
     #region Modifier
 
-    public List<ModifierGroup> ModifierList(){
+    public List<ModifierGroup> ModifierList()
+    {
         var item = _context.ModifierGroups.OrderBy(c => c.ModifierName).ToList();
         return item;
     }
 
-    public List<ModifierItem> ModifierItemsList(){
+    public List<ModifierItem> ModifierItemsList()
+    {
         var item = _context.ModifierItems
                     .OrderBy(x => x.ModifierItemId).ToList();
         return item;
     }
 
-    public List<Unit> UnitList(){
+    public List<Unit> UnitList()
+    {
         return _context.Units.ToList();
     }
 
-    
-    public List<ModifierItem> ModifierItemList(int ModifierGroupId)
+
+    public async Task<List<ModifierItem>> ModifierItemList(int ModifierGroupId)
     {
-        var items = _context.ModifierItems
-            .Where(x => x.ModifierGroupId == ModifierGroupId)
-            .Include(x => x.Unit)
-            .OrderBy(x => x.ModifierItemId)
-            .ToList();
-        return items;
+        try
+        {
+        var modifiers = _context.MappingItemModifiers.Where(c => c.ModifierGroupId == ModifierGroupId).Select(c => c.ModifierId).ToList();
+        var result = await _context.ModifierItems.Where(c => modifiers.Contains(c.ModifierItemId)).Include(c => c.Unit).ToListAsync();
+        return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
     }
 
-    
 
 
-    
+
+
     public void DeleteModifierItem(int itemId)
     {
         var modifierItem = _context.ModifierItems.FirstOrDefault(x => x.ModifierItemId == itemId);
@@ -168,47 +181,94 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         }
     }
 
-    
-    public void AddModifier(MenuViewModel model)
+
+    // public void AddModifier(MenuViewModel model)
+    // {
+    //     var ModifierGroup = new ModifierGroup
+    //     {
+    //         ModifierName = model.ModifierName,
+    //         Description = model.Description
+    //     };
+    //     _context.ModifierGroups.Add(ModifierGroup);
+    //     _context.SaveChanges();
+    // }
+    public ModifierGroup AddModifier(ModifierGroup modifier)
     {
-        var ModifierGroup = new ModifierGroup
+        try
         {
-            ModifierName = model.ModifierName,
-            Description = model.Description
-        };
-        _context.ModifierGroups.Add(ModifierGroup);
-        _context.SaveChanges();
+            _context.ModifierGroups.Add(modifier);
+            _context.SaveChanges();
+            return modifier;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+    }
+    public MappingItemModifier AddModifierMapping(MappingItemModifier modifier)
+    {
+        try
+        {
+            _context.MappingItemModifiers.Add(modifier);
+            _context.SaveChanges();
+            return modifier;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
     }
 
-    
-    public void AddModifierItem(ModifierListViewModel model){
+
+
+
+    public ModifierItem  AddModifierItem(ModifierListViewModel model)
+    {
+        // var modifierMapping = new MappingItemModifier{
+        //     ModifierGroupId = model.ModifierGroupId,
+        //     ModifierId = model.ModifierItemId
+            
+        // };
 
         var modifierItem = new ModifierItem
         {
-            ModifierGroupId = model.ModifierGroupId,
+
             ModifierItemName = model.ModifierItemName,
             Description = model.Description,
             Quantity = model.Quantity,
             Rate = model.Rate,
-            UnitId = model.UnitId, 
+            UnitId = model.UnitId,
         };
         _context.ModifierItems.Add(modifierItem);
         _context.SaveChanges();
+
+        var ModifierItemList = _context.ModifierItems.FirstOrDefault(c =>c.ModifierItemName == model.ModifierItemName);
+
+        return ModifierItemList;
     }
 
-    
-    public ModifierGroup GetModifierGroupById(int id){
+    // public void AddModifierMapping(MappingItemModifier modifierMapping){
+    //     _context.MappingItemModifiers.Add(modifierMapping);
+    //     _context.SaveChanges();
+
+    // }
+
+
+    public ModifierGroup GetModifierGroupById(int id)
+    {
         return _context.ModifierGroups.FirstOrDefault(p => p.ModifierGroupId == id);
     }
 
-    
+
     public void UpdateModifier(ModifierGroup modifier)
     {
         _context.ModifierGroups.Update(modifier);
         _context.SaveChanges();
     }
 
-    
+
     public void DeleteModifier(int id)
     {
         var modifier = _context.ModifierGroups.FirstOrDefault(p => p.ModifierGroupId == id);
@@ -219,14 +279,14 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             _context.SaveChanges();
         }
     }
-    
+
     public void UpdateModifierItem(ModifierItem modifierItem)
     {
         _context.ModifierItems.Update(modifierItem);
         _context.SaveChanges();
     }
 
-        public void  DeleteMultipleModifierItem(List<int> dataId)
+    public void DeleteMultipleModifierItem(List<int> dataId)
     {
         // var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
         var itemToDelete = _context.ModifierItems.Where(item => dataId.Contains(item.ModifierItemId)).ToList();

@@ -443,8 +443,11 @@
                             </div>
                             <div class="col-sm-4 pt-3" style="background-color: antiquewhite;">
                                 <div>
-                                    <select class="form-select" aria-label="Default select example">
-                                    </select>
+                                    @* <select class="form-select"  aria-label="Default select example">
+
+                                    </select> *@
+                                    @* <select class="selectpicker" multiple aria-label="Default select example" data-live-search="true"> *@
+                                    <select multiple class="form-select" id="exampleSelectMultiple"></select>
                                 </div>
                             </div>
                         </div>
@@ -498,7 +501,7 @@
 <script>
 
     $('#searchCategoryList').on('search', function() {
-    debugger;
+
     search = $(this).val();  
 
     fetchCategoryItems(currentCategoryId, currentPage, pageSize, search); 
@@ -526,6 +529,7 @@
     }
 
     $(document).ready(function () {
+       
         
         $('#deleteForm').submit(function (e) {
             e.preventDefault();
@@ -749,19 +753,19 @@
         $('.deleteMultipleCategoryItems').click(function (){
             let selectedIds = [];
 
-            $('.deleteItemCheckbox:checked').each(function(){
-                let id = $(this).data("categoryitem-id");
-                console.log(id);
-                selectedIds.push(id);
-            });
+                $('.deleteItemCheckbox:checked').each(function(){
+                    let id = $(this).data("categoryitem-id");
+                    console.log(id);
+                    selectedIds.push(id);
+                });
             console.log(selectedIds);
 
             $.each(selectedIds, function(index,value){
                 $("#arrayResult").append('<span class="deleteCategoryItemIds">' + value + '</span>')
             })
-            const modal = new bootstrap.Modal('#deleteMultipleItems');
-            modal.show();
-            @* $('#deleteMultipleItems').modal('show'); *@
+            @* const modal = new bootstrap.Modal('#deleteMultipleItems');
+            modal.show(); *@
+            $('#deleteMultipleItems').modal('show');
         });
 
         $("#deleteMultipleItemForm").submit(function (e) {

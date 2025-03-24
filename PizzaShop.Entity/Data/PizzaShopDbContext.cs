@@ -32,6 +32,8 @@ public partial class PizzaShopDbContext : DbContext
 
     public virtual DbSet<Invoice> Invoices { get; set; }
 
+    public virtual DbSet<MappingItemModifier> MappingItemModifiers { get; set; }
+
     public virtual DbSet<ModifierGroup> ModifierGroups { get; set; }
 
     public virtual DbSet<ModifierItem> ModifierItems { get; set; }
@@ -372,6 +374,40 @@ public partial class PizzaShopDbContext : DbContext
                 .HasConstraintName("invoice_tax_id_fkey");
         });
 
+        modelBuilder.Entity<MappingItemModifier>(entity =>
+        {
+            entity.HasKey(e => e.MappingItem).HasName("mapping_item_modifier_pkey");
+
+            entity.ToTable("mapping_item_modifier");
+
+            entity.Property(e => e.MappingItem).HasColumnName("mapping_item");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.ModifiedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("modified_at");
+            entity.Property(e => e.ModifiedBy).HasColumnName("modified_by");
+            entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
+            entity.Property(e => e.ModifierId).HasColumnName("modifier_id");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.MappingItemModifierCreatedByNavigations)
+                .HasForeignKey(d => d.CreatedBy)
+                .HasConstraintName("mapping_item_modifier_created_by_fkey");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.MappingItemModifierModifiedByNavigations)
+                .HasForeignKey(d => d.ModifiedBy)
+                .HasConstraintName("mapping_item_modifier_modified_by_fkey");
+
+            entity.HasOne(d => d.ModifierGroup).WithMany(p => p.MappingItemModifiers)
+                .HasForeignKey(d => d.ModifierGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("mapping_item_modifier_modifier_group_id_fkey");
+        });
+
         modelBuilder.Entity<ModifierGroup>(entity =>
         {
             entity.HasKey(e => e.ModifierGroupId).HasName("modifier_group_pkey");
@@ -433,17 +469,12 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
-            entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
             entity.Property(e => e.ModifierItemName)
                 .HasMaxLength(255)
                 .HasColumnName("modifier_item_name");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.Rate).HasColumnName("rate");
             entity.Property(e => e.UnitId).HasColumnName("unit_id");
-
-            entity.HasOne(d => d.ModifierGroup).WithMany(p => p.ModifierItems)
-                .HasForeignKey(d => d.ModifierGroupId)
-                .HasConstraintName("modifier_items_modifier_group_id_fkey");
 
             entity.HasOne(d => d.Unit).WithMany(p => p.ModifierItems)
                 .HasForeignKey(d => d.UnitId)

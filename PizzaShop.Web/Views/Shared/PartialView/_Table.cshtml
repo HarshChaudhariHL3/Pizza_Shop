@@ -256,7 +256,7 @@
 <script>
 
     $('#searchTable').on('search', function() {
-    debugger;
+
     search = $(this).val();  
 
     fetchTable(currentTableId, currentPage, pageSize, search); 
@@ -264,7 +264,7 @@
 
     function paginationTable() {
         var value =parseInt($("#PageSize").val());
-        debugger
+
         pageSize = value;
         let totalPages = Math.ceil(@Model.TotalItems / pageSize);
         if (currentPage > totalPages) {
@@ -372,7 +372,7 @@
         });
 
         $('#editTableForm').submit(function (e) {
-            debugger
+
             e.preventDefault();
 
             var tableId = parseInt($('#editTableId').val());
@@ -399,7 +399,7 @@
                 success: function (response) {
                     // Handle success
                     if (response) {
-                        debugger
+
                         $('#editTable').modal('hide');
                         location.reload();
                     } else {
@@ -412,7 +412,7 @@
             });
         });
         $(document).on('click', '.delete-btn', function () {
-            debugger;
+
 
             var tableId = $(this).data('table-id');
             $.ajax({

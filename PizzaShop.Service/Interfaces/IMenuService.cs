@@ -17,7 +17,7 @@ public interface IMenuService
 
     void AddCategory(MenuViewModel model);
 
-    void AddModifier(MenuViewModel model);
+    Task AddModifier(MenuViewModel model);
     void AddCategoryItem(CategoryListViewModel model);
 
     void AddModifierItem(ModifierListViewModel model);

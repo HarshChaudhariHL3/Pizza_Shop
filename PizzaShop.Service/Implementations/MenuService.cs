@@ -21,7 +21,7 @@ public class MenuService : IMenuService
         return _menuRepository.CategoryList();
     }
 
-    public async Task<PaginationViewModel<CategoryListViewModel>> GetCategoryItems(int categoryId, int page , int pageSize, string search ="")
+    public async Task<PaginationViewModel<CategoryListViewModel>> GetCategoryItems(int categoryId, int page, int pageSize, string search = "")
     {
         // if(page == 0){
         //     page = 1;
@@ -51,14 +51,15 @@ public class MenuService : IMenuService
                 UnitId = item.UnitId
             });
         }
-        if(!string.IsNullOrEmpty(search)){
+        if (!string.IsNullOrEmpty(search))
+        {
             categoryListViews = categoryListViews.Where(u => u.ItemName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         int catItemCount = categoryListViews.Count;
         categoryListViews = categoryListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-        return new PaginationViewModel<CategoryListViewModel> 
+        return new PaginationViewModel<CategoryListViewModel>
         {
             Items = categoryListViews,
             TotalItems = catItemCount,
@@ -210,32 +211,33 @@ public class MenuService : IMenuService
         _menuRepository.DeleteCategory(id);
     }
 
-    public async Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page , int pageSize, string search ="")
+    public async Task<PaginationViewModel<ModifierListViewModel>> GetModifierItems(int ModifierGroupId, int page, int pageSize, string search = "")
     {
 
-        List<ModifierItem> modifierItem = _menuRepository.ModifierItemList(ModifierGroupId);
+        var modifierItem = await _menuRepository.ModifierItemList(ModifierGroupId);
         List<ModifierListViewModel> modifierListViews = new List<ModifierListViewModel>();
 
         foreach (ModifierItem item in modifierItem)
         {
             modifierListViews.Add(new ModifierListViewModel
             {
-            ModifierItemId = item.ModifierItemId,
-            ModifierItemName = item.ModifierItemName,
-            Quantity = item.Quantity,
-            UnitName = item.Unit?.UnitName,
-            Rate = item.Rate,
-            ModifierGroupId = item.ModifierGroupId
+                ModifierGroupId = ModifierGroupId,
+                ModifierItemId = item.ModifierItemId,
+                ModifierItemName = item.ModifierItemName,
+                Quantity = item.Quantity,
+                UnitName = item.Unit?.UnitName,
+                Rate = item.Rate,
             });
         }
-        if(!string.IsNullOrEmpty(search)){
+        if (!string.IsNullOrEmpty(search))
+        {
             modifierListViews = modifierListViews.Where(u => u.ModifierItemName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         int catItemCount = modifierListViews.Count;
         modifierListViews = modifierListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-        return new PaginationViewModel<ModifierListViewModel> 
+        return new PaginationViewModel<ModifierListViewModel>
         {
             Items = modifierListViews,
             TotalItems = catItemCount,
@@ -255,7 +257,6 @@ public class MenuService : IMenuService
         // Map data from entity to ViewModel
         return new ModifierListViewModel
         {
-            ModifierGroupId = item.ModifierGroupId,
             ModifierItemName = item.ModifierItemName,
             ModifierItemId = item.ModifierItemId,
             Rate = item.Rate,
@@ -267,11 +268,28 @@ public class MenuService : IMenuService
     }
 
 
-
-    public void AddModifier(MenuViewModel model)
+    public async Task AddModifier(MenuViewModel model)
     {
-        _menuRepository.AddModifier(model);
+        var modifierGroup = new ModifierGroup
+        {
+            ModifierName = model.ModifierName,
+            Description = model.DescriptionModifier
+        };
+
+        _menuRepository.AddModifier(modifierGroup);
+
+        foreach (var itemId in model.SelectedModifierIds)
+        {
+            var itemModifierGroup = new MappingItemModifier
+            {
+                ModifierId = itemId,
+                ModifierGroupId = modifierGroup.ModifierGroupId
+            };
+            _menuRepository.AddModifierMapping(itemModifierGroup);
+
+        }
     }
+
 
     public void EditModifier(MenuViewModel model)
     {
@@ -305,6 +323,7 @@ public class MenuService : IMenuService
 
     public void EditModifierItem(ModifierListViewModel model)
     {
+
         var item = _menuRepository.GetModifierItemById(model.ModifierItemId);
 
         if (item != null)
@@ -321,7 +340,18 @@ public class MenuService : IMenuService
 
     public void AddModifierItem(ModifierListViewModel model)
     {
-        _menuRepository.AddModifierItem(model);
+
+
+        var ModifierItemList = _menuRepository.AddModifierItem(model);
+
+        var modifierMapping = new MappingItemModifier
+        {
+            ModifierGroupId = model.ModifierGroupId,
+            ModifierId = ModifierItemList.ModifierItemId
+
+        };
+        _menuRepository.AddModifierMapping(modifierMapping);
+
     }
 
 

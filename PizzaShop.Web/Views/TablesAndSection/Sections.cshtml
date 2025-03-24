@@ -185,7 +185,6 @@
                 search: search,
             },
             success: function (data) {
-                debugger;
                 @* if(data.TotalItems == 0){
                 toastr.success(data.message, data.title);
                 } *@
@@ -200,12 +199,11 @@
     $(document).ready(function () {
 
         $('.sectionSide').click(function () {
-            debugger
             var sectionId = $(this).data('section-id');
             currentTableId = $(this).data('section-id');
 
             if (sectionId) {
-                fetchTable(sectionId, currentPage, pageSize);
+                fetchTable(sectionId, currentPage, pageSize,search);
             } else {
                 console.error("Section ID is undefined.");
             }
@@ -217,7 +215,7 @@
             const firstTableId = firstTableLink.getAttribute('data-section-id');
             currentTableId = firstTableId;
             console.log(firstTableId);
-            fetchTable(firstTableId, currentPage, pageSize);
+            fetchTable(firstTableId, currentPage, pageSize,search);
         }
 
 

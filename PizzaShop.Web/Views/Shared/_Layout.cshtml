@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,14 +9,17 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
 </head>
+
 <body>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <header>
-    <div class="top-nav">
+        <div class="top-nav">
             <h2 class="logo d-flex align-items-center gap-2">
                 <span>
-                   <img src="~/images/logos/pizzashop_logo.png" height="50px" width="60px" alt="">
+                    <img src="~/images/logos/pizzashop_logo.png" height="50px" width="60px" alt="">
                 </span>
                 <span>Pizza Shop</span>
             </h2>
@@ -28,19 +32,19 @@
                     <div class="menu p-2">
                         <ul>
                             <li>
-                                <a asp-controller="User" asp-action="Profile" >
+                                <a asp-controller="User" asp-action="Profile">
                                     <span class="material-symbols-outlined"><i class="bi bi-person"></i></span>
-                                    <span >My Profile</span>
+                                    <span>My Profile</span>
                                 </a>
                             </li>
                             <li>
-                                <a asp-controller="Validation" asp-action="Changepassword" >
+                                <a asp-controller="Validation" asp-action="Changepassword">
                                     <span class="material-symbols-outlined"><i class="bi bi-key"></i></span>
-                                    <span >Change Password</span>
+                                    <span>Change Password</span>
                                 </a>
                             </li>
                             <li>
-                                <a asp-controller="Validation" asp-action="Logout" >
+                                <a asp-controller="Validation" asp-action="Logout">
                                     <span class="material-symbols-outlined"><i class="bi bi-box-arrow-left"></i></span>
                                     <span>Logout</span>
                                 </a>
@@ -149,7 +153,11 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/062c911f56.js" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
