@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
@@ -184,7 +185,22 @@ public class MenuService : IMenuService
 
     public void AddCategoryItem(CategoryListViewModel model)
     {
-        _menuRepository.AddCategoryItem(model);
+        var categoryItemList = _menuRepository.AddCategoryItem(model);
+         
+        
+        for(int i = 0; i < model.SelectedModifiers.Count; i++){
+
+            var  categoryModifierMapping = new CategoryModifierMapping
+            {
+                CategoryItemId = categoryItemList.CategoryItemId,
+                ModifierId = model.SelectedModifiers[i].ModifierId,
+                MaxValue = model.SelectedModifiers[i].MaxValue,
+                MinValue = model.SelectedModifiers[i].MinValue
+            };
+            _menuRepository.AddCategoryModifierMapping(categoryModifierMapping);
+        }
+
+        // _menuRepository.AddModifierMapping(modifierMapping);
     }
 
 
@@ -248,23 +264,29 @@ public class MenuService : IMenuService
     }
 
     // Fetch item details by ItemId
-    public ModifierListViewModel GetModifierItemById(int itemId)
+    public async Task<List<ModifierListViewModel>> GetModifierItemById(int itemId)
     {
-        var item = _menuRepository.GetModifierItemById(itemId);
-        if (item == null)
-            return null;
+        var item = await _menuRepository.ModifierItemList(itemId);
+        var modifierGroupName = _menuRepository.GetModifierGroupById(itemId);
 
-        // Map data from entity to ViewModel
-        return new ModifierListViewModel
+        var modifier = item.Select(x => new ModifierListViewModel
         {
-            ModifierItemName = item.ModifierItemName,
-            ModifierItemId = item.ModifierItemId,
-            Rate = item.Rate,
-            Quantity = item.Quantity,
-            UnitId = item.UnitId,
-            ImageUrl = item.ImageUrl,
-            Description = item.Description
-        };
+            ModifierGroupName = modifierGroupName.ModifierName,
+            ModifierItemName = x.ModifierItemName,
+            ModifierItemId = x.ModifierItemId,
+            Rate = x.Rate,
+            Quantity = x.Quantity,
+            UnitId = x.UnitId,
+            UnitName = x.Unit.UnitName,
+            Description = x.Description
+        }).ToList();
+
+        return modifier;
+    }
+    public List<ModifierGroup> GetAllModifierById()
+    {
+        return _menuRepository.GetAllModifierById().ToList();
+
     }
 
 

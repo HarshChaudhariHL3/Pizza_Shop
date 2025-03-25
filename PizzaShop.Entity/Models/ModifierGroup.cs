@@ -25,5 +25,7 @@ public partial class ModifierGroup
 
     public virtual Category? Category { get; set; }
 
+    public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
+
     public virtual ICollection<MappingItemModifier> MappingItemModifiers { get; set; } = new List<MappingItemModifier>();
 }

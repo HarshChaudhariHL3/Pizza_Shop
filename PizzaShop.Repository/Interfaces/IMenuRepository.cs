@@ -13,12 +13,13 @@ public interface IMenuRepository
     CategoryItem GetItemById(int itemId);
 
     ModifierItem GetModifierItemById(int itemId);
+   List<ModifierGroup> GetAllModifierById();
 
     void DeleteCategoryItem(int itemId);
 
     void DeleteModifierItem(int itemId);
 
-     void AddCategoryItem(CategoryListViewModel model);
+    CategoryItem AddCategoryItem(CategoryListViewModel model);
      ModifierItem  AddModifierItem(ModifierListViewModel model);
 
      public MappingItemModifier GetMappingModifierItemById(int itemId);
@@ -32,6 +33,8 @@ public interface IMenuRepository
 
     ModifierGroup AddModifier(ModifierGroup modifier);
     MappingItemModifier AddModifierMapping(MappingItemModifier modifier);
+
+    CategoryModifierMapping AddCategoryModifierMapping(CategoryModifierMapping categoryModifierMapping);
 
     Category GetCategoryById(int id);
 
@@ -52,4 +55,5 @@ public interface IMenuRepository
 
     void  DeleteMultipleCategoryItem(List<int> dataId);
     void  DeleteMultipleModifierItem(List<int> dataId);
+    Unit unitNameById(int id);
 }

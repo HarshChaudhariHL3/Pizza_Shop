@@ -6,14 +6,14 @@ public class ModifierListViewModel
 
     public int ModifierGroupId { get; set; }
 
-    public string ModifierItemName { get; set; } = null!;
-
+    public string ModifierItemName { get; set; }
+    public string ModifierGroupName { get; set; }
     public float? Rate { get; set; }
 
     public int? UnitId { get; set; }
     public string? UnitName { get; set; }
 
-    public string? ImageUrl { get; set; }
+    // public string? ImageUrl { get; set; }
 
     public int? Quantity { get; set; }
 

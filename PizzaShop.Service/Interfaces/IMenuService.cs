@@ -23,8 +23,8 @@ public interface IMenuService
     void AddModifierItem(ModifierListViewModel model);
 
     CategoryListViewModel GetItemById(int itemId);
-    ModifierListViewModel GetModifierItemById(int itemId);
-
+    Task<List<ModifierListViewModel>> GetModifierItemById(int itemId);
+    List<ModifierGroup> GetAllModifierById();
     MenuViewModel GetCategoryById(int id);
 
     void EditCategory(MenuViewModel model);

@@ -29,8 +29,6 @@ public partial class ModifierItem
 
     public string? Description { get; set; }
 
-    public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
-
     public virtual ICollection<OrderItemModifier> OrderItemModifiers { get; set; } = new List<OrderItemModifier>();
 
     public virtual Unit? Unit { get; set; }

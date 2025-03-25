@@ -3,6 +3,7 @@ namespace PizzaShop.Entity.ViewModel;
 public class CategoryListViewModel
 {
     public int CategoryItemId { get; set; }
+    public int ModifierGroupId { get; set; }
 
     public int? CategoryId { get; set; }
 
@@ -25,7 +26,16 @@ public class CategoryListViewModel
 
     public string? ImageUrl { get; set; }
 
+    public List<CategoryModifierMappingsViewModel> SelectedModifiers { get; set; }
 
 
 
+
+}
+
+public class CategoryModifierMappingsViewModel
+{
+    public int ModifierId { get; set; }
+    public int MaxValue { get; set; }
+    public int MinValue { get; set; }
 }

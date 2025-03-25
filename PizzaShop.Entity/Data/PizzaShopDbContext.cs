@@ -173,6 +173,8 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
+            entity.Property(e => e.MaxValue).HasColumnName("max_value");
+            entity.Property(e => e.MinValue).HasColumnName("min_value");
             entity.Property(e => e.ModifiedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -180,15 +182,15 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
-            entity.Property(e => e.ModifierItemId).HasColumnName("modifier_item_id");
+            entity.Property(e => e.ModifierId).HasColumnName("modifier_id");
 
             entity.HasOne(d => d.CategoryItem).WithMany(p => p.CategoryModifierMappings)
                 .HasForeignKey(d => d.CategoryItemId)
                 .HasConstraintName("category_modifier_mapping_category_item_id_fkey");
 
-            entity.HasOne(d => d.ModifierItem).WithMany(p => p.CategoryModifierMappings)
-                .HasForeignKey(d => d.ModifierItemId)
-                .HasConstraintName("category_modifier_mapping_modifier_item_id_fkey");
+            entity.HasOne(d => d.Modifier).WithMany(p => p.CategoryModifierMappings)
+                .HasForeignKey(d => d.ModifierId)
+                .HasConstraintName("category_modifier_mapping_modifier_id_fkey");
         });
 
         modelBuilder.Entity<City>(entity =>

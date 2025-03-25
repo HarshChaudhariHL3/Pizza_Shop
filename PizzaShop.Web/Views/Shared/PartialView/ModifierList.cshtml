@@ -379,7 +379,7 @@
     $(document).ready(function () {
 
         $(document).on('click', '.editModifier-btn', function () {
-            debugger
+
             var itemId = $(this).data('modifieritem-id');
             var modifierGroupId = $(this).data('modifiergroup-id');
 
@@ -389,7 +389,6 @@
                 type: 'GET',
                 data: { itemId: itemId },
                 success: function (data) {
-                    debugger;
                     $('#editItemId').val(data.modifierItemId);
                     $('#editModifierId').val(data.modifierGroupId);
                     $('#editModifierUnitId').val(data.unitId);

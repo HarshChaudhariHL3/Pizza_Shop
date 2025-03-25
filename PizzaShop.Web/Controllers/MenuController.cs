@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Interfaces;
@@ -109,6 +110,10 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
     {
         try
         {
+             if (model.SelectedModifiers != null)
+        {
+            Console.WriteLine("Selected Modifiers: " + string.Join(", ", model.SelectedModifiers));
+        }
             _menuService.AddCategoryItem(model);
             TempData["Success"] = "CategoryItem Added Successfully";
             return Json(new { Success = true });
@@ -304,16 +309,32 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
         }
     }
 
+    [Route("/Menu/GetModifierItemDetails")]
     [HttpGet]
-    public IActionResult GetModifierItemDetails(int itemId)
+    public async Task<IActionResult> GetModifierItemDetails(int modifierGroupId)
     {
         try
         {
-            var item = _menuService.GetModifierItemById(itemId);
-            if (item == null)
+            var item = await _menuService.GetModifierItemById(modifierGroupId);
+                if (item == null)
             {
                 return NotFound();
             }
+            return Json(item);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+    [Route("/Menu/GetAllModifier")]
+    [HttpGet]
+    public IActionResult GetAllModifier()
+    {
+        try
+        {
+            var item = _menuService.GetAllModifierById();
             return Json(item);
         }
         catch (Exception ex)

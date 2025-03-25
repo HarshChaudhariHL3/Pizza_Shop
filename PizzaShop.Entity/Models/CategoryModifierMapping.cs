@@ -9,8 +9,6 @@ public partial class CategoryModifierMapping
 
     public int? CategoryItemId { get; set; }
 
-    public int? ModifierItemId { get; set; }
-
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? ModifiedAt { get; set; }
@@ -19,7 +17,13 @@ public partial class CategoryModifierMapping
 
     public string? ModifiedBy { get; set; }
 
+    public int? ModifierId { get; set; }
+
+    public int? MaxValue { get; set; }
+
+    public int? MinValue { get; set; }
+
     public virtual CategoryItem? CategoryItem { get; set; }
 
-    public virtual ModifierItem? ModifierItem { get; set; }
+    public virtual ModifierGroup? Modifier { get; set; }
 }

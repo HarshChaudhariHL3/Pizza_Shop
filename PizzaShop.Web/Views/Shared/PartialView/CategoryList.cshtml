@@ -441,13 +441,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 pt-3" style="background-color: antiquewhite;">
-                                <div>
-                                    @* <select class="form-select"  aria-label="Default select example">
-
-                                    </select> *@
-                                    @* <select class="selectpicker" multiple aria-label="Default select example" data-live-search="true"> *@
-                                    <select multiple class="form-select" id="exampleSelectMultiple"></select>
+                            <div class="col-sm-4 pt-3" style="background-color: antiquewhite; height: 428px; overflow: auto;">                              
+                                    <div class="dropdown">
+                                          <button class="btn mt-2 dropdown-toggle w-100 bg-white" type="button" id="SelectModifierInItem" data-bs-toggle="dropdown" aria-expanded="false">Select ModifierGroup </button>
+                                            <ul class="dropdown-menu dropdown-checkboxes  w-100 ps-3" aria-labelledby="SelectModifierInItem"></ul>
+                                    </div>                                 
+                                <div id="modifierContainer">
                                 </div>
                             </div>
                         </div>
@@ -499,6 +498,142 @@
 @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
 <script>
+    let selectedModifierGroups = [];
+let tempArray = [];
+
+// Function to load modifier groups
+function loadModifierGroups() {
+    $.ajax({
+        url: '/Menu/GetAllModifier',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log("Response Data:", data);
+
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            data.forEach(modifier => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="form-check">
+                        <input class="form-check-input modifier-checkbox" type="checkbox" value="${modifier.modifierGroupId}" id="checkbox-${modifier.modifierGroupId}">
+                        <label class="form-check-label" for="checkbox-${modifier.modifierGroupId}">
+                            ${modifier.modifierName} 
+                        </label>
+                    </div>`;
+                dropdownMenu.appendChild(listItem);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            $(".SelectModifierInItem").html('<option value="-1">Failed to load categories</option>');
+        }
+    });
+}
+
+// Adding change event listener with ID-based selection
+document.addEventListener('change', function (event) {
+    if (event.target.classList.contains('modifier-checkbox')) {
+        let checkbox = event.target; // No need for jQuery
+        let modifierId = checkbox.value;
+        let modifierName = document.querySelector(`label[for='${checkbox.id}']`).textContent.trim();
+
+        if (checkbox.checked) {
+            console.log("Adding Modifier:", modifierId, modifierName);
+            selectedModifierGroups.push({ id: modifierId, name: modifierName });
+            addModifierSection(modifierId, modifierName);
+        } else {
+            removeModifierGroup(modifierId);
+        }
+    }
+});
+
+// Event delegation for delete-group button
+document.addEventListener('click', function (event) {
+    if (event.target.closest(".delete-group")) {
+        let button = event.target.closest(".delete-group");
+        let modifierId = button.getAttribute("data-group-id");
+
+        console.log("Deleting Modifier Group:", modifierId);
+
+        // Update the checkbox state and remove the group
+        let checkbox = document.querySelector(`.modifier-checkbox[value='${modifierId}']`);
+        if (checkbox) {
+            checkbox.checked = false;
+        }
+        removeModifierGroup(modifierId);
+    }
+});
+
+// Function to remove modifier group
+function removeModifierGroup(modifierId) {
+    console.log("Removing Modifier:", modifierId);
+    selectedModifierGroups = selectedModifierGroups.filter(m => m.id !== modifierId);
+    const groupElement = document.querySelector(`#group-${modifierId}`);
+    if (groupElement) {
+        groupElement.remove();
+    }
+}
+
+// Function to add a modifier section
+function addModifierSection(modifierId, modifierName) {
+    console.log("Adding Modifier Section:", modifierId, modifierName);
+
+    $.ajax({
+        url: "/Menu/GetModifierItemDetails",
+        type: "GET",
+        dataType: "json",
+        data: { modifierGroupId: modifierId },
+        success: function (data) {
+            let htmlContent = `
+                <div class="modifier-group-container mt-3" id="group-${modifierId}">
+                    <div class="modifier-group-header d-flex justify-content-between">
+                        <div>
+                            <strong>${modifierName}</strong>
+                            <select class="modifier-qty form-select" id="MinimumValue">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="delete-group btn" data-group-id="${modifierId}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <select class="modifier-qty form-select" id="MaximumValue">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modifier-items">`;
+
+            data.forEach(modifier => {
+                htmlContent += `
+                    <div class="modifier-item d-flex justify-content-between">
+                        <div>${modifier.modifierItemName}</div>
+                        <div>
+                            <span class="modifier-price">₹${modifier.rate}</span>
+                        </div>
+                    </div>`;
+            });
+
+            htmlContent += `
+                    </div>
+                </div>`;
+            document.querySelector("#modifierContainer").insertAdjacentHTML('beforeend', htmlContent);
+        },
+        error: function () {
+            alert("Error loading modifiers.");
+        }
+    });
+}
+
+// Load modifier groups on page load
+loadModifierGroups();
+
 
     $('#searchCategoryList').on('search', function() {
 
@@ -690,7 +825,20 @@
         });
 
         $('#addCategoryItemForm').submit(function (e) {
+            debugger;
             e.preventDefault();
+
+            const selectedModifiers = [];
+            document.querySelectorAll('#modifierContainer .modifier-group-container').forEach(element => {
+                const modifierId = element.id.replace('group-', '');
+                const minValue = element.querySelector('#MinimumValue').value; // Get the minimum value
+                const maxValue = element.querySelector('#MaximumValue').value; // Get the maximum value
+                selectedModifiers.push({
+                    ModifierId: modifierId,
+                    MinValue: parseInt(minValue, 10), // Ensure values are integers
+                    MaxValue: parseInt(maxValue, 10),}); // Push modifier ID into array
+             });
+            console.log(selectedModifiers);
 
             var itemId = $('#addItemId').val();
             var categoryId = $('#AddCategoryId').val();
@@ -703,7 +851,6 @@
             var defaultTax = $('#addTax').prop('checked');
             var shortCode = $('#addCode').val();
             var description = $('#addCategoryItemDescription').val();
-
 
             var formData = {
                 CategoryItemId: itemId,
@@ -718,6 +865,9 @@
                 DefaultTax: defaultTax,
                 ShortCode: shortCode
             };
+                if (selectedModifiers && selectedModifiers.length > 0) {
+                formData["SelectedModifiers"] = selectedModifiers; // Safely append modifiers
+                }
 
             // Send data to the server using AJAX
             $.ajax({
