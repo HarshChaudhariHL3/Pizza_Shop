@@ -7,8 +7,6 @@ public partial class Payment
 {
     public int PaymentId { get; set; }
 
-    public int? OrderId { get; set; }
-
     public string? PaymentMethod { get; set; }
 
     public string? PaymentStatus { get; set; }
@@ -17,13 +15,11 @@ public partial class Payment
 
     public DateTime? PaymentDate { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
-
     public DateTime? ModifiedAt { get; set; }
 
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
 
-    public virtual Order? Order { get; set; }
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

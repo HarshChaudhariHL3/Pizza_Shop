@@ -24,6 +24,7 @@ builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<ITaxesAndFeesRepository, TaxesAndFeesRepository>();
 builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();
 builder.Services.AddScoped<ITablesAndSectionRepository, TablesAndSectionRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ISendmailService, SendmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<ITaxesAndFeesService, TaxesAndFeesService>();
 builder.Services.AddScoped<IPaginationService, PaginationService>();
 builder.Services.AddScoped<ITablesAndSectionService, TablesAndSectionService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 
 builder.Services.AddAuthentication(options =>

@@ -27,16 +27,9 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
         }
         if (!string.IsNullOrEmpty(search))
         {
-            tableList = tableList.Where(u => u.TableName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            tableListViews = tableListViews.Where(u => u.TableName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
-        if (search == "")
-        {
-            tableCount = tableListViews.Count;
-        }
-        else
-        {
-            tableCount = tableList.Count;
-        }
+        tableCount = tableListViews.Count;
         tableListViews = tableListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
         return new PaginationViewModel<TableViewModel>

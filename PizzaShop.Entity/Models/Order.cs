@@ -23,6 +23,8 @@ public partial class Order
 
     public string? ModifiedBy { get; set; }
 
+    public int? PaymentId { get; set; }
+
     public virtual Customer? Customer { get; set; }
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
@@ -33,7 +35,7 @@ public partial class Order
 
     public virtual ICollection<OrderTaxMapping> OrderTaxMappings { get; set; } = new List<OrderTaxMapping>();
 
-    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+    public virtual Payment? Payment { get; set; }
 
     public virtual TableDetail? Table { get; set; }
 

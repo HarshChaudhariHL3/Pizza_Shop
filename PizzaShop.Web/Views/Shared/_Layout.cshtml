@@ -10,7 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-    <script src="https://unpkg.com/bootstrap-multiselect@0.9.13/dist/js/bootstrap-multiselect.js"></script>
+    @* <script src="https://unpkg.com/bootstrap-multiselect@0.9.13/dist/js/bootstrap-multiselect.js"></script> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/062c911f56.js" crossorigin="anonymous"></script>
@@ -103,7 +103,7 @@
             <span class="material-symbols-outlined side-row-icon"><i class="bi bi-cash-coin"></i></span>
             <p>Taxes and Fees</p>
         </a>
-        <a asp-controller="" asp-action="Index" class="side-nav-row">
+        <a asp-controller="Order" asp-action="Orders" class="side-nav-row">
             <span class="material-symbols-outlined side-row-icon"><i class="bi bi-clipboard-check"></i></span>
             <p>Orders</p>
         </a>
