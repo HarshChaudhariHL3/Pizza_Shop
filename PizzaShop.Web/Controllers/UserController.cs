@@ -12,7 +12,7 @@ using PizzaShop.Web.Models;
 
 namespace PizzaShop.Web.Controllers;
 
-public class UserController(IUserService _userService, IJwtService _jwtService, IPaginationService _paginationService) : Controller
+public class UserController(IUserService _userService, IJwtService _jwtService) : Controller
 {
     [HttpGet]
     public async Task<IActionResult> Profile()
@@ -106,7 +106,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
         }
         catch (Exception ex)
         {
-           TempData["Error"] = ex.Message;
+            TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
@@ -120,7 +120,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
         }
         catch (Exception ex)
         {
-           TempData["Error"] = ex.Message;
+            TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
@@ -134,7 +134,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
         }
         catch (Exception ex)
         {
-           TempData["Error"] = ex.Message;
+            TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
@@ -153,15 +153,30 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
         }
     }
 
+
     [HttpGet]
-    public IActionResult Users(int pagesize = 3, int page = 1)
+    public IActionResult Users()
     {
         try
         {
-            string search = null;
-            var data = _paginationService.pagination_user_list(page, pagesize, search);
-            return View(data);
-            
+           return View();
+
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+    [HttpGet]
+    public async Task<IActionResult> UserList( int page, int pageSize, string search = "", string sortColumn = "", string sortOrder = "asc")
+    {
+        try
+        {
+            PaginationViewModel<UserlistViewModel> table = await _userService.GetUserList( page, pageSize, search,sortColumn,sortOrder);
+
+             return PartialView("./PartialView/_UserList", table);
+
         }
         catch (Exception ex)
         {
@@ -170,25 +185,25 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
         }
     }
 
-    [HttpPost]
-    public IActionResult Users(int pagesize = 3, int page = 1, string search = null)
-    {
-        try
-        {
-            var data = _paginationService.pagination_user_list(page, pagesize, search);
-            if (data == null)
-            {
-                TempData["Error"] = "Not Valid User";
-                return RedirectToAction("Users", "User");
-            }
-            return View(data);
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = ex.Message;
-            return Redirect(Request.Headers["Referer"].ToString());
-        }
-    }
+    // [HttpPost]
+    // public IActionResult Users(int pagesize = 3, int page = 1, string search = null)
+    // {
+    //     try
+    //     {
+    //         var data = _paginationService.pagination_user_list(page, pagesize, search);
+    //         if (data == null)
+    //         {
+    //             TempData["Error"] = "Not Valid User";
+    //             return RedirectToAction("Users", "User");
+    //         }
+    //         return View(data);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         TempData["Error"] = ex.Message;
+    //         return Redirect(Request.Headers["Referer"].ToString());
+    //     }
+    // }
 
     [HttpGet]
     public IActionResult AddUser()
@@ -201,11 +216,15 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
     {
         try
         {
-            _userService.AddUser(model);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+                _userService.AddUser(model);
 
-            TempData["Success"] = "User Added Successfully";
-            return RedirectToAction("Users");
-        }
+                TempData["Success"] = "User Added Successfully";
+                return RedirectToAction("Users");
+            }
         catch (Exception ex)
         {
             TempData["Error"] = ex.Message;
@@ -218,6 +237,10 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             if (Email == null)
             {
                 TempData["Error"] = "Email not Found";
@@ -276,7 +299,7 @@ public class UserController(IUserService _userService, IJwtService _jwtService, 
             TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
-        
+
     }
 
 }

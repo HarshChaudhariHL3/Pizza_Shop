@@ -29,12 +29,14 @@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="fname" asp-for="FirstName" placeholder="FirstName">
                         <label asp-for="FirstName">FirstName</label>
+                        <span class="text-danger" asp-validation-for="FirstName"></span>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" asp-for="LastName" id="lname" placeholder="LastName">
                         <label asp-for="LastName">LastName</label>
+                        <span class="text-danger" asp-validation-for="LastName"></span>
                     </div>
                 </div>
             </div>
@@ -43,6 +45,7 @@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" asp-for="Username" id="uname" placeholder="Username">
                         <label asp-for="Username">Username</label>
+                        <span class="text-danger" asp-validation-for="Username"></span>
                     </div>
                 </div>
                 <div class="col-6">
@@ -52,6 +55,7 @@
                             <option selected>Select Role</option>
                         </select>
                         <label for="roleSelect">Role</label>
+                        <span class="text-danger" asp-validation-for="Role"></span>
                     </div>
                 </div>
             </div>
@@ -60,6 +64,7 @@
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" asp-for="Email" id="floatingInput" placeholder="name@example.com">
                         <label asp-for="Email">Email address</label>
+                        <span class="text-danger" asp-validation-for="Email"></span>
                     </div>
 
                 </div>
@@ -67,6 +72,7 @@
                     <div class="form-floating">
                         <input type="password" class="form-control" asp-for="Password" id="floatingPassword" placeholder="Password">
                         <label asp-for="Password">Password</label>
+                        <span class="text-danger" asp-validation-for="Password"></span>
                     </div>
                 </div>
             </div>
@@ -81,6 +87,7 @@
                             <img src="images/cloud-upload-icon.svg" alt="">Browse Files
                         </label>
                         <input type="file" class="form-control d-none" id="formfile">
+                        @* <span class="text-danger" asp-validation-for="ProfilePicture"></span> *@
                     </div>
                 </div>
             </div>
@@ -92,6 +99,7 @@
                             <option selected>Select country</option>
                         </select>
                         <label for="countrySelect">Country</label>
+                        <span class="text-danger" asp-validation-for="Country"></span>
                     </div>
                 </div>
                 <div class="col">
@@ -101,6 +109,7 @@
                             <option selected>Select state</option>
                         </select>
                         <label for="stateSelect">State</label>
+                        <span class="text-danger" asp-validation-for="State"></span>
                     </div>
                 </div>
                 <div class="col">
@@ -110,6 +119,7 @@
                             <option selected>Select city</option>
                         </select>
                         <label for="citySelect">City</label>
+                        <span class="text-danger" asp-validation-for="City"></span>
                     </div>
                 </div>
             </div>
@@ -118,18 +128,21 @@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" asp-for="ZipCode" id="fname" placeholder="Zipcode">
                         <label asp-for="ZipCode">Zipcode</label>
+                        <span class="text-danger" asp-validation-for="ZipCode"></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" asp-for="Address" id="fname" placeholder="Address">
                         <label asp-for="Address">Address</label>
+                        <span class="text-danger" asp-validation-for="Address"></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" asp-for="Phone" id="fname" placeholder="Phone">
                         <label asp-for="Phone">Phone</label>
+                        <span class="text-danger" asp-validation-for="Phone"></span>
                     </div>
                 </div>
             </div>
@@ -141,9 +154,6 @@
         </div>
     </form>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>
 
 <script>
     $(document).ready(function () {

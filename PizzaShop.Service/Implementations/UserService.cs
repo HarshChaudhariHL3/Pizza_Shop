@@ -65,7 +65,7 @@ public class UserService(IUserRepository _repository) : IUserService
             Phone = user.Phone,
             Address = user.Address,
             ZipCode = user.ZipCode,
-            ImgUrl = user.ImgUrl
+            Imgurl = user.ImgUrl
         };
 
         return edituserViewModel;
@@ -135,7 +135,7 @@ public class UserService(IUserRepository _repository) : IUserService
             user.ZipCode = model.ZipCode;
             user.Status = model.Status;
             user.UserRole = model.Role;
-            user.ImgUrl = model.ImgUrl;
+            user.ImgUrl = model.Imgurl;
 
             return _repository.Update(user);
         }
@@ -197,9 +197,65 @@ public class UserService(IUserRepository _repository) : IUserService
         return _repository.Delete(user);
     }
 
+    public async Task<PaginationViewModel<UserlistViewModel>> GetUserList(int page, int pageSize, string search = "", string sortColumn = "", string sortOrder = "")
+    {
+
+        List<User> userList = _repository.GetAllUser();
+        List<UserlistViewModel> UserListViews = new List<UserlistViewModel>();
+        int tableCount;
+
+        foreach (User user in userList)
+        {
+            var role = user.UserRole.HasValue ? _repository.GetRole(user.UserId) : null;
+            UserListViews.Add(new UserlistViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Imgurl = user.ImgUrl,
+                Email = user.Email,
+                Phone = user.Phone?.ToString(),
+                Status = user.Status ?? false,
+                RoleName = role?.RoleName,
+            });
+        }
+        if (!string.IsNullOrEmpty(search))
+        {
+            UserListViews = UserListViews.Where(u => u.FirstName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        if (!string.IsNullOrEmpty(sortColumn))
+        {
+            if (sortColumn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+            {
+                if (sortOrder == "asc")
+                    UserListViews = UserListViews.OrderBy(u => u.FirstName).ToList();
+                else
+                    UserListViews = UserListViews.OrderByDescending(u => u.FirstName).ToList();
+            }
+            else if (sortColumn.Equals("Role", StringComparison.OrdinalIgnoreCase))
+            {
+                if (sortOrder == "asc")
+                    UserListViews = UserListViews.OrderBy(u => u.RoleName).ToList();
+                else
+                    UserListViews = UserListViews.OrderByDescending(u => u.RoleName).ToList();
+            }
+        }
+        tableCount = UserListViews.Count();
+        UserListViews = UserListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        return new PaginationViewModel<UserlistViewModel>
+        {
+            Items = UserListViews,
+            TotalItems = tableCount,
+            CurrentPage = page,
+            PageSize = pageSize,
+            sortOrder = sortOrder,
+            sortColumn = sortColumn,
+        };
+    }
+
 
     // public async  Task<PaginationViewModel<UserlistViewModel>> GetUserList(string searchUser, string sort, int page, int pageSize){
-        
+
     //     List<User> userList =  _repository.GetAllUser();
     //     List<UserlistViewModel> users = new List<UserlistViewModel>();
 
@@ -231,7 +287,7 @@ public class UserService(IUserRepository _repository) : IUserService
 
     //     int usersCount = users.Count;
     //     users = users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        
+
     //     return new PaginationViewModel<UserlistViewModel>
     //     {
     //         Items = users,

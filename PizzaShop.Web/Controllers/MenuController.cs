@@ -5,7 +5,7 @@ using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
 
-public class MenuController(IMenuService _menuService, IPaginationService _paginationService) : Controller
+public class MenuController(IMenuService _menuService) : Controller
 {
 
     [HttpGet]
@@ -246,48 +246,6 @@ public class MenuController(IMenuService _menuService, IPaginationService _pagin
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
-
-    [HttpGet]
-    public IActionResult CategoryListPagination(int pagesize = 3, int page = 1)
-    {
-        try
-        {
-            string search = null;
-            var data = _paginationService.pagination_category_list(page, pagesize, search);
-            return View(data);
-
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = ex.Message;
-            return Redirect(Request.Headers["Referer"].ToString());
-        }
-    }
-
-    [HttpPost]
-    public IActionResult CategoryListPagination(int pagesize = 3, int page = 1, string search = null)
-    {
-        try
-        {
-            var data = _paginationService.pagination_category_list(page, pagesize, search);
-            if (data == null)
-            {
-                TempData["Error"] = "Not Valid User";
-                return RedirectToAction("Users", "User");
-            }
-            // ViewBag.users = data.Items;
-            // ViewBag.pagesize = pagesize;
-            // ViewBag.page = page;
-            // ViewBag.totalpages = data.TotalPages;
-            return View(data);
-        }
-        catch (Exception ex)
-        {
-            TempData["Error"] = ex.Message;
-            return Redirect(Request.Headers["Referer"].ToString());
-        }
-    }
-
 
     #endregion
 

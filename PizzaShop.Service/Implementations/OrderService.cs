@@ -60,15 +60,6 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
                 orderListViews = orderListViews.Where(o => o.OrderDate >= startOfMonth).ToList();
             }
         }
-        // if (fromDate.HasValue)
-        // {
-        //     orderListViews = orderListViews.Where(o => o.OrderDate >= fromDate.Value).ToList();
-        // }
-
-        // if (toDate.HasValue)
-        // {
-        //     orderListViews = orderListViews.Where(o => o.OrderDate <= toDate.Value).ToList();
-        // }
         if (fromDate.HasValue && toDate.HasValue)
         {
             
@@ -99,5 +90,11 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
             CurrentPage = page,
             PageSize = pageSize,
         };
+    }
+
+
+    public IQueryable<Order> GetAllOrderDetailToExport (){
+        var element = _orderRepository.GetAllOrderList().AsQueryable();
+        return element;
     }
 }

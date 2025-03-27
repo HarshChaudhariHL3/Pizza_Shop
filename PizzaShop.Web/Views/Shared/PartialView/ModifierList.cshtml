@@ -93,14 +93,14 @@
                                     </span>
                                 </div>
                                 <div class="m-2">
-                                <button class="page-link" id="prev"  onclick="pageChange('prev')" @(Model.CurrentPage
+                                <button class="page-link btn" id="prev"  onclick="pageChange('prev')" @(Model.CurrentPage
                                                     == 1 ? "disabled" : "") aria-label="Previous" id="previous_page">
                                
                                 <i class="fa-solid fa-backward" aria-hidden="true"></i>
                                 </button>
                                 </div>
                                 <div class="m-2">
-                                    <button class="page-link" id="next" onclick="pageChange('next')" @((Model.CurrentPage
+                                    <button class="page-link btn" id="next" onclick="pageChange('next')" @((Model.CurrentPage
                                                     *Model.PageSize >= Model.TotalItems) ? "disabled" : "") aria-label="Next" id="next_page">
                                         <i class="fa-solid fa-forward" aria-hidden="true"></i>
                                     </button>

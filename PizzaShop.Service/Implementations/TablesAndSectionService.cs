@@ -29,7 +29,7 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
         {
             tableListViews = tableListViews.Where(u => u.TableName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
         }
-        tableCount = tableListViews.Count;
+        tableCount = tableListViews.Count();
         tableListViews = tableListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
         return new PaginationViewModel<TableViewModel>

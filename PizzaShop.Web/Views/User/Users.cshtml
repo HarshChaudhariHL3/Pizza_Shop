@@ -3,21 +3,19 @@
 }
 
 
-@model PizzaShop.Entity.ViewModel.PaginatedList<PizzaShop.Entity.ViewModel.UserlistViewModel>
-<div >
+@model PizzaShop.Entity.ViewModel.UserlistViewModel
+<div>
     <!-- user nav -->
     <div class="d-flex  justify-content-between mb-4">
         <div class="m-1">
             <h1 class="text-primary"> Users</h1>
         </div>
         <div class="d-flex align-items-center justify-content-center gap-3 m-2" id="addUserBtn">
-            <form method="post">
-                <div id="has-search">
-                    <span class="fa fa-search form-control-feedback"></span>
-                    <input class="form-control " type="search" placeholder="Search" name="search" id="search"
-                        aria-label="Search">
-                </div>
-            </form>
+            <div id="has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input class="form-control " type="search" value="@ViewBag.search" placeholder="Search" name="search"
+                    id="searchUserList" aria-label="Search">
+            </div>
             <a class="btn btn-primary" asp-action="AddUser" asp-controller="User">
                 <div class="d-flex align-items-center justify-content-center">
                     <i class="bi bi-plus-lg"></i>
@@ -28,105 +26,8 @@
     </div>
 
     <!--user list-->
-    <div class="shadow bg-white rounded ">
-        <div class="table-responsive p-4 tile ">
-            <table class="table table-bordered align-middle ">
-                <thead>
-                    <tr>
-                        <th scope="col d-flex">
-                            Name
-                        </th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col d-flex">
-                            Role
-                        </th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in @Model.Items)
-                    {
-                        <tr>
-                            <td class="d-flex gap-2 align-items-center">
-                                <div>
-                                    <img src="~/@item.Imgurl" class="rounded-circle" alt="pic" width="40px" height="40px">    
-                                </div>
-                                <span>@item.FirstName @item.LastName</span>
+    <div class="shadow bg-white rounded " id="UserList">
 
-                            </td>
-                            <td>@item.Email</td>
-
-                            <td>@item.Phone</td>
-                            <td>@item.RoleName</td> 
-                            <td class="">
-                                @if (@item.Status == true)
-                                {
-                                    <span class="btn btn-sm bg-success text-white">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="btn btn-sm bg-danger text-white">Inactive</span>
-                                }
-                            </td>
-                            <td class="d-flex">
-                                <form asp-action="Edituser" asp-controller="User" method="get">
-                                    <input type="hidden" name="email" value="@item.Email">
-                                    <input type="hidden" name="Name" value="@item.FirstName">
-                                    <button type="submit" class="btn" id="editBtn">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                </form>
-                                <button type="button" class="btn openmodel" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" data-id="@item.Email" id="deleteBtn">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <div aria-label="Page navigation example" class="d-flex justify-content-end">
-                <form asp-action="Users" asp-controller="User" method="get">
-                    <ul class="pagination m-auto f-flex align-items-center ">
-                        <li class="page-item m-2">
-                            <span>User per page</span>
-                            <select name="pagesize" id="pagesize" class="">
-                                <option asp-route-pagesize=3 id="opt3">3</option>
-                                <option asp-route-pagesize=5 id="opt5">5</option>
-                                <option asp-route-pagesize=10 id="opt10">10</option>
-                                <option asp-route-pagesize=15 id=opt15>15</option>
-                            </select>
-                        </li>
-                        <li class=" page-item m-2">
-                            Showing @Model.PageIndex of @Model.TotalPages
-                        </li>
-
-                        <!-- Previous Button -->
-                        <li class="page-item m-2 pt-3">
-                            <p class="page-link" aria-label="Previous" id="previous_page">
-                               
-                                <i class="fa-solid fa-backward" aria-hidden="true"></i>
-                            </p>
-                        </li>
-                        <li class="page-item m-2 pt-3">
-                            <p class="page-link" aria-label="Next" id="next_page">
-                                <i class="fa-solid fa-forward" aria-hidden="true"></i>
-                            </p>
-                        </li>
-
-                        @*
-                        <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link text-decoration-none @(currentPage == 1 ? "text-muted" : "text-body")"
-                        href="@Url.Action("Index", new { page = currentPage - 1, pageSize })"><i
-                            class="bi bi-caret-left-fill"></i></a>
-                </li>*@
-                    </ul>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -154,59 +55,66 @@
     </div>
 </div>
 
-@section Scripts
-{
 
-    <script>
-        $(document).ready(function () {
+<script>
+    var currentPage = 1;
+    var pageSize = 5;
+    var search = "";
+    var sortColumn = "";
+    var sortOrder = "";
 
-            // Set selected option from ViewBag.pageSize
-            let opt_value = '@Model.PageSize';
-            if (opt_value == 3) {
-                $('#opt3').attr('selected', 'selected');
-            } else if (opt_value == 5) {
-                $('#opt5').attr('selected', 'selected');
-            } else if (opt_value == 10) {
-                $('#opt10').attr('selected', 'selected');
-            } else if (opt_value == 15) {
-                $('#opt15').attr('selected', 'selected');
+
+
+    $('#searchUserList').on('search', function () {
+        debugger;
+        search = $(this).val();
+        fetchUserList(currentPage, pageSize, search, sortColumn, sortOrder);
+    });
+
+    function fetchUserList(currentPage, pageSize, search, sortColumn, sortOrder) {
+        $.ajax({
+            url: '/User/UserList',
+            type: 'GET',
+            data: {
+                page: currentPage,
+                pageSize: pageSize,
+                search: search,
+                sortColumn: sortColumn,
+                sortOrder: sortOrder,
+
+            },
+            success: function (data) {
+                $("#UserList").html(data);
+            },
+            error: function (xhr, status, error) {
+                $('#UserList').html('<tr><td colspan="4">Error loading items.</td></tr>');
             }
-
-            // Previous Page Click Handler
-            let currentPage = @Model.PageIndex;
-            let totalPages = @Model.TotalPages;
-
-            if (currentPage > 1) {
-                $('#previous_page').on('click', function () {
-                    currentPage--;
-                    $(this).closest('form')
-                        .append('<input type="hidden" name="page" value="' + currentPage + '">')
-                        .submit();
-                });
-            }
-
-            // Next Page Click Handler
-            if (currentPage < totalPages) {
-                $('#next_page').on('click', function () {
-                    currentPage++;
-                    $(this).closest('form')
-                        .append('<input type="hidden" name="page" value="' + currentPage + '">')
-                        .submit();
-                });
-            }
-
-            // Pagesize Dropdown Change Event
-            $('#pagesize').change(function () {
-                $(this).closest('form').submit();
-            });
-
-
-
-            $('.openmodel').on("click", function () {
-                var email = $(this).data('id');
-                console.log(email)
-                $("#model-email").val(email);
-            });
         });
-    </script>
-}
+    }
+
+    // Sorting function
+    function sortTable(column) {
+        debugger
+        if (sortColumn === column) {
+            $(".upDownArrow").addClass("d-none");
+            sortOrder = (sortOrder === "asc") ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortOrder = "asc";
+        }
+
+        fetchUserList(currentPage, pageSize, search, sortColumn, sortOrder);
+    }
+
+
+    $(document).ready(function () {
+        fetchUserList(currentPage, pageSize, search, sortColumn, sortOrder);
+        
+
+        $('.openmodel').on("click", function () {
+            var email = $(this).data('id');
+            console.log(email)
+            $("#model-email").val(email);
+        });
+    });
+</script>

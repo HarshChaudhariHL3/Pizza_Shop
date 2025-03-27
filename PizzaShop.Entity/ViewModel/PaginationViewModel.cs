@@ -7,6 +7,8 @@ public class PaginationViewModel<T>
     public int CurrentPage {get; set; }
     public int TotalPages {get; set; }
     public int PageSize {get; set; }
+    public string sortOrder {get; set; }
+    public string sortColumn {get; set; }
 
     public bool HasPreviousPage => CurrentPage > 1 ;
     public bool HasNextPage => CurrentPage < TotalPages ;

@@ -1,5 +1,6 @@
 
 
+using MailKit.Search;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 
@@ -28,5 +29,6 @@ public interface IUserService
     List<City> GetCities(int StateId);
 
     // Task<PaginationViewModel<UserlistViewModel>> GetUserList(string searchUser, string sort, int page, int pageSize);
+    Task<PaginationViewModel<UserlistViewModel>> GetUserList(int page, int pageSize, string search = "",  string sortColumn = "", string sortOrder = "asc");
 
 }

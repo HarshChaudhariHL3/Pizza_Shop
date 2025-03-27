@@ -29,6 +29,7 @@ public class TablesAndSectionController(ITablesAndSectionService _tablesAndSecti
     {
         try
         {
+            ViewBag.search = search;
             PaginationViewModel<TableViewModel> table = await _tablesAndSectionService.GetTable(SectionId, page, pageSize, search);
             // if(table.TotalItems == 0 ){
             //     return PartialView("./PartialView/_Table", table);

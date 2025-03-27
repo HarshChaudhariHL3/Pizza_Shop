@@ -22,7 +22,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<ITaxesAndFeesRepository, TaxesAndFeesRepository>();
-builder.Services.AddScoped<IPaginationRepository, PaginationRepository>();
 builder.Services.AddScoped<ITablesAndSectionRepository, TablesAndSectionRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ISendmailService, SendmailService>();
@@ -32,7 +31,6 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<ITaxesAndFeesService, TaxesAndFeesService>();
-builder.Services.AddScoped<IPaginationService, PaginationService>();
 builder.Services.AddScoped<ITablesAndSectionService, TablesAndSectionService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
@@ -83,8 +81,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<JwtMiddleware>();
 app.UseAuthentication();
+app.UseMiddleware<JwtMiddleware>();
 app.UseAuthorization();
 
 app.MapControllerRoute(

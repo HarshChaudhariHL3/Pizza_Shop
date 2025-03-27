@@ -191,7 +191,7 @@
     var search = "";
     var currentCategoryId = null;
 
-    function fetchCategoryItems(categoryId, currentPage,pageSize) {
+    function fetchCategoryItems(categoryId, currentPage,pageSize,search) {
         $.ajax({
             url: '/Menu/CategoryItems',
             type: 'GET',
@@ -202,7 +202,6 @@
                 search:search
             },
             success: function (data) {
-                debugger
                 console.log(data);
                 $("#categoryItems").html(data);
             },
@@ -220,7 +219,7 @@
             currentCategoryId = $(this).data('category-id');
 
             if (categoryId) {
-                fetchCategoryItems(categoryId, currentPage,pageSize);
+                fetchCategoryItems(categoryId, currentPage,pageSize,search);
             } else {
                 console.error("Category ID is undefined.");
             }
@@ -232,7 +231,7 @@
             const firstCategoryId = firstCategoryLink.getAttribute('data-category-id');
              currentCategoryId = firstCategoryId;
             console.log(firstCategoryId);
-            fetchCategoryItems(firstCategoryId,currentPage,pageSize);
+            fetchCategoryItems(firstCategoryId,currentPage,pageSize,search);
         }
 
 

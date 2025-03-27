@@ -168,6 +168,11 @@ public class ValidationController(IAuthService _authService, IJwtService _jwtSer
     {
         try
         {
+            if (model.Password == model.NewPassword) 
+            {
+                TempData["Error"] = "The new password cannot be the same as the old password.";
+                return View();
+            }
             var (success, error) = await _authService.ChangePassword(model);
 
             if (error != null)
