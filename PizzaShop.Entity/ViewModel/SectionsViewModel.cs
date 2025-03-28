@@ -12,5 +12,8 @@ public class SectionsViewModel
 
     public List<SectionsViewModel> SectionList { get; set; }
     public List<TableViewModel> TableList { get; set; }
+    public List<PermissionViewModel> PermissionList { get; set; }
+
+
 
 }

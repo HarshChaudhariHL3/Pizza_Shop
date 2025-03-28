@@ -5,8 +5,8 @@ using PizzaShop.Repository.Interfaces;
 using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
-
-public class RoleController(IRoleService _roleService) : Controller
+[ServiceFilter(typeof(PermissionFilter))]
+public class RoleAndPermissionController(IRoleService _roleService, IUserService _userService) : Controller
 {
     [HttpGet]
     public IActionResult Roles()

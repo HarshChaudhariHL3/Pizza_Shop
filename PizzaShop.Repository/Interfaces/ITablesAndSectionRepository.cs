@@ -15,4 +15,6 @@ public interface ITablesAndSectionRepository
     void AddTable(TableViewModel model);
     void UpdateTable(TableDetail tableDetail);
     void DeleteTable(int itemId);
+
+    IEnumerable< RolePermission> GetPermissionByroleId(int roleId);
 }

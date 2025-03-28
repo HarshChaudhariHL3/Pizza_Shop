@@ -5,6 +5,7 @@ using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
 
+[ServiceFilter(typeof(PermissionFilter))]
 public class MenuController(IMenuService _menuService) : Controller
 {
 

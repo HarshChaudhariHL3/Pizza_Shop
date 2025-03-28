@@ -4,6 +4,7 @@ using AuthenticationDemo.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Implementations;
 using PizzaShop.Service.Interfaces;
@@ -12,8 +13,10 @@ using PizzaShop.Web.Models;
 
 namespace PizzaShop.Web.Controllers;
 
-public class UserController(IUserService _userService, IJwtService _jwtService) : Controller
+[ServiceFilter(typeof(PermissionFilter))]
+public class UsersController(IUserService _userService, IJwtService _jwtService) : Controller
 {
+
     [HttpGet]
     public async Task<IActionResult> Profile()
     {

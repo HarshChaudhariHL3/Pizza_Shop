@@ -4,7 +4,7 @@ using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
 
-public class TaxesAndFeesController(ITaxesAndFeesService _taxService) : Controller
+public class TaxAndFeeController(ITaxesAndFeesService _taxService) : Controller
 {
     [HttpGet]
     public IActionResult TaxesAndFees()

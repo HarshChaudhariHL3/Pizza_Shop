@@ -16,6 +16,7 @@ var conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PizzaShopDbContext>(q => q.UseNpgsql(conn));
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -33,7 +34,7 @@ builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<ITaxesAndFeesService, TaxesAndFeesService>();
 builder.Services.AddScoped<ITablesAndSectionService, TablesAndSectionService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddScoped<PermissionFilter>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -62,8 +63,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -81,8 +80,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseAuthentication();
 app.UseMiddleware<JwtMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

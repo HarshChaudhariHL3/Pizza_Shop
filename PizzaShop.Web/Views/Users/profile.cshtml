@@ -10,7 +10,7 @@
                 <h2>My Profile </h2>
             </div>
         </div>
-        <form asp-controller="User" asp-action="Profile" enctype="multipart/form-data" asp-antiforgery="true"
+        <form asp-controller="Users" asp-action="Profile" enctype="multipart/form-data" asp-antiforgery="true"
             method="post">
             <div class="mb-5">
                 <div>
@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <div class="form-floating ">
                                 <input type="text" class="form-control" id="Username" asp-for="Username">
-                                <label for="Username">User Name</label> 
+                                <label for="Username">Users Name</label> 
                                 <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
-            url: '/User/GetCountries',
+            url: '/Users/GetCountries',
             success: function (data) {
                 console.log(data);
                 var s = '<option value="-1">Please select a country</option>';
@@ -153,7 +153,7 @@
         });
         $.ajax({
             type: 'GET',
-            url: '/User/GetStates',
+            url: '/Users/GetStates',
             data: { CountryId: @Model.Country },
             success: function (data) {
                 console.log(data);
@@ -171,7 +171,7 @@
         });
         $.ajax({
             type: 'GET',
-            url: '/User/GetCities',
+            url: '/Users/GetCities',
             data: { stateId: @Model.State },
             success: function (data) {
                 console.log(data);
@@ -194,7 +194,7 @@
         $('#stateSelect').empty().append('<option selected>Select state</option>').prop('disabled', false);
         $.ajax({
             type: 'GET',
-            url: '/User/GetStates',
+            url: '/Users/GetStates',
             data: { CountryId: countryId },
             success: function (data) {
              
@@ -213,7 +213,7 @@
         $('#citySelect').empty().append('<option selected>Select city</option>').prop('disabled', false);
         $.ajax({
             type: 'GET',
-            url: '/User/GetCities',
+            url: '/Users/GetCities',
             data: { stateId: stateId },
             success: function (data) {
                 var s = '<option value="-1">Please select a city</option>';

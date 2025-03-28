@@ -2,24 +2,39 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Interfaces;
 
+
 namespace PizzaShop.Web.Controllers;
-
-public class TablesAndSectionController(ITablesAndSectionService _tablesAndSectionService) : Controller
+[ServiceFilter(typeof(PermissionFilter))]
+public class TableAndSectionController(ITablesAndSectionService _tablesAndSectionService, IJwtService _jwtService) : Controller
 {
-
     [HttpGet]
     public IActionResult Sections()
     {
         var sectionsList = _tablesAndSectionService.GetSections();
+        // var principal = _jwtService.ValidateToken(Request.Cookies["SuperSecretAuthToken"]);
+        // if (principal == null)
+        // {
+        //     return RedirectToAction("Login", "Validation");
+        // }
+        // int RoleId = int.Parse(principal?.Claims.ElementAt(3).Value ?? "0");
+        // var rolePermissions = _tablesAndSectionService.GetPermissionByroleId(RoleId);
+
         var viewModel = new SectionsViewModel
         {
             SectionList = sectionsList.Select(section => new SectionsViewModel
             {
                 SectionId = section.SectionId,
                 SectionName = section.SectionName,
-                Description = section.Description
+                Description = section.Description,
+            }).ToList(),
 
-            }).ToList()
+            // PermissionList = rolePermissions.Select(x => new PermissionViewModel
+            // {
+            //     ModuleName = x.Permission.ModuleName,
+            //     CanView = x.CanView,
+            //     CanAddEdit = x.CanAddEdit,
+            //     CanDelete = x.CanDelete,
+            // }).ToList()
 
         };
         return View(viewModel);
@@ -30,13 +45,9 @@ public class TablesAndSectionController(ITablesAndSectionService _tablesAndSecti
         try
         {
             ViewBag.search = search;
-            PaginationViewModel<TableViewModel> table = await _tablesAndSectionService.GetTable(SectionId, page, pageSize, search);
-            // if(table.TotalItems == 0 ){
-            //     return PartialView("./PartialView/_Table", table);
-            // }else{
+            PaginationViewModel<TableViewModel> table = await _tablesAndSectionService.GetTable(SectionId, page, pageSize,search);
 
-             return PartialView("./PartialView/_Table", table);
-            // }
+            return PartialView("./PartialView/_Table", table);
         }
         catch (Exception ex)
         {
@@ -102,7 +113,7 @@ public class TablesAndSectionController(ITablesAndSectionService _tablesAndSecti
         }
     }
 
-    
+
 
 
     [HttpPost]

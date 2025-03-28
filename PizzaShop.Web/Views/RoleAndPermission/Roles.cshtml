@@ -23,7 +23,7 @@
                         <tr>
                             <td >@role.RoleName</td>
                             <td>
-                                <a asp-action="Permission" asp-controller="Role" asp-route-roleId="@role.RoleId" class="btn"><i class="bi bi-pen"></i></a>
+                                <a asp-action="Permission" id="EditBtnForRole" asp-controller="RoleAndPermission" asp-route-roleId="@role.RoleId" class="btn"><i class="bi bi-pen"></i></a>
                             </td>
                         </tr>
                     }
@@ -37,3 +37,14 @@
 
     </div>
 </div>
+
+<script>
+    var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit === 'False') {
+            document.querySelectorAll('#EditBtnForRole').forEach(link => {
+            link.classList.add('disabled');
+            link.setAttribute('aria-disabled', 'true');
+            link.style.pointerEvents = 'none';
+            });
+        }
+</script>

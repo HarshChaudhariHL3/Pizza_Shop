@@ -25,7 +25,7 @@
         <button type="button" class="btn deleteMultipleTable" data-bs-toggle="modal">
             <i class="bi bi-trash h5"></i>
         </button>
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addTable">
+        <button type="button" class="btn" id="AddTableBtnForTable" data-bs-toggle="modal" data-bs-target="#addTable">
             <i class="btn bg-primary bi bi-plus-square text-white">New Table</i>
         </button>
     </div>
@@ -70,8 +70,9 @@
                                 }
                         </td>
                         <td class="gap-3">
-                            <button class="btn  edit-btn" data-table-id="@item.TableId" data-bs-toggle="modal" data-bs-target="#editTable"><i class="bi bi-pen"></i></button>
-                            <button class="btn delete-btn" data-table-id="@item.TableId" data-bs-toggle="modal" data-bs-target="#deleteTable"><i class="bi bi-trash"></i></button>
+                            <button class="btn  edit-btn" data-table-id="@item.TableId" id="EditBtnForTable" data-bs-toggle="modal" data-bs-target="#editTable"><i class="bi bi-pen"></i></button>
+                            <button class="btn delete-btn" data-table-id="@item.TableId" id="DeleteBtnForTable" data-bs-toggle="modal" data-bs-target="#deleteTable"><i class="bi bi-trash"></i></button>
+    
                         </td>
                         </tr>
                     }
@@ -254,6 +255,17 @@
 @* Modal end *@
 
 <script>
+        if (canAddEdit) {
+            document.querySelectorAll('#EditBtnForTable, #AddTableBtnForTable').forEach(button => {
+            button.disabled = true;
+            });
+        }
+        if (canDelete) {
+            document.querySelectorAll('#DeleteBtnForTable, .deleteMultipleTable').forEach(button => {
+            button.disabled = true;
+            });
+        }
+        
     $('#searchTable').on('search', function() {
     search = $(this).val();  
     fetchTable(currentTableId, currentPage, pageSize, search); 
@@ -283,7 +295,6 @@
 
 
     $(document).ready(function () {
-
         $.ajax({
             url: '/TablesAndSection/SectionsList',
             type: 'GET',

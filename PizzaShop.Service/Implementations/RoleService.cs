@@ -33,4 +33,9 @@ public class RoleService(IRoleRepository _roleRepository) : IRoleService
     }
 
 
+    public Role GetRoleByUserId(string userId)
+    {
+        return _roleRepository.GetRoleByUserId(userId);
+    }
+
 }

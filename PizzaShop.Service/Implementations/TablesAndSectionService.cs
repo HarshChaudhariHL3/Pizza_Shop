@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
@@ -22,7 +23,7 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
                 TableName = item.TableName,
                 Capacity = item.Capacity,
                 SectionId = item.SectionId,
-                Status = item.Status
+                Status = item.Status,
             });
         }
         if (!string.IsNullOrEmpty(search))
@@ -115,6 +116,11 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
             return true;
         }
         return false;
+    }
+
+    public IEnumerable<RolePermission> GetPermissionByroleId(int roleId)
+    {
+        return _tablesAndSectionRepository.GetPermissionByroleId(roleId);
     }
 
 }

@@ -16,7 +16,7 @@
                 <input class="form-control " type="search" value="@ViewBag.search" placeholder="Search" name="search"
                     id="searchUserList" aria-label="Search">
             </div>
-            <a class="btn btn-primary" asp-action="AddUser" asp-controller="User">
+            <a class="btn btn-primary" asp-action="AddUser" asp-controller="Users">
                 <div class="d-flex align-items-center justify-content-center">
                     <i class="bi bi-plus-lg"></i>
                     Add User
@@ -40,7 +40,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Delete Confirmation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="DeleteUser" asp-controller="User" method="post">
+            <form asp-action="DeleteUser" asp-controller="Users" method="post">
                 <div class="modal-body text-center d-block">
                     <img src="~/images/toppng.com-warning-icon-2400x2400.png" alt="warning" width="50px">
                     <p>Are you sure you want to Delete this User ?</p>
@@ -57,6 +57,17 @@
 
 
 <script>
+    
+    var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit === 'False') {
+            debugger;
+            document.querySelectorAll('#addUserBtn').forEach(div => {
+                div.classList.add('disabled');
+                div.setAttribute('aria-disabled', 'true');
+                div.style.pointerEvents = 'none';
+            });
+        }
+    
     var currentPage = 1;
     var pageSize = 5;
     var search = "";
@@ -73,7 +84,7 @@
 
     function fetchUserList(currentPage, pageSize, search, sortColumn, sortOrder) {
         $.ajax({
-            url: '/User/UserList',
+            url: '/Users/UserList',
             type: 'GET',
             data: {
                 page: currentPage,

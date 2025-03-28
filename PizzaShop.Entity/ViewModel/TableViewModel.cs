@@ -14,6 +14,10 @@ public class TableViewModel
 
     public List<TableViewModel> TableList { get; set; }
 
+    public PermissionViewModel PermissionList { get; set; }
+
+
+
 
 
 }

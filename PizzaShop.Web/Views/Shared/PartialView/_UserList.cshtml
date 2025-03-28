@@ -63,7 +63,7 @@
                         }
                     </td>
                     <td class="d-flex">
-                        <form asp-action="Edituser" asp-controller="User" method="get">
+                        <form asp-action="Edituser" asp-controller="Users" method="get">
                             <input type="hidden" name="email" value="@item.Email">
                             <input type="hidden" name="Name" value="@item.FirstName">
                             <button type="submit" class="btn" id="editBtn">
@@ -121,6 +121,20 @@
 
 
 <script>
+    var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit) {
+            document.querySelectorAll('#editBtn').forEach(button => {
+            button.disabled = true;
+            });
+        }
+        var canDelete = '@Context.Items["CanDelete"]';
+        if (canDelete) {
+            document.querySelectorAll('#deleteBtn').forEach(button => {
+            button.disabled = true;
+            });
+        }
+
+
     function paginationTable() {
         var value =parseInt($("#PageSize").val());
 

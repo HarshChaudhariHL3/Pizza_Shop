@@ -6,6 +6,7 @@ public interface IUserRepository
 
     List<User> GetAllUser();
     
+
     string GetRoleName(int id);
      User GetAll(int id);
 

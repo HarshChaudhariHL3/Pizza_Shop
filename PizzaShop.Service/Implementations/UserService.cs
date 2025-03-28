@@ -253,47 +253,4 @@ public class UserService(IUserRepository _repository) : IUserService
         };
     }
 
-
-    // public async  Task<PaginationViewModel<UserlistViewModel>> GetUserList(string searchUser, string sort, int page, int pageSize){
-
-    //     List<User> userList =  _repository.GetAllUser();
-    //     List<UserlistViewModel> users = new List<UserlistViewModel>();
-
-
-    //     foreach(User user in userList){
-    //        users.Add(new UserlistViewModel{
-    //         FirstName = user.FirstName,
-    //         LastName = user.LastName,
-    //         Email = user.Email,
-    //         RoleId = user.UserRole,
-    //         RoleName =user.UserRole.HasValue ? _repository.GetRoleName(user.UserRole.Value) : null,
-    //         Phone = user.Phone,
-    //         Status = user.Status,
-    //         Imgurl = user.ImgUrl,
-    //         UserId = user.UserId,
-    //        });
-
-    //     }
-    //     if(!string.IsNullOrEmpty(searchUser)){
-    //         users = users.Where(u => (u.FirstName + ' ' + u.LastName).Contains(searchUser)).ToList();
-    //     }
-    //     users = sort switch{
-    //         "name_desc" => users.OrderByDescending(u => (u.FirstName + ' ' + u.LastName).Contains(searchUser)).ToList(),
-    //         "name_asc" => users.OrderBy(u => (u.FirstName + ' ' + u.LastName).Contains(searchUser)).ToList(),
-    //         "role_desc" => users.OrderByDescending(u => u.RoleName).ToList(),
-    //         "role_asc" => users.OrderBy(u => u.RoleName).ToList(),
-    //         _ => users.OrderBy(u => u.FirstName).ToList(),
-    //     };
-
-    //     int usersCount = users.Count;
-    //     users = users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-    //     return new PaginationViewModel<UserlistViewModel>
-    //     {
-    //         Items = users,
-    //         TotalItems = usersCount,
-    //         CurrentPage = page,
-    //         PageSize = pageSize,
-    //     };
-    // }
 }

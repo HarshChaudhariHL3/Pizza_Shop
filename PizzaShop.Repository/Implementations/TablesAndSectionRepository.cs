@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PizzaShop.Entity.Data;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
@@ -88,5 +89,10 @@ public class TablesAndSectionRepository(PizzaShopDbContext _context) : ITablesAn
             _context.SaveChanges();
         }
 
+    }
+
+    public IEnumerable< RolePermission> GetPermissionByroleId(int roleId)
+    {
+        return _context.RolePermissions.Include(rp => rp.Role).Include(rp => rp.Permission).Where(rp => rp.RoleId == roleId).ToList();
     }
 }

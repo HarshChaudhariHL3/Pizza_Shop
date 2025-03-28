@@ -12,7 +12,7 @@
             <div class="input-group">
                 <div class="d-flex align-items-center">
                     <div class="border">
-                        <a asp-action="Roles" asp-controller="Role" class="btn" role="button">
+                        <a asp-action="Roles" asp-controller="RoleAndPermission" class="btn" role="button">
                             <i class="bi bi-chevron-left"></i><span>Back</span>
                         </a>
                     </div>
@@ -91,15 +91,13 @@
                 </table>
                 <div class="d-flex justify-content-end gap-3 m-3">
                     <button type="submit" class="btn btn-primary text-white">Save</button>
-                    <a asp-action="Roles" asp-controller="Role"
+                    <a asp-action="Roles" asp-controller="RoleAndPermission"
                         class="btn border border-primary text-primary">Cancel</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
-@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
 
 <script>

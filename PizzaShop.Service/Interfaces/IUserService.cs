@@ -9,6 +9,7 @@ namespace PizzaShop.Service.Interfaces;
 public interface IUserService
 {
     ProfileViewModel GetUser(string id);
+   
 
     EdituserViewModel GetUserByEmail(string Email);
 

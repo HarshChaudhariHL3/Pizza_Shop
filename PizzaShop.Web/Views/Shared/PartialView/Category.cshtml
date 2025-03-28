@@ -26,7 +26,7 @@
     <div class=" d-block  rounded col-2"> <!-- style="width: 240px;" -->
         <div class=" pt-2 d-flex align-items-center justify-content-between mx-4 mb-2">
             <h4 id="category-header">Category</h4>
-            <a class="btn blue-outline d-flex align-items-center" data-bs-target="#staticBackdrop"
+            <a class="btn blue-outline d-flex align-items-center" id="AddCategoryBtnForCategory" data-bs-target="#staticBackdrop"
                 data-bs-toggle="modal">
                 <h3><i class="bi bi-plus"></i></h3>
             </a>
@@ -40,10 +40,10 @@
                         <span class="category-item" data-category-id="@item.CategoryId"
                             style="cursor: pointer;">@item.CategoryName</span>
                         <div class="gap-1 d-flex notvisible" id="categoryBtn">
-                            <button class="border-0" data-bs-toggle="modal" data-bs-target="#editmodal"
+                            <button class="border-0" data-bs-toggle="modal" id="EditCategoryBtnForCategory" data-bs-target="#editmodal"
                                 onclick="openEditModal(@item.CategoryId,'@item.CategoryName', '@item.Description')">
                                 <i class="bi bi-pen  "></i></button>
-                            <button class="border-0" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                            <button class="border-0" data-bs-toggle="modal" id="DeleteCategoryBtnForCategory" data-bs-target="#deleteModal"
                                 onclick="openDeleteModal(@item.CategoryId,'@item.CategoryName')">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -185,6 +185,24 @@
 
 
 <script>
+    var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit === 'False') {
+            const addCategoryButton = document.getElementById('AddCategoryBtnForCategory');
+            if (addCategoryButton) {
+            addCategoryButton.classList.add('disabled');
+            addCategoryButton.setAttribute('aria-disabled', 'true');
+            addCategoryButton.style.pointerEvents = 'none';
+            }
+            document.querySelectorAll('#EditCategoryBtnForCategory').forEach(button => {
+            button.disabled = true;
+            });
+        }
+        var canDelete = '@Context.Items["CanDelete"]';
+        if (canDelete) {
+            document.querySelectorAll('#DeleteCategoryBtnForCategory').forEach(button => {
+            button.disabled = true;
+            });
+        }
 
     var currentPage = 1;
     var pageSize = 5; 

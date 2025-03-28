@@ -28,7 +28,7 @@
         <div class=" d-block  rounded col-2"> <!-- style="width: 240px;" -->
             <div class=" pt-2 d-flex align-items-center justify-content-between mx-4 mb-2">
                 <h4 id="category-header">Sections</h4>
-                <a class="btn blue-outline d-flex align-items-center" data-bs-target="#staticBackdrop"
+                <a class="btn blue-outline d-flex align-items-center" id="AddSectionForSection" data-bs-target="#staticBackdrop"
                     data-bs-toggle="modal">
                     <h3><i class="bi bi-plus"></i></h3>
                 </a>
@@ -41,10 +41,11 @@
                             <span class="sectionSide" data-section-id="@item.SectionId"
                                 style="cursor: pointer;">@item.SectionName</span>
                             <div class="gap-1 d-flex notvisible" id="sectionBtn">
-                                <button class="border-0" data-bs-toggle="modal" data-bs-target="#editModalSection"
+                                <button class="border-0" id="EditbtnForSection" data-bs-toggle="modal"
+                                    data-bs-target="#editModalSection"
                                     onclick="openEditModal(@item.SectionId,'@item.SectionName', '@item.Description')">
                                     <i class="bi bi-pen  "></i></button>
-                                <button class="border-0" data-bs-toggle="modal" data-bs-target="#deleteModalSection"
+                                <button class="border-0" id="DeletebtnForSection" data-bs-toggle="modal" data-bs-target="#deleteModalSection"
                                     onclick="openDeleteModal(@item.SectionId,'@item.SectionName')">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -62,7 +63,7 @@
 
 @* Modal Start *@
 
-<form method="post" asp-action="AddSection" asp-controller="TablesAndSection">
+<form method="post" asp-action="AddSection" asp-controller="TableAndSection">
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -97,7 +98,7 @@
     </div>
 </form>
 
-<form method="post" asp-action="EditSection" asp-controller="TablesAndSection">
+<form method="post" asp-action="EditSection" asp-controller="TableAndSection">
     <input type="hidden" asp-for="SectionId" id="editSectionId">
 
     <div class="modal fade" id="editModalSection" tabindex="-1">
@@ -126,7 +127,7 @@
     </div>
 </form>
 
-<form method="post" asp-action="DeleteSection" asp-controller="TablesAndSection">
+<form method="post" asp-action="DeleteSection" asp-controller="TableAndSection">
 
     <input type="hidden" id="deleteSectionId" asp-for="SectionId">
 
@@ -158,6 +159,7 @@
 
 <script>
 
+
     function openDeleteModal(SectionId, SectionName) {
         document.getElementById('deleteSectionId').value = SectionId;
         document.getElementById('deleteSectionName').textContent = SectionName;
@@ -174,9 +176,9 @@
     var search = "";
     var currentTableId = null;
 
-    function fetchTable(SectionId, currentPage, pageSize,search) {
+    function fetchTable(SectionId, currentPage, pageSize, search) {
         $.ajax({
-            url: '/TablesAndSection/Tables',
+            url: '/TableAndSection/Tables',
             type: 'GET',
             data: {
                 SectionId: SectionId,
@@ -188,35 +190,53 @@
                 @* if(data.TotalItems == 0){
                 toastr.success(data.message, data.title);
                 } *@
-                $("#tables").html(data);
+                    $("#tables").html(data);
             },
             error: function (xhr, status, error) {
                 $('#tables').html('<tr><td colspan="4">Error loading items.</td></tr>');
             }
         });
     }
+        debugger;
+        var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit) {
+            document.querySelectorAll('#EditbtnForSection').forEach(button => {
+            button.disabled = true;
+            });
+            document.querySelectorAll('#AddSectionForSection').forEach(a => {
+                a.classList.add('disabled');
+                a.setAttribute('aria-disabled', 'true');
+                a.style.pointerEvents = 'none';
+            });
+        }
+        var canDelete = '@Context.Items["CanDelete"]';
+        if (canDelete) {
+            document.querySelectorAll('#DeletebtnForSection').forEach(button => {
+            button.disabled = true;
+            });
+        }
 
     $(document).ready(function () {
 
-        $('.sectionSide').click(function () {
-            var sectionId = $(this).data('section-id');
-            currentTableId = $(this).data('section-id');
+    $('.sectionSide').click(function () {
+        var sectionId = $(this).data('section-id');
+        currentTableId = $(this).data('section-id');
 
-            if (sectionId) {
-                fetchTable(sectionId, currentPage, pageSize,search);
-            } else {
-                console.error("Section ID is undefined.");
-            }
-        });
-
-        const firstTableLink = document.querySelector('.sectionSide');
-
-        if (firstTableLink) {
-            const firstTableId = firstTableLink.getAttribute('data-section-id');
-            currentTableId = firstTableId;
-            console.log(firstTableId);
-            fetchTable(firstTableId, currentPage, pageSize,search);
+        if (sectionId) {
+            fetchTable(sectionId, currentPage, pageSize, search);
+        } else {
+            console.error("Section ID is undefined.");
         }
+    });
+
+    const firstTableLink = document.querySelector('.sectionSide');
+
+    if (firstTableLink) {
+        const firstTableId = firstTableLink.getAttribute('data-section-id');
+        currentTableId = firstTableId;
+        console.log(firstTableId);
+        fetchTable(firstTableId, currentPage, pageSize, search);
+    }
 
 
     });

@@ -6,6 +6,7 @@ namespace PizzaShop.Repository.Interfaces;
 public interface IRoleRepository
 {
     List<Role> GetRoles();
+    Role GetRoleByUserId(string userId);
     List<RolePermission> GetPermissionByroleId(int roleId);
     List<Permission> GetPermissionListByRoleId(int roleId);
     Role GetRoleById(int roleId);
