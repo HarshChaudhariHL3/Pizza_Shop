@@ -33,8 +33,18 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     // }
     public CategoryItem GetItemById(int itemId)
     {
-        return _context.CategoryItems.FirstOrDefault(x => x.CategoryItemId == itemId)!;
+        return _context.CategoryItems
+        .Include(x => x.CategoryModifierMappings)
+        .ThenInclude(x => x.Modifier)
+        .FirstOrDefault(x => x.CategoryItemId == itemId)!;
     }
+
+    // public List<ModifierItem> GetModifierItemsList(int ModifierGroupId){
+    //     return _context.ModifierItems
+    //         .Where(x => x. == ModifierGroupId)
+    //         .OrderBy(x => x.ModifierItemId)
+    //         .ToList();
+    // }
     public ModifierItem GetModifierItemById(int itemId)
     {
         return _context.ModifierItems.FirstOrDefault(x => x.ModifierItemId == itemId)!;
@@ -134,7 +144,6 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         _context.CategoryItems.Update(categoryItem);
         _context.SaveChanges();
     }
-
 
 
 

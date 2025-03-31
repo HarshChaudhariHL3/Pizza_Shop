@@ -45,7 +45,6 @@ public interface IMenuService
     void EditModifierItem(ModifierListViewModel model);
 
     List<ModifierItem> GetModifierItems();
-
 }
 
 

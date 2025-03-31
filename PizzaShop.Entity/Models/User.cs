@@ -56,9 +56,4 @@ public partial class User
     public virtual State? State { get; set; }
 
     public virtual Role? UserRoleNavigation { get; set; }
-
-    public List<Role>? ToList()
-    {
-        throw new NotImplementedException();
-    }
 }

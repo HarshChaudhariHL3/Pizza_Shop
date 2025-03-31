@@ -68,4 +68,12 @@ public class OrderController(IOrderService _orderService) : Controller
         var content = stream.ToArray();
         return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Order.xlsx");
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> OrderDetails(int id)
+    {
+        var model = _orderService.GetOrderDetails(id);
+        return View(model);
+    }
 }

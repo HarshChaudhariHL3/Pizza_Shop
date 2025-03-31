@@ -246,6 +246,8 @@ public class MenuController(IMenuService _menuService) : Controller
             TempData["Error"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
+        
+
     }
 
     #endregion

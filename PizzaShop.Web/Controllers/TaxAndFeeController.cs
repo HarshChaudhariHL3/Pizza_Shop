@@ -34,12 +34,61 @@ public class TaxAndFeeController(ITaxesAndFeesService _taxService) : Controller
     }
 
     [HttpPost]
+    public IActionResult AddTax(TaxesAndFeesViewModel model){
+        try
+        {
+            _taxService.AddTax(model);
+            TempData["Success"] = "Tax Added Successfully";
+            return RedirectToAction("TaxesAndFees");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpPost]
     public IActionResult DeleteTaxFee(int taxId)
     {
         try
         {
             _taxService.DeleteTaxFee(taxId);
             TempData["Success"] = "Tax or fee deleted successfully.";
+            return RedirectToAction("TaxesAndFees");
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpGet]
+    public IActionResult GetAllTaxByTaxId(int TaxId)
+    {
+        try
+        {
+            var item = _taxService.GetAllTaxByTaxId(TaxId);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return Json(item);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+
+    [HttpPost]
+    public IActionResult EditTax(TaxesAndFeesViewModel model){
+        try
+        {
+            _taxService.UpdateTax(model);
+            TempData["Success"] = "Tax Updated Successfully";
             return RedirectToAction("TaxesAndFees");
         }
         catch (Exception ex)

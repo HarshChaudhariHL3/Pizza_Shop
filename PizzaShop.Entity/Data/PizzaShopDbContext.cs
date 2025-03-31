@@ -887,7 +887,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.IsDefault)
                 .HasDefaultValue(true)
                 .HasColumnName("is_default");
-            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.IsEnabled)
                 .HasDefaultValue(true)
                 .HasColumnName("is_enabled");

@@ -9,4 +9,5 @@ public interface IOrderService
     DateTime? toDate = null);
 
     IQueryable<Order> GetAllOrderDetailToExport ();
+    OrderSummaryViewModel GetOrderDetails(long id);
 }

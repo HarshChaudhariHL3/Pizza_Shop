@@ -97,4 +97,10 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
         var element = _orderRepository.GetAllOrderList().AsQueryable();
         return element;
     }
+
+
+    public OrderSummaryViewModel GetOrderDetails(long id)
+    {
+        return _orderRepository.GetOrderDetails(id);
+    }
 }

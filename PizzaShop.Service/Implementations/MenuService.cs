@@ -97,8 +97,8 @@ public class MenuService : IMenuService
         var item = _menuRepository.GetItemById(itemId);
         if (item == null)
             return null;
+        // var ModifierItemsList = _menuRepository.GetModifierItemsList(item.CategoryModifierMappings.First().);
 
-        // Map data from entity to ViewModel
         return new CategoryListViewModel
         {
             CategoryItemId = item.CategoryItemId,
@@ -113,7 +113,16 @@ public class MenuService : IMenuService
             IsAvailable = item.IsAvailable ?? false,
             // TaxPercentage = item.TaxPercentage,
             ShortCode = item.ShortCode,
-            ImageUrl = item.ImageUrl
+            ImageUrl = item.ImageUrl,
+            SelectedModifiers = item.CategoryModifierMappings.Select(x => new CategoryModifierMappingsViewModel
+            {
+                ModifierGroupName = x.Modifier.ModifierName,
+                CategoryItemId = x.CategoryItemId,
+                ModifierId = x.ModifierId,
+                MaxValue = x.MaxValue,
+                MinValue = x.MinValue
+            }).ToList()
+
         };
     }
 
@@ -186,11 +195,12 @@ public class MenuService : IMenuService
     public void AddCategoryItem(CategoryListViewModel model)
     {
         var categoryItemList = _menuRepository.AddCategoryItem(model);
-         
-        
-        for(int i = 0; i < model.SelectedModifiers.Count; i++){
 
-            var  categoryModifierMapping = new CategoryModifierMapping
+
+        for (int i = 0; i < model.SelectedModifiers.Count; i++)
+        {
+
+            var categoryModifierMapping = new CategoryModifierMapping
             {
                 CategoryItemId = categoryItemList.CategoryItemId,
                 ModifierId = model.SelectedModifiers[i].ModifierId,
