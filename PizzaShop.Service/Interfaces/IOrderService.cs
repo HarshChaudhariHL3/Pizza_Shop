@@ -10,4 +10,6 @@ public interface IOrderService
 
     IQueryable<Order> GetAllOrderDetailToExport ();
     OrderSummaryViewModel GetOrderDetails(long id);
+
+    ExportOrderResultViewModel GetExportOrders(string search, string time, DateTime fromDate, DateTime toDate, string status = ""); 
 }

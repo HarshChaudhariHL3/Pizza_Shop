@@ -1,26 +1,23 @@
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Service.Interfaces;
 
 namespace PizzaShop.Web.Controllers;
 
-public class OrderController(IOrderService _orderService) : Controller
+public class CustomersController(ICustomersService _customersService) : Controller
 {
-    [HttpGet]
-    public IActionResult Orders()
+    public IActionResult Customers()
     {
         return View();
     }
-
-    [HttpGet]
-    public async Task<IActionResult> GetOrderDetails( int page, int pageSize, string search, string orderStatus, string orderTime,DateTime? fromDate, DateTime? toDate)
+        [HttpGet]
+    public async Task<IActionResult> GetCustomerDetails( int page, int pageSize, string search, string customerTime )
     {
         try
         {
-            PaginationViewModel<OrderViewModel> table = await _orderService.GetOrderDetail(page, pageSize, search, orderStatus,orderTime,fromDate,toDate);
-             return PartialView("./PartialView/_OrderPartial", table);
+            PaginationViewModel<CustomerViewModel> table = await _customersService.GetCustomerDetail(page, pageSize, search, customerTime);
+             return PartialView("./PartialView/_CustomerPartial", table);
         }
         catch (Exception ex)
         {
@@ -29,15 +26,11 @@ public class OrderController(IOrderService _orderService) : Controller
         }
     }
 
-    [HttpGet]
-     public IActionResult ExportToExcel(string search, string time, DateTime fromDate, DateTime toDate, string status = "")
+
+     public IActionResult ExportAllCustomer(string time,string search)
     {
-        var ordersdata = _orderService.GetExportOrders(search: search, status: status, time: time, fromDate: fromDate, toDate: toDate);
-
-        Guid name = Guid.NewGuid();
-        var path = Path.Combine("D:\\" + name + ".xlsx");
-
-
+        // int timeint = int.Parse(time);
+        var customerdata = _customersService.GetExportCustomer(search: search, time: time);
 
         using var wb = new XLWorkbook();
 
@@ -45,14 +38,14 @@ public class OrderController(IOrderService _orderService) : Controller
         ws.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
         ws.Range("A2", "B3").Merge().Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
-        ws.Cell("A2").Value = "Status";
+        ws.Cell("A2").Value = "Account";
         ws.Cell("A2").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center)
         .Border.SetTopBorder(XLBorderStyleValues.Thin)
         .Border.SetRightBorder(XLBorderStyleValues.Thin)
         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
         .Border.SetLeftBorder(XLBorderStyleValues.Thin);
         ws.Range("C2", "F3").Merge();
-        ws.Cell("C2").Value = ordersdata.status;
+      //  ws.Cell("C2").Value = ordersdata.status;
         ws.Cell("C2").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center)
         .Border.SetTopBorder(XLBorderStyleValues.Thin)
         .Border.SetRightBorder(XLBorderStyleValues.Thin)
@@ -67,7 +60,7 @@ public class OrderController(IOrderService _orderService) : Controller
         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
         .Border.SetLeftBorder(XLBorderStyleValues.Thin);
         ws.Range("J2", "M3").Merge();
-        ws.Cell("J2").Value = ordersdata.search;
+        ws.Cell("J2").Value = customerdata.search;
         ws.Cell("J2").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center)
         .Border.SetTopBorder(XLBorderStyleValues.Thin)
         .Border.SetRightBorder(XLBorderStyleValues.Thin)
@@ -82,7 +75,7 @@ public class OrderController(IOrderService _orderService) : Controller
         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
         .Border.SetLeftBorder(XLBorderStyleValues.Thin);
         ws.Range("C5", "F6").Merge();
-        ws.Cell("C5").Value = ordersdata.Date;
+        ws.Cell("C5").Value = customerdata.Date;
         ws.Cell("C5").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center)
         .Border.SetTopBorder(XLBorderStyleValues.Thin)
         .Border.SetRightBorder(XLBorderStyleValues.Thin)
@@ -97,13 +90,14 @@ public class OrderController(IOrderService _orderService) : Controller
         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
         .Border.SetLeftBorder(XLBorderStyleValues.Thin);
         ws.Range("J5", "M6").Merge();
-        ws.Cell("J5").Value = ordersdata.record;
+        ws.Cell("J5").Value = customerdata.record;
         ws.Cell("J5").Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center)
         .Border.SetTopBorder(XLBorderStyleValues.Thin)
         .Border.SetRightBorder(XLBorderStyleValues.Thin)
         .Border.SetBottomBorder(XLBorderStyleValues.Thin)
         .Border.SetLeftBorder(XLBorderStyleValues.Thin);
 
+        // var img = "D:\\DotNet Project\\Pizzashop\\PizzaShop\\Pizzashop.web\\wwwroot\\images\\logos\\pizzashop_logo.png";
         var img = "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\images\\logos\\pizzashop_logo.png";
         ws.Range("O2", "P6").Merge();
         ws.AddPicture(img).MoveTo(ws.Cell("O2")).Scale(.3);
@@ -112,41 +106,39 @@ public class OrderController(IOrderService _orderService) : Controller
         ws.Cell("A9").Value = "Id";
         ws.Cell("A9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("B9", "D9").Merge();
-        ws.Cell("B9").Value = "Date";
+        ws.Cell("B9").Value = "Name";
         ws.Cell("B9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("E9", "G9").Merge();
-        ws.Cell("E9").Value = "Customer";
+        ws.Cell("E9").Value = "Email";
         ws.Cell("E9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("H9", "J9").Merge();
-        ws.Cell("H9").Value = "Status";
+        ws.Cell("H9").Value = "Date";
         ws.Cell("H9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("K9", "L9").Merge();
-        ws.Cell("K9").Value = "Payment Mode";
+        ws.Cell("K9").Value = "Phone";
         ws.Cell("K9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("M9", "N9").Merge();
-        ws.Cell("M9").Value = "Ratings";
+        ws.Cell("M9").Value = "TotalOrder";
         ws.Cell("M9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
         ws.Range("O9", "P9").Merge();
-        ws.Cell("O9").Value = "Total Amount";
-        ws.Cell("O9").Style.Fill.SetBackgroundColor(XLColor.FromHtml("#0066A8"));
+        
 
-        for (var j = 0; j < ordersdata.orderData.Count(); j++)
+        for (var j = 0; j < customerdata.CustomerData.Count(); j++)
         {
             var i = j + 10;
             // dataTable.Rows.Add(row.OrderID,row.OrderDate,row.Customer,row.Status,row.PaymentMod,row.Rating,row.Total);
-            ws.Cell("A" + i).Value = ordersdata.orderData[j].OrderId;
+            ws.Cell("A" + i).Value = customerdata.CustomerData[j].CustomerId;
             ws.Range("B" + i, "D" + i).Merge();
-            ws.Cell("B" + i).Value = ordersdata.orderData[j].OrderDate + "";
+            ws.Cell("B" + i).Value = customerdata.CustomerData[j].CustomerName;
             ws.Range("E" + i, "G" + i).Merge();
-            ws.Cell("E" + i).Value = ordersdata.orderData[j].CustomerName;
+            ws.Cell("E" + i).Value = customerdata.CustomerData[j].Email;
             ws.Range("H" + i, "J" + i).Merge();
-            ws.Cell("H" + i).Value = ordersdata.orderData[j].OrderStatus;
+            ws.Cell("H" + i).Value = customerdata.CustomerData[j].Date + "";
             ws.Range("K" + i, "L" + i).Merge();
-            ws.Cell("K" + i).Value = ordersdata.orderData[j].PaymentMethod;
+            ws.Cell("K" + i).Value = customerdata.CustomerData[j].Phone;
             ws.Range("M" + i, "N" + i).Merge();
-            ws.Cell("M" + i).Value = ordersdata.orderData[j].Rating;
-            ws.Range("O" + i, "P" + i).Merge();
-            ws.Cell("O" + i).Value = ordersdata.orderData[j].TotalAmount;
+            ws.Cell("M" + i).Value = customerdata.CustomerData[j].TotalOrder;
+           
         }
 
 
@@ -154,17 +146,8 @@ public class OrderController(IOrderService _orderService) : Controller
         wb.SaveAs(stream);
         stream.Position = 0;
 
-        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Orders.xlsx");
+        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customer.xlsx");
 
 
-    }
-
-
-
-    [HttpGet]
-    public async Task<IActionResult> OrderDetails(int id)
-    {
-        var model = _orderService.GetOrderDetails(id);
-        return View(model);
     }
 }

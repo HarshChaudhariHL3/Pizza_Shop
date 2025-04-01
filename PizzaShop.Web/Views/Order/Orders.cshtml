@@ -28,7 +28,7 @@
             <option value="month">Current Month</option>
         </select>
 
-        <button id="export-tax-btn" type="button"
+        <button id="export-Order-btn" type="button" onclick="exportAllOrder()"
             class="btn btn-primary py-2 px-3 text-decoration-none rounded-1 bg-header text-white ms-1 text-nowrap me-3 d-flex justify-content-center align-items-center gap-1"
             style="height: 35px;">
             <img src="~/images/icons/export-white.svg" width="24px" class="">
@@ -100,11 +100,10 @@
     });
 
     $('#order-time').on('change', function () {
-
         orderTime = $(this).val();
         fetchTable(currentPage, pageSize, search, orderStatus, orderTime, fromDate, toDate);
     });
-
+             
     function fetchTable(currentPage, pageSize, search, orderStatus, orderTime, fromDate, toDate) {
         console.log({
             currentPage,
@@ -136,30 +135,56 @@
         });
     }
 
-    $('#export-tax-btn').on("click", function () {
-        console.log("Export button clicked");
-        $.ajax({
-            url: '/Order/ExportToExcel',
-            type: "GET",
-            xhrFields: {
-                responseType: 'blob'
-            },
-            success: function (data) {
-                const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = "Order.xlsx";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error exporting file: ", error);
-                alert("Failed to export the file. Please try again.");
-            }
-        });
-    });
+    function exportAllOrder() {
+              // Get filter values
+             debugger;
+              const CustomerDates = $('#order-time').val();
+              const searchCustomer = $('#searchOrder').val();
+              const fromDate = $('#fromDate').val();
+              const toDate = $('#toDate').val();
+              const Status = $('#order-status').val();
+
+              // Prepare loading state
+              const exportBtn = $('#export-Order-btn');
+              exportBtn.prop('disabled', true);
+              exportBtn.html('<span class="spinner-border spinner-border-sm" role="status"></span> Exporting...');
+              // AJAX call
+              $.ajax({
+                     url: "ExportToExcel",
+                     type: 'GET',
+                     data: {
+                            time: CustomerDates,
+                            search: searchCustomer,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                            status: Status,
+                     },
+                     xhrFields: {
+                            responseType: 'blob'
+                     },
+                     success: function (data, status, xhr) {
+                            // Create download link
+                            const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                            const downloadUrl = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = downloadUrl;
+                            a.download = 'CustomerExport.xlsx';
+                            document.body.appendChild(a);
+                            a.click();
+
+                            // Cleanup
+                            setTimeout(function () {
+                                   document.body.removeChild(a);
+                                   window.URL.revokeObjectURL(downloadUrl);
+                            }, 100);
+                     },
+                     complete: function () {
+                            // Reset button state
+                            exportBtn.prop('disabled', false);
+                            exportBtn.html('<img src="/images/icons/export-white.png" width="24px"><span> Export</span>');
+                     }
+              });
+       }
 
     $(document).ready(function () {
         fetchTable(currentPage, pageSize, search, orderStatus, orderTime, fromDate, toDate)

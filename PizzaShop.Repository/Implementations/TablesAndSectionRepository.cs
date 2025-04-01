@@ -8,6 +8,7 @@ namespace PizzaShop.Repository.Implementations;
 
 public class TablesAndSectionRepository(PizzaShopDbContext _context) : ITablesAndSectionRepository
 {
+    
     public List<Section> GetSections()
     {
         return _context.Sections

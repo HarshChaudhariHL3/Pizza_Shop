@@ -7,6 +7,7 @@ namespace PizzaShop.Web.Controllers;
 [ServiceFilter(typeof(PermissionFilter))]
 public class TableAndSectionController(ITablesAndSectionService _tablesAndSectionService, IJwtService _jwtService) : Controller
 {
+
     [HttpGet]
     public IActionResult Sections()
     {
@@ -45,7 +46,7 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
         try
         {
             ViewBag.search = search;
-            PaginationViewModel<TableViewModel> table = await _tablesAndSectionService.GetTable(SectionId, page, pageSize,search);
+            PaginationViewModel<TableViewModel> table = await _tablesAndSectionService.GetTable(SectionId, page, pageSize, search);
 
             return PartialView("./PartialView/_Table", table);
         }
@@ -86,6 +87,7 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
     {
         try
         {
+            
             _tablesAndSectionService.EditSection(model);
             TempData["Success"] = "Sections Updated successfully.";
             return RedirectToAction("Sections");
@@ -115,7 +117,6 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
 
 
 
-
     [HttpPost]
     public IActionResult AddTable(TableViewModel model)
     {
@@ -137,6 +138,10 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
     {
         try
         {
+            if (!(bool)HttpContext.Items["CanAddEdit"])
+            {
+                return Forbid();  // Return 403 Forbidden if they don't have permission
+            }
             var item = _tablesAndSectionService.GetTableById(tableId);
             if (item == null)
             {
@@ -156,9 +161,15 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
     {
         try
         {
+            if (!(bool)HttpContext.Items["CanAddEdit"])
+            {
+                return Forbid();  // Return 403 Forbidden if they don't have permission
+            }
             _tablesAndSectionService.EditTable(model);
             TempData["Success"] = "CategoryItem Edited Successfully";
             return Json(new { Success = true });
+            // return PartialView("./PartialView/_Table", model);
+            // return Json(model);
         }
         catch (Exception ex)
         {

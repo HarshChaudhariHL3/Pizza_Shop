@@ -9,16 +9,28 @@ public class TaxesAndFeesService(ITaxesAndFeesRepository _taxRepository) : ITaxe
 {
 
 
-    public List<TaxesAndFee> GetTaxesAndFees()
+    // public List<TaxesAndFee> GetTaxesAndFees()
+    // {
+    //     return _taxRepository.GetTaxesAndFees();
+    // }
+    public List<TaxesAndFee> GetTaxesAndFees(string search = "")
     {
-        return _taxRepository.GetTaxesAndFees();
+        var query = _taxRepository.GetTaxesAndFees(); // Fetch all records
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(t => t.TaxName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                     t.TaxType.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        return query.OrderBy(x => x.TaxId).ToList(); // Optional: to keep the sorting
     }
 
     public void AddTax(TaxesAndFeesViewModel model)
     {
         _taxRepository.AddTax(model);
     }
-public void UpdateTax(TaxesAndFeesViewModel model)
+    public void UpdateTax(TaxesAndFeesViewModel model)
     {
         var taxes = _taxRepository.GetTaxFeeById(model.TaxId);
         if (taxes != null)
@@ -41,12 +53,14 @@ public void UpdateTax(TaxesAndFeesViewModel model)
         _taxRepository.DeleteTaxFee(id);
     }
 
-    public TaxesAndFeesViewModel GetAllTaxByTaxId(int id){
+    public TaxesAndFeesViewModel GetAllTaxByTaxId(int id)
+    {
         var item = _taxRepository.GetTaxFeeById(id);
         if (item == null)
             return null;
 
-        return new TaxesAndFeesViewModel{
+        return new TaxesAndFeesViewModel
+        {
             TaxName = item.TaxName,
             TaxType = item.TaxType,
             IsDefault = item.IsDefault,

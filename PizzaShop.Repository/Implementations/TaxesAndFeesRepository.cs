@@ -12,6 +12,13 @@ public class TaxesAndFeesRepository(PizzaShopDbContext _context) : ITaxesAndFees
         return _context.TaxesAndFees.OrderBy(x => x.TaxId).ToList();
     }
 
+    public List<TaxesAndFee> GetTaxesAndFees(string search)
+{
+    return _context.TaxesAndFees
+        .Where(x => x.TaxName.Contains(search) || x.TaxType.Contains(search))
+        .ToList();
+}
+
     public TaxesAndFee GetTaxFeeById(int id){
 
         var tax =  _context.TaxesAndFees.FirstOrDefault(c => c.TaxId == id);

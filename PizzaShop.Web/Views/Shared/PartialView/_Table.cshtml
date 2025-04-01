@@ -26,7 +26,7 @@
             <i class="bi bi-trash h5"></i>
         </button>
         <button type="button" class="btn" id="AddTableBtnForTable" data-bs-toggle="modal" data-bs-target="#addTable">
-            <i class="btn bg-primary bi bi-plus-square text-white">New Table</i>
+            <i class="btn bg-primary bi bi-plus-lg text-white">New Table</i>
         </button>
     </div>
     <!-- finish search-add-item section -->
@@ -146,9 +146,9 @@
                         </div>
 
                         <div class="form-floating " style="width: 200px;">
-                            <select class="form-select" aria-label="Floating label select example" id="SectionSelect">
+                            <select class="form-select" aria-label="Floating label select example" id="AddSectionSelect">
                             </select>
-                            <label for="SectionSelect">Section*</label>
+                            <label for="AddSectionSelect">Section*</label>
                         </div>
                     </div>
 
@@ -159,15 +159,16 @@
                         </div>
                         <div class="form-floating" style="width: 200px;">
                             <select class="form-select"  aria-label="Floating label select example" id="addTableStatus">
-                                <option value="true">Available</option>
-                                <option value="false">Not-Available</option>
+
+                                <option value="" selected>Select Status</option>
+                                <option value="true">Occupied</option>
+                                <option value="false">Free</option>
                             </select>
-                            <label for="editTableStatus">Status*</label>
+                            <label for="addTableStatus">Status*</label>
                         </div>
                     </div>
 
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -208,8 +209,8 @@
                         </div>
                         <div class="form-floating" style="width: 200px;">
                             <select class="form-select"  aria-label="Floating label select example" id="editTableStatus">
-                                <option value="false">Available</option>
-                                <option value="true">Not-Available</option>
+                                <option value='false'>Free</option>
+                                <option value='true'>Occupied</option>
                             </select>
                             <label for="editTableStatus">Status*</label>
                         </div>
@@ -254,8 +255,10 @@
 
 @* Modal end *@
 
-<script>
+
+<script>   
         if (canAddEdit) {
+            debugger
             document.querySelectorAll('#EditBtnForTable, #AddTableBtnForTable').forEach(button => {
             button.disabled = true;
             });
@@ -293,10 +296,8 @@
             fetchTable(currentTableId, currentPage ,pageSize, search)
         }
 
-
-    $(document).ready(function () {
         $.ajax({
-            url: '/TablesAndSection/SectionsList',
+            url: '/TableAndSection/SectionsList',
             type: 'GET',
             success: function (data) {
                 console.log(data);
@@ -304,15 +305,16 @@
                 for (var i = 0; i < data.length; i++) {
                     s += '<option value="' + data[i].sectionId + '">' + data[i].sectionName + '</option>'
                 }
-                $("#SectionSelect").html(s);
+                $("#AddSectionSelect").html(s);
             }
         });
+
+    $(document).ready(function () {
 
         $('#addTableForm').submit(function (e) {
             e.preventDefault();
 
-
-            var section = parseInt($('#SectionSelect').val());
+            var section = parseInt($('#AddSectionSelect').val());
             var tableName = $('#addTableName').val();
             var capacity = $('#addTableCapacity').val();
             var status = $('#addTableStatus').val();
@@ -326,7 +328,7 @@
 
             // Send data to the server using AJAX
             $.ajax({
-                url: '/TablesAndSection/AddTable',
+                url: '/TableAndSection/AddTable',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -345,7 +347,7 @@
             });
         });
         $.ajax({
-            url: '/TablesAndSection/SectionsList',
+            url: '/TableAndSection/SectionsList',
             type: 'GET',
             success: function (data) {
                 console.log(data);
@@ -361,16 +363,19 @@
 
             var tableId = $(this).data('table-id');
             $.ajax({
-                url: '/TablesAndSection/GetTableDetails',
+                url: '/TableAndSection/GetTableDetails',
                 type: 'GET',
                 data: { tableId: tableId },
                 success: function (data) {
-
+                    console.log(data);
+                    debugger
                     @* $('#editItemId').val(data.categoryItemId); *@
                     $('#editTableName').val(data.tableName);
                     $('#editTableId').val(data.tableId);
                     $('#editTableCapacity').val(data.capacity);
                     $('#SectionSelectEdit').val(data.sectionId);
+                    @* $('#editTableStatus').val(data.status.toString()); *@
+                    $('#editTableStatus').val(data.status);
                     $('#editTable').modal('show');
                 },
                 error: function (error) {
@@ -380,9 +385,8 @@
         });
 
         $('#editTableForm').submit(function (e) {
-
+            debugger;
             e.preventDefault();
-
             var tableId = parseInt($('#editTableId').val());
             var tableName = $('#editTableName').val();
             var capacity = $('#editTableCapacity').val();
@@ -401,30 +405,35 @@
 
             // Send data to the server using AJAX
             $.ajax({
-                url: '/TablesAndSection/UpdateTable',
+                url: '/TableAndSection/UpdateTable',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
                     // Handle success
-                    if (response) {
-
+                    debugger;
+                    if (response.success) {
+                        
                         $('#editTable').modal('hide');
+                        @* $('#Table').html(response); *@
                         location.reload();
                     } else {
-                        alert('Error: ' + response.message);
+                        console.log(response);
+                        @* alert('Error: ' + response.message); *@
                     }
                 },
-                error: function () {
-                    alert('Error updating item.');
+                error: function (response) {
+                    console.log(response);
+                    @* alert('Error updating item.'); *@
                 }
             });
         });
+
         $(document).on('click', '.delete-btn', function () {
 
 
             var tableId = $(this).data('table-id');
             $.ajax({
-                url: '/TablesAndSection/GetTableDetails',
+                url: '/TableAndSection/GetTableDetails',
                 type: 'GET',
                 data: { tableId: tableId },
                 success: function (data) {
@@ -447,12 +456,12 @@
 
             // Send data to the server using AJAX
             $.ajax({
-                url: '/TablesAndSection/DeleteTable',
+                url: '/TableAndSection/DeleteTable',
                 type: 'POST',
                 data: { tableId: tableId },
                 success: function (response) {
                     // Handle success
-                    if (response == true) {
+                    if (response.success) {
                          $('#deleteItemModal').modal('hide');
                         location.reload();
                     } else {

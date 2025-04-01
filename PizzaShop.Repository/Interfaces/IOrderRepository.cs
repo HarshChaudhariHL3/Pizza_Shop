@@ -7,4 +7,6 @@ public interface IOrderRepository
 {
     List<Order> GetAllOrderList();
     OrderSummaryViewModel GetOrderDetails(long id);
+
+    IQueryable<Order> GetAllOrderExport();
 }

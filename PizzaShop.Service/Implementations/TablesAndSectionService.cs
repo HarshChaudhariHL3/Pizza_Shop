@@ -8,6 +8,7 @@ namespace PizzaShop.Service.Implementations;
 
 public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSectionRepository) : ITablesAndSectionService
 {
+    
     public async Task<PaginationViewModel<TableViewModel>> GetTable(int SectionId, int page, int pageSize, string search = "")
     {
 
@@ -91,6 +92,7 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
             TableName = item.TableName,
             Capacity = item.Capacity,
             SectionId = item.SectionId,
+            Status = item.Status,
         };
     }
 

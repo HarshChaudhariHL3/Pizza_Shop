@@ -58,16 +58,6 @@
 
 <script>
     
-    var canAddEdit = '@Context.Items["CanAddEdit"]';
-        if (canAddEdit === 'False') {
-
-            document.querySelectorAll('#addUserBtn').forEach(div => {
-                div.classList.add('disabled');
-                div.setAttribute('aria-disabled', 'true');
-                div.style.pointerEvents = 'none';
-            });
-        }
-    
     var currentPage = 1;
     var pageSize = 5;
     var search = "";

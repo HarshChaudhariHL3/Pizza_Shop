@@ -128,7 +128,7 @@
             });
         }
         var canDelete = '@Context.Items["CanDelete"]';
-        if (canDelete) {
+        if (!canDelete) {
             document.querySelectorAll('#deleteBtn').forEach(button => {
             button.disabled = true;
             });

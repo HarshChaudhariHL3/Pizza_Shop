@@ -10,11 +10,11 @@
             <h1 class="text-primary"> Taxes/Fees</h1>
         </div>
         <div class="d-flex align-items-center justify-content-center gap-3 m-2" id="addUserBtn">
-                <div id="has-search">
-                    <span class="fa fa-search form-control-feedback"></span>
-                    <input class="form-control " type="search" placeholder="Search" name="search" id="search"
-                        aria-label="Search">
-                </div>
+            <div id="has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input class="form-control" type="search" placeholder="Search" name="search" id="search"
+                    aria-label="Search" value="@Context.Request.Query["search"]" onchange="submitSearch()">
+            </div>
             <a class="btn btn-primary" data-bs-target="#AddTax" data-bs-toggle="modal">
                 <div class="d-flex align-items-center justify-content-center">
                     <i class="bi bi-plus-lg"></i>
@@ -38,28 +38,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach(var taxFee in Model.TaxFeesList)
-                   {
-                    <tr>
-                        <td>@taxFee.TaxName</td>
-                        <td>@taxFee.TaxType</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-switch " @(taxFee.IsEnabled ? "checked" : "")  type="checkbox"/>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check form-switch">
-                                        <input class="form-check-input toggle-switch " @(taxFee.IsDefault ? "checked" : "")  type="checkbox"/>
-                            </div>
-                        </td>
-                        <td>@taxFee.TaxValue</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-success" id="EditTaxBtn" data-itemid="@taxFee.TaxId">Edit</button>
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setTax(@taxFee.TaxId)">Delete</button>
-                        </td>
-                    </tr>
-                   }
+                    @foreach (var taxFee in Model.TaxFeesList)
+                    {
+                        <tr>
+                            <td>@taxFee.TaxName</td>
+                            <td>@taxFee.TaxType</td>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input toggle-switch " @(taxFee.IsEnabled ? "checked" : "")
+                                        type="checkbox" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input toggle-switch " @(taxFee.IsDefault ? "checked" : "")
+                                        type="checkbox" />
+                                </div>
+                            </td>
+                            <td>@taxFee.TaxValue</td>
+                            <td>
+                                <button type="button" class="btn btn-sm " id="EditTaxBtn"
+                                    data-itemid="@taxFee.TaxId">
+                                    <i class="bi bi-pen"></i>
+                                </button>
+                                    <button type="button" class="btn btn-sm " data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" onclick="setTax(@taxFee.TaxId)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -82,7 +90,7 @@
                     <p>Are you sure you want to delete this tax/fee?</p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <input type="text"  id="TaxId" asp-for="TaxId">
+                    <input type="text" id="TaxId" asp-for="TaxId">
                     <button type="submit" class="btn btn-primary">Yes</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
@@ -115,6 +123,7 @@
                                 <option value="FlatAmount">FlatAmount</option>
                             </select>
                             <label>Taxes Type*</label>
+                            <span class="text-danger" asp-validation-for="TaxType"></span>
                         </div>
                         <div class="form-floating mb-3">
                             <input asp-for="TaxValue" type="text" class="form-control hover-effect" placeholder="">
@@ -125,17 +134,19 @@
                     <div class="d-flex gap-3">
                         <div class="form-check form-switch">
                             <h5>
-                                <input class="form-check-input toggle-switch"  asp-for="IsEnabled"
-                                    type="checkbox" role="switch">
+                                <input class="form-check-input toggle-switch" asp-for="IsEnabled" type="checkbox"
+                                    role="switch">
                                 <label class="form-check-label" for="addAvailable">IsEnable</label>
+                                <span class="text-danger" asp-validation-for="IsEnabled"></span>
                             </h5>
 
                         </div>
                         <div class="form-check form-switch">
                             <h5>
-                                <input class="form-check-input toggle-switch"  asp-for="IsDefault"
-                                    type="checkbox" role="switch">
+                                <input class="form-check-input toggle-switch" asp-for="IsDefault" type="checkbox"
+                                    role="switch">
                                 <label class="form-check-label" for="addAvailable">IsDefault</label>
+                                <span class="text-danger" asp-validation-for="IsDefault"></span>
                             </h5>
 
                         </div>
@@ -161,16 +172,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">Add Tax</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" asp-action="EditTax" asp-controller="TaxAndFee" >
-                <input type="hidden" id="EditTaxId" asp-for="TaxId"/>
+            <form method="post" asp-action="EditTax" asp-controller="TaxAndFee">
+                <input type="hidden" id="EditTaxId" asp-for="TaxId" />
                 <div class="modal-body">
                     <div class="form-floating mb-3">
-                        <input id="EditTaxName" asp-for="TaxName" type="text" class="form-control hover-effect" placeholder="">
+                        <input id="EditTaxName" asp-for="TaxName" type="text" class="form-control hover-effect"
+                            placeholder="">
                         <label for="EditTaxName">Name</label>
                     </div>
                     <div class="" style="display: flex; justify-content: space-between; ">
                         <div class="form-floating mb-3 " style="width: 230px;">
-                            <select class="form-select" aria-label="Floating label select example" id="EditTaxType" asp-for="TaxType">
+                            <select class="form-select" aria-label="Floating label select example" id="EditTaxType"
+                                asp-for="TaxType">
                                 <option value="Percentage">Percentage</option>
                                 <option value="FlatAmount">FlatAmount</option>
                             </select>
@@ -178,7 +191,8 @@
                             <label>Taxes Type*</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input id="EditTaxValue" asp-for="TaxValue" type="text" class="form-control hover-effect" placeholder="">
+                            <input id="EditTaxValue" asp-for="TaxValue" type="text" class="form-control hover-effect"
+                                placeholder="">
                             <span asp-asp-validation-for="TaxValue"></span>
                             <label for="EditTaxValue">Amount</label>
                         </div>
@@ -186,17 +200,17 @@
                     <div class="d-flex gap-3">
                         <div class="form-check form-switch">
                             <h5>
-                                <input class="form-check-input toggle-switch" id="EditIsEnabled"
-                                    type="checkbox" role="switch" asp-for="IsEnabled">
+                                <input class="form-check-input toggle-switch" id="EditIsEnabled" type="checkbox"
+                                    role="switch" asp-for="IsEnabled">
                                 <label class="form-check-label" for="EditIsEnabled">IsEnable</label>
                             </h5>
 
                         </div>
                         <div class="form-check form-switch">
                             <h5>
-                                <input class="form-check-input toggle-switch" id="EditIsDefault"
-                                    type="checkbox" role="switch" asp-for="IsDefault" >
-                                <label class="form-check-label" for="EditIsDefault"  >IsDefault</label>
+                                <input class="form-check-input toggle-switch" id="EditIsDefault" type="checkbox"
+                                    role="switch" asp-for="IsDefault">
+                                <label class="form-check-label" for="EditIsDefault">IsDefault</label>
                             </h5>
 
                         </div>
@@ -219,25 +233,30 @@
 
     $(document).on('click', '#EditTaxBtn', function () {
         debugger
-            var TaxId = $(this).data('itemid');
-            $.ajax({
-                url: '/TaxAndFee/GetAllTaxByTaxId',
-                type: 'GET',
-                data: { TaxId: TaxId },
-                success: function (data) {
-                    console.log(data);
-                    debugger;
-                    $('#EditTaxId').val(TaxId);
-                    $('#EditTaxName').val(data.taxName);
-                    $('#EditTaxType').val(data.taxType);
-                    $('#EditTaxValue').val(data.taxValue);
-                    $('#EditIsDefault').prop('checked',data.isDefault);
-                    $('#EditIsEnabled').prop('checked',data.isEnabled);
-                    $('#EditTaxModal').modal('show');
-                },
-                error: function (error) {
-                    console.error('Error fetching item details:', error);
-                }
-            });
+        var TaxId = $(this).data('itemid');
+        $.ajax({
+            url: '/TaxAndFee/GetAllTaxByTaxId',
+            type: 'GET',
+            data: { TaxId: TaxId },
+            success: function (data) {
+                console.log(data);
+                debugger;
+                $('#EditTaxId').val(TaxId);
+                $('#EditTaxName').val(data.taxName);
+                $('#EditTaxType').val(data.taxType);
+                $('#EditTaxValue').val(data.taxValue);
+                $('#EditIsDefault').prop('checked', data.isDefault);
+                $('#EditIsEnabled').prop('checked', data.isEnabled);
+                $('#EditTaxModal').modal('show');
+            },
+            error: function (error) {
+                console.error('Error fetching item details:', error);
+            }
         });
+    });
+
+    function submitSearch() {
+        const searchValue = document.getElementById('search').value;
+        window.location.href = `@Url.Action("TaxesAndFees", "TaxAndFee")?search=${searchValue}`;
+    }
 </script>

@@ -5,7 +5,8 @@ namespace PizzaShop.Service.Interfaces;
 
 public interface ITaxesAndFeesService
 {
-    List<TaxesAndFee> GetTaxesAndFees();
+    // List<TaxesAndFee> GetTaxesAndFees();
+    List<TaxesAndFee> GetTaxesAndFees(string search = "");
     void AddTax(TaxesAndFeesViewModel model);
 
      void DeleteTaxFee(int id);
