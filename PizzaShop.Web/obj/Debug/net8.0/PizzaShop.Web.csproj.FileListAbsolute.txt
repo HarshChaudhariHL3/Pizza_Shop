@@ -144,3 +144,13 @@ D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\ExcelNumberFormat.d
 D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\RBush.dll
 D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\SixLabors.Fonts.dll
 D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.IO.Packaging.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.Mvc.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.Razor.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.Helpers.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.WebPages.Deployment.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.WebPages.Razor.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\System.Web.WebPages.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\Microsoft.Web.Infrastructure.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\Rotativa.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\bin\Debug\net8.0\Rotativa.AspNetCore.dll
+D:\DotNet N Layered\PizzaShop\PizzaShop.Web\obj\Debug\net8.0\PizzaShop.Web.MvcApplicationPartsAssemblyInfo.cs

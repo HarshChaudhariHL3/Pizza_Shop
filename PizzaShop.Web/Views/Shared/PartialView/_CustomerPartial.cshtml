@@ -21,7 +21,7 @@
         {
             @foreach (var customer in Model.Items)
             {
-                <tr>
+                <tr data-id="@customer.CustomerId" class="cursor-pointer" onclick="showCustomerDetailsModal(@customer.CustomerId)">
                     <td>@customer.CustomerName</td>
                     <td>@customer.Email</td>
                     <td>@customer.Phone</td>
@@ -79,7 +79,9 @@
 
     
 </div>
+<div  id="CustomerDetailsModal" >
 
+</div> 
 
 <script>
       function paginationTable() {
@@ -103,4 +105,26 @@
         }
         fetchCustomer(currentPage, pageSize, search, customerTime);
     }
+
+    function showCustomerDetailsModal(customerId) {
+    
+        $.ajax({
+            url: '/Customers/GetCustomerHistory',
+            type: 'GET',
+            data: {
+                customerId: customerId
+            },
+            success: function (response) {
+              
+                $('#CustomerDetailsModal').html(response);
+                $('#modalCustomerHistory').modal('show');
+            },
+            error: function (xhr, status, error) {
+                alert('Error loading items.');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+    });
 </script>

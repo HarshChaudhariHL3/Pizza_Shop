@@ -1,0 +1,186 @@
+@using Microsoft.AspNetCore.Hosting.Server
+@model PizzaShop.Entity.ViewModel.OrderSummaryViewModel;
+@{
+   ViewData["Title"] = "ExportPdf"; Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<style>
+   .container{
+      padding: 10px 0px;
+   }
+   .border-color-blue {
+      background-color: #0066a6;
+   }
+   .color-blue {
+      color: #0066a6;
+   }
+   .pizzaHeading {
+      color: #0066a6;
+      font-size: 25px;
+   }
+   .text-white{
+      color: white;
+   }
+   .border-bottom {
+      border-bottom: 1px solid #0066a6;
+   }
+</style>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>ExportPdf - Pizzashop</title>
+   <link rel="stylesheet"
+      href="@($"{Context.Request.Scheme}://{Context.Request.Host}/lib/bootstrap/dist/css/bootstrap.min.css")" />
+   <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+   <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   <div class="container w-75">
+      <div style="text-align: center; white-space: nowrap; margin-top: 20px;">
+         <div style="display: inline-block; vertical-align: middle;">
+            <img src="@Url.Content("~/images/logos/pizzashop_logo.png")" alt="PizzaShop"
+               style="width: 50%; vertical-align: middle;">
+         </div>
+         <div style="display: inline-block">
+            <p class="pizzaHeading" style="display: inline-block; margin-left:-50px; font-size: 24px; font-weight: bold;">
+               PIZZASHOP</p>
+         </div>
+      </div>
+      <div class="m-0 mt-3 customer-details-table-row" style="white-space: nowrap;">
+         <div class="p-3 justify-self-center"
+            style="display: inline-block; vertical-align: top; width: 48%; box-sizing: border-box;">
+            <p class="fw-bold color-blue">Customer Details</p>
+            <div>
+               <span>Name: </span>
+               <span>@Model.CustomerName</span>
+               <br />
+               <span>Phone: </span>
+               <span>@Model.Phone</span><br />
+            </div>
+         </div>
+
+         <div class="p-3" style="display: inline-block; vertical-align: top; width: 48%; box-sizing: border-box;">
+            <p class="fw-bold color-blue">Order Details</p>
+            <div>
+               <span>Invoice Number: </span>
+               @* <span>#@Model.Invoice</span> *@
+               <br />
+               <span>Date: </span>
+               <span>@Model.CreatedAt.ToShortDateString()</span>
+               <br />
+               <span>Section: </span>
+               <span>@Model.table.SectionName</span>
+               <br />
+               <span>Table: </span>
+               @* @for (var i = 0; i < Model.table.TableName.Count(); i++)
+               {
+                  if (Model.table.TableName.Count() - i == 1)
+                  {
+                     <span>@Model.table.TableName[i]</span>
+                  }
+                  else
+                  {
+                     <span>@Model.table.TableName[i],</span>
+                  }
+               } *@
+               <br />
+            </div>
+         </div>
+      </div>
+      <div class="table-responsive mt-2">
+         <table class="table fw-lighter order-details-table" id="orderDetailsTable">
+            <thead>
+               <tr class="border-bottom border-color-blue">
+                  <th scope="col" class="background-white text-white">Sr.No.</th>
+                  <th scope="col" class="background-color-blue text-white">Items</th>
+                  <th scope="col" class="background-color-blue text-white">Quantity</th>
+                  <th scope="col" class="text-end background-color-blue text-white">Unit Price</th>
+                  <th scope="col" class="text-end background-color-blue text-white">Amount</th>
+               </tr>
+            </thead>
+            <tbody id="orderTableBody">
+               @* @if (Model.Items != null && Model.Items.Any())
+               {
+                  for (int i = 0; i < Model.Items.Count; i++)
+                  {
+                     var item = Model.Items[i];
+                     <tr>
+                        <td rowspan="@(item.itemModifiers?.Count() > 0 ? item.itemModifiers.Count() + 1 : 1)">
+                           @(i + 1)
+                        </td>
+                        <td class="pb-0">@item.Itemname</td>
+                        <td class="pb-0">@item.Quantity</td>
+                        <td class="text-end pb-0">@item.unitPrice.ToString("0.00")</td>
+                        <td class="text-end pb-0">@((item.Quantity * item.unitPrice).ToString("0.00"))</td>
+                     </tr>
+                     if (item.itemModifiers != null && item.itemModifiers.Any())
+                     {
+                        for (int j = 0; j < item.itemModifiers.Count(); j++)
+                        {
+                           var modifier = item.itemModifiers.ElementAt(j); var count = item.itemModifiers?.Count();
+                           <tr class="@(count != j + 1 ? "" : "border-bottom")">
+                              <td class="@(count != j + 1 ? "py-0" : "pt-0")">@modifier.ModifierName</td>
+                              <td class="@(count != j + 1 ? "py-0" : "pt-0")">@modifier.Quantity</td>
+                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")">
+                                 @modifier.unitPrice.ToString("0.00")
+                              </td>
+                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")">@((modifier.Quantity *
+                                                      modifier.unitPrice).ToString("0.00"))
+                  </td>
+               </tr>
+                              }
+                     }
+                  }
+                  <tr>
+                     <td colspan="4"><strong>Sub Total:</strong></td>
+                     <td class="text-end"><strong>@Model.Amount.ToString("0.00")</strong></td>
+
+                  </tr>
+
+                  @if (Model.Taxes != null && Model.Taxes.Any())
+                  {
+                     @foreach (var tax in Model.Taxes.Where(t => t.TaxAmount > 0))
+                     {
+                        <tr>
+                           <td colspan="4">@tax.TaxName</td>
+                           <td class="text-end">@tax.TaxAmount.ToString("0.00")</td>
+                        </tr>
+                     }
+                  }
+                  <tr>
+                     <td colspan="4"> Other:</td>
+                     <td class="text-end"> @Model.Other.ToString("0.00") </td>
+                  </tr>
+                  <tr class="border-top  text-white fw-bold">
+                     <td colspan="4" class="color-blue"> Total Amount Due:</td>
+                     <td class="text-end color-blue"> @Model.Amount.ToString("0.00") </td>
+                  </tr>
+               }
+               else
+               {
+                  <tr>
+                     <td colspan="5" class="text-center">No items found</td>
+                  </tr>
+               }
+ *@
+            </tbody>
+         </table>
+      </div>
+      <div>
+         <span class="color-blue text-center"><strong>Payment Information:</strong></span>
+         <br /> <span>Payment Method:</span>
+         @* <span>@Model.Payment</span> *@
+      </div>
+      <div class="d-flex mt-5 text-center">
+         <span class="color-blue fw-bold ">THANK YOU!</span>
+      </div>
+   </div>
+   <script
+      src="@($"{Context.Request.Scheme}://{Context.Request.Host}/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+   <script src="~/js/site.js"></script>
+</body>
+
+</html>

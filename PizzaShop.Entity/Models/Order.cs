@@ -7,7 +7,7 @@ public partial class Order
 {
     public int OrderId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int CustomerId { get; set; }
 
     public int? TableId { get; set; }
 
@@ -25,7 +25,9 @@ public partial class Order
 
     public int? PaymentId { get; set; }
 
-    public virtual Customer? Customer { get; set; }
+    public string? OrderType { get; set; }
+
+    public virtual Customer Customer { get; set; } = null!;
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 

@@ -17,5 +17,7 @@ public interface ITablesAndSectionService
      void EditTable(TableViewModel model);
      bool DeleteTable(int itemId);
 
-     IEnumerable<RolePermission> GetPermissionByroleId(int roleId);
+    IEnumerable<RolePermission> GetPermissionByroleId(int roleId);
+
+     bool DeleteMultipleTable(List<int> dataId);
 }

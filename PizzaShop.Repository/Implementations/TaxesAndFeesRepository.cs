@@ -9,19 +9,23 @@ public class TaxesAndFeesRepository(PizzaShopDbContext _context) : ITaxesAndFees
 {
     public List<TaxesAndFee> GetTaxesAndFees()
     {
-        return _context.TaxesAndFees.OrderBy(x => x.TaxId).ToList();
+        return _context.TaxesAndFees
+        .Where(x => x.IsDeleted == false)
+        .OrderBy(x => x.TaxId).ToList();
     }
 
     public List<TaxesAndFee> GetTaxesAndFees(string search)
 {
-    return _context.TaxesAndFees
-        .Where(x => x.TaxName.Contains(search) || x.TaxType.Contains(search))
-        .ToList();
+        return _context.TaxesAndFees
+            .Where(x => (x.TaxName.Contains(search) || x.TaxType.Contains(search)) && x.IsDeleted == false)
+            .ToList();
 }
 
     public TaxesAndFee GetTaxFeeById(int id){
 
-        var tax =  _context.TaxesAndFees.FirstOrDefault(c => c.TaxId == id);
+        var tax =  _context.TaxesAndFees
+        .Where(x => x.IsDeleted == false)
+        .FirstOrDefault(c => c.TaxId == id);
 
         return tax;
     }
@@ -50,7 +54,8 @@ public class TaxesAndFeesRepository(PizzaShopDbContext _context) : ITaxesAndFees
     public void DeleteTaxFee(int id){
         var tax = _context.TaxesAndFees.FirstOrDefault(x => x.TaxId == id);
         if(tax !=null){
-            _context.TaxesAndFees.Remove(tax);
+            tax.IsDeleted = true;
+            _context.TaxesAndFees.Update(tax);
             _context.SaveChanges();
         }
     }

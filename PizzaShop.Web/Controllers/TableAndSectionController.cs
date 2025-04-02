@@ -203,4 +203,40 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
         }
     }
 
+    [HttpPost]
+    public IActionResult DeleteMultipleTable(List<int> dataId)
+    {
+        try
+        {
+            if (dataId.Count != 0)
+            {
+
+                var result = _tablesAndSectionService.DeleteMultipleTable(dataId);
+
+                if (result)
+                {
+                    TempData["Success"] = "Category item deleted successfully.";
+                    return Json(result);
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to delete category item.";
+                    return Json(result);
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Please select Category Item";
+                return RedirectToAction("Menu", "Menu");
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        
+
+    }
+
 }

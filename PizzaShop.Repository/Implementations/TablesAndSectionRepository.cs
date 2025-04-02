@@ -96,4 +96,17 @@ public class TablesAndSectionRepository(PizzaShopDbContext _context) : ITablesAn
     {
         return _context.RolePermissions.Include(rp => rp.Role).Include(rp => rp.Permission).Where(rp => rp.RoleId == roleId).ToList();
     }
+
+
+        public void DeleteMultipleTable(List<int> dataId)
+    {
+        var itemToDelete = _context.TableDetails.Where(item => dataId.Contains(item.TableId)).ToList();
+
+        if (itemToDelete != null)
+        {
+            itemToDelete.ForEach(x => x.IsDeleted = true);
+            _context.TableDetails.UpdateRange(itemToDelete);
+            _context.SaveChanges();
+        }
+    }
 }

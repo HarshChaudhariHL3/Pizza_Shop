@@ -17,4 +17,6 @@ public interface ITablesAndSectionRepository
     void DeleteTable(int itemId);
 
     IEnumerable< RolePermission> GetPermissionByroleId(int roleId);
+
+    void DeleteMultipleTable(List<int> dataId);
 }

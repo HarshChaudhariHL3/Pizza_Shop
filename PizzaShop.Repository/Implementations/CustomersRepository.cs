@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PizzaShop.Entity.Data;
 using PizzaShop.Entity.Models;
+using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
 
 namespace PizzaShop.Repository.Implementations;
@@ -17,7 +18,9 @@ public class CustomersRepository(PizzaShopDbContext _context) : ICustomersReposi
         try
 
         {
-            var query = _context.Customers.AsQueryable();
+            var query = _context.Customers
+                .Include(x => x.Orders).AsQueryable();
+                
             return query;
         }
         catch (DbUpdateException ex)
@@ -33,5 +36,17 @@ public class CustomersRepository(PizzaShopDbContext _context) : ICustomersReposi
         var query = _context.Orders.Where(o => o.Customer.Email == Email).ToList();
         return query;
     }
+
+    public Customer GetCustomerById(int id)
+    {
+        return _context.Customers
+        .Include(x => x.Orders)
+        .ThenInclude(x => x.OrderItems)
+        .Include(x => x.Orders)
+        .ThenInclude(x => x.Payment)
+        .FirstOrDefault(x => x.CustomerId == id);
+    }
         
 }
+
+//  public ICollection<Payment> Payments { get; set; } // Added Payments property

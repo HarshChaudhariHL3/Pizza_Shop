@@ -44,17 +44,18 @@ public class OrderRepository(PizzaShopDbContext _context) : IOrderRepository
             //             TaxValue = tax.Tax.TaxValue,
             //         }).ToList();
 
-            var tableQuery = _context.TableOrderMappings.Where(x => x.OrderId == id).Select(table => new TableAndSectionViewModel
-            {
-                TableName = table.Table.TableName,
-                // Name = table.Table.Section.Name,
-                // Capacity = table.Capacity
-            }).FirstOrDefault();
+            // var tableQuery = _context.TableOrderMappings.Where(x => x.OrderId == id).Select(table => new TableAndSectionViewModel
+            // {
+            //     TableName = table.Table.TableName,
+            //     Name = table.Table.Section.Name,
+            //     Capacity = table.Capacity,
+            // }).FirstOrDefault();
 
             var Query = _context.Orders.Where(x => x.OrderId == id).Select(order => new OrderSummaryViewModel
             {
                 // tax = taxQuery,
-                table = tableQuery!,
+                // table = tableQuery!,
+                OrderId = order.OrderId,
                 CustomerName = order.Customer.CustomerName,
                 Phone = order.Customer.Phone,
                 Email = order.Customer.Email,

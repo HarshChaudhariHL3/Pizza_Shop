@@ -23,6 +23,7 @@ public class OrderSummaryViewModel
 public class TableAndSectionViewModel
 {
     public string TableName { get; set; } = null!;
+    public string SectionName { get; set; } = null!;
     public string Name { get; set; } = null!;
     public int NoOfPerson { get; set; }
 }

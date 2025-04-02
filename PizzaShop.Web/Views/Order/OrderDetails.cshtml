@@ -29,18 +29,14 @@
                                 <span class="text-nowrap"><span class="fw-bold">Invoice No:</span>#DOM146569546565</span>
                                 <div>
                                     <span class="text-nowrap"><span class="fw-bold">Paid on :</span> 20-08-2024</span>
-                                    @* <span class="text-nowrap ms-2"><span class="fw-bold">Placed on :</span> @Model.CreatedAt</span> *@
-                                    @* <span class="text-nowrap ms-2"><span class="fw-bold">Modified on :</span> @Model.ModifiedAt</span> *@
+                                    <span class="text-nowrap ms-2"><span class="fw-bold">Placed on :</span> @Model.CreatedAt</span>
+                                    <span class="text-nowrap ms-2"><span class="fw-bold">Modified on :</span> @Model.ModifiedAt</span>
                                     <span class="text-nowrap ms-2"><span class="fw-bold">Order Duration: </span>00</span>
                                 </div>
                             </div>
                         </div>
                         <div class="ExportBtn mt-2 m-sm-0">
-                            <button type="button" id="exportToExcel"
-                                class="btn btn-primary d-flex align-items-center justify-content-end">
-                                <img src="~/images/export-svgrepo-com.svg" width="30px" alt="images">
-                                <span>Export</span>
-                            </button>
+                            <a asp-action="DownloadInvoice" asp-controller="Order" asp-route-id="@Model.OrderId" class="btn btn-primary d-flex p-2"><i class="fa-regular fa-file-pdf"><span class="ps-2">Export</span></i></a>
                         </div>
                     </div>
                 </div>
@@ -52,10 +48,10 @@
                             <h3><i class="fa-solid fa-user fs-4"></i> Customer Details</h3>
                         </div>
                         <div class="d-flex flex-column ">
-                            @* <span class="text-nowrap">Name : @Model.CustomerName</span> *@
-                            @* <span class="text-nowrap">Phone : @Model.Phone</span> *@
-                            @* <span class="text-nowrap">No of person : @Model.table.NoOfPerson</span> *@
-                            @* <span class="text-nowrap">Email : @Model.Email</span> *@
+                            <span class="text-nowrap">Name : @Model.CustomerName</span>
+                            <span class="text-nowrap">Phone : @Model.Phone</span>
+                            <span class="text-nowrap">No of person : @Model.table.NoOfPerson</span>
+                            <span class="text-nowrap">Email : @Model.Email</span>
                         </div>
                     </div>
                 </div>
@@ -65,13 +61,13 @@
                             <h3><i class="fa-solid fa-table fs-4"></i> Table Details</h3>
                         </div>
                         <div class="d-flex flex-column">
-                            @* <span class="text-nowrap">Table : @Model.table.TableName</span> *@
-                            @* <span class="text-nowrap">Section : @Model.table.Name</span> *@
+                            <span class="text-nowrap">Table : @Model.table.TableName</span>
+                            <span class="text-nowrap">Section : @Model.table.Name</span>
                         </div>
                     </div>
                 </div>
             </div>
-            @* <div class="row">
+            <div class="row">
                 <div class="col-12">
                     <div class="p-3 rounded-3 shadow-lg bg-light">
                         <h3>Order Items</h3>
@@ -87,7 +83,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach(var items in Model.items)
+                                    @* @foreach(var items in Model.items)
                                     {
                                     <tr>
                                         <td class=" text-nowrap">1</td>
@@ -115,28 +111,28 @@
                                             <div>10.00</div>
                                         </td>
                                     </tr>
-                                    }
+                                    } *@
                                 </tbody>
                             </table>
                         </div>
                             <div class="d-flex flex-row align-items-center justify-content-end mt-3">
-                                @foreach(var tax in Model.tax)
+                                @* @foreach(var tax in Model.tax)
                                 {
                                     <div class="">
                                         <h6>Sub Total:</h6>
-                                        <h6>@tax.Name</h6>
+                                        <h6>@tax.TaxName</h6>
                                         <h6>Total</h6>
                                     </div>
                                     <div class="ms-2 d-flex flex-column justify-content-end">
                                         <h6 class="d-flex justify-content-end text-secondary">₹900</h6>
-                                        <h6 class="d-flex justify-content-end text-secondary">₹@tax.Value</h6>
+                                        <h6 class="d-flex justify-content-end text-secondary">₹@tax.TaxValue</h6>
                                         <h6 class="d-flex justify-content-end text-secondary">₹600.00</h6>
                                     </div>
-                                }
+                                } *@
                             </div>
                     </div>
                 </div>
-            </div> *@
+            </div>
         </div>
     </div>
 </div>

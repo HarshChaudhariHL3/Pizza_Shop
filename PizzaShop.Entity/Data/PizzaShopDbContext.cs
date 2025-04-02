@@ -505,6 +505,10 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
+            entity.Property(e => e.OrderType)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'Dine-In'::character varying")
+                .HasColumnName("order_type");
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
@@ -514,6 +518,7 @@ public partial class PizzaShopDbContext : DbContext
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("orders_customer_id_fkey");
 
             entity.HasOne(d => d.Payment).WithMany(p => p.Orders)

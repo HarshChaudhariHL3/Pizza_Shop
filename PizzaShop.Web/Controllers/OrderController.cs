@@ -167,4 +167,27 @@ public class OrderController(IOrderService _orderService) : Controller
         var model = _orderService.GetOrderDetails(id);
         return View(model);
     }
+
+    public async Task<IActionResult> DownloadInvoice(int id)
+    {
+        // Setup Rotativa
+        var wwwrootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        Rotativa.AspNetCore.RotativaConfiguration.Setup(wwwrootPath, "Rotativa");
+
+        // Await the async call to get the model
+        var model = _orderService.GetOrderDetails(id);
+
+        if (model == null)
+        {
+            TempData["Error"] = "Order notfound";
+            return RedirectToAction("Order", "Order");
+            // _logger.LogWarning("No order details found for Order ID {OrderId}.", id);
+        }
+
+        // Return the model to the view
+        // return View(model);
+
+        // Uncomment this to directly generate the PDF if desired
+        return new Rotativa.AspNetCore.ViewAsPdf("DownloadInvoice", model) { FileName = "Invoice.pdf" };
+    }
 }

@@ -45,13 +45,13 @@
                             <td>@taxFee.TaxType</td>
                             <td>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input toggle-switch " @(taxFee.IsEnabled ? "checked" : "")
+                                    <input class="form-check-input toggle-switch " disabled @(taxFee.IsEnabled ? "checked" : "")
                                         type="checkbox" />
                                 </div>
                             </td>
                             <td>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input toggle-switch " @(taxFee.IsDefault ? "checked" : "")
+                                    <input class="form-check-input toggle-switch " disabled @(taxFee.IsDefault ? "checked" : "")
                                         type="checkbox" />
                                 </div>
                             </td>
@@ -126,7 +126,7 @@
                             <span class="text-danger" asp-validation-for="TaxType"></span>
                         </div>
                         <div class="form-floating mb-3">
-                            <input asp-for="TaxValue" type="text" class="form-control hover-effect" placeholder="">
+                            <input asp-for="TaxValue" type="text" class="form-control hover-effect"  placeholder="">
                             <label asp-for="TaxValue">Amount</label>
                             <span class="text-danger" asp-validation-for="TaxValue"></span>
                         </div>
@@ -134,7 +134,7 @@
                     <div class="d-flex gap-3">
                         <div class="form-check form-switch">
                             <h5>
-                                <input class="form-check-input toggle-switch" asp-for="IsEnabled" type="checkbox"
+                                <input class="form-check-input toggle-switch"  asp-for="IsEnabled" type="checkbox" 
                                     role="switch">
                                 <label class="form-check-label" for="addAvailable">IsEnable</label>
                                 <span class="text-danger" asp-validation-for="IsEnabled"></span>
@@ -232,7 +232,6 @@
     }
 
     $(document).on('click', '#EditTaxBtn', function () {
-        debugger
         var TaxId = $(this).data('itemid');
         $.ajax({
             url: '/TaxAndFee/GetAllTaxByTaxId',
@@ -240,7 +239,6 @@
             data: { TaxId: TaxId },
             success: function (data) {
                 console.log(data);
-                debugger;
                 $('#EditTaxId').val(TaxId);
                 $('#EditTaxName').val(data.taxName);
                 $('#EditTaxType').val(data.taxType);

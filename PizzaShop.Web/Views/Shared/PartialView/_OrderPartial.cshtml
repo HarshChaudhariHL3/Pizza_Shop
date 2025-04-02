@@ -50,9 +50,8 @@
                         </td>
                         <td>₹@order.TotalAmount</td>
                         <td>
-                            <i class="fa-regular fa-file-pdf"></i>
-                            
-                            <a asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.OrderId"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                            <a asp-action="DownloadInvoice" asp-controller="Order" asp-route-id="@order.OrderId" class="text-black"><i class="fa-regular fa-file-pdf"></i></a>
+                            <a asp-action="OrderDetails" asp-controller="Order" asp-route-id="@order.OrderId" class="text-black"><i class="fa fa-eye" aria-hidden="true"></i></a>
                             
                         </td>
                     </tr>

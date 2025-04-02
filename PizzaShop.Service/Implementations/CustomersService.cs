@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
@@ -20,6 +21,7 @@ public class CustomersService(ICustomersRepository _customersRepository) : ICust
 
             customerListViews.Add(new CustomerViewModel
             {
+            CustomerId = item.CustomerId,
             CustomerName = item.CustomerName,
             Email = item.Email,
             Phone = item.Phone,
@@ -72,21 +74,8 @@ public class CustomersService(ICustomersRepository _customersRepository) : ICust
     public ExportOrderResultViewModel GetExportCustomer(string search, string time)
     {
         var query = _customersRepository.GetAllCustomerExport();
-        var emailCounts = query
-                .GroupBy(o => o.Email)
-                .Select(group => new
-                {
-                    Email = group.Key,
-                    Count = group.Count()
-                }).ToDictionary(x => x.Email, x => x.Count);
 
-        // int parsedTime = int.TryParse(time, out var result) ? result : 0;
-        // var Date = DateTime.Now.AddDays(-parsedTime);
-
-        // if (parsedTime >= 0)
-        // {
-        //     query = query.Where(o => o.CreatedAt >= Date);
-        // }
+        
 
         if (!string.IsNullOrEmpty(time) && time != "all")
         {
@@ -124,7 +113,7 @@ public class CustomersService(ICustomersRepository _customersRepository) : ICust
             CustomerName = o.CustomerName,
             Email = o.Email,
             Phone = o.Phone,
-            TotalOrder = emailCounts.ContainsKey(o.Email) ? emailCounts[o.Email] : 0
+            TotalOrder = o.Orders != null ? o.Orders.Count : 0
         }).ToList();
 
         return new ExportOrderResultViewModel
@@ -136,5 +125,34 @@ public class CustomersService(ICustomersRepository _customersRepository) : ICust
             CustomerData = customerData,
             
         };
+    }
+
+    public CustomerHistoryViewModel GetCustomerHistory(int id)
+    {
+        var customer = _customersRepository.GetCustomerById(id);
+
+        var customerHistory = new CustomerHistoryViewModel
+        {  
+            Name = customer.CustomerName,
+            PhoneNo = customer.Phone,
+            CreatedOn = customer.CreatedAt,
+            Visits = customer.Orders.Count(),
+            MaxOrderBill = customer.Orders.Max(o => o.TotalAmount) ?? 0f,
+            Avgbill = customer.Orders.Average(o => o.TotalAmount) ?? 0f,
+            Email = customer.Email,
+
+            OrderHistory = customer.Orders.Select(o => new OrderHistory
+            {
+                OrderDate = o.CreatedAt ?? DateTime.MinValue,
+                OrderType = o.OrderType,
+                PaymentMethod = o.Payment.PaymentMethod,
+                Items = o.OrderItems.Count,
+                TotalAmount = o.TotalAmount ?? 0f
+            }).ToList()
+
+        };
+
+
+        return customerHistory; 
     }
 }

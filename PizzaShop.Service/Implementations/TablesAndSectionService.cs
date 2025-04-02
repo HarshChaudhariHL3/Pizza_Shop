@@ -125,4 +125,13 @@ public class TablesAndSectionService(ITablesAndSectionRepository _tablesAndSecti
         return _tablesAndSectionRepository.GetPermissionByroleId(roleId);
     }
 
+    public bool DeleteMultipleTable(List<int> dataId)
+    {
+
+
+        _tablesAndSectionRepository.DeleteMultipleTable(dataId);
+        return true;
+
+    }
+
 }

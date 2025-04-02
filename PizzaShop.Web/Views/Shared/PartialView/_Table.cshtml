@@ -37,7 +37,7 @@
                 <tr>
                     <th>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="selectAll">
+                            <input class="form-check-input" type="checkbox" id="selectAllTable">
                         </div>
                     </th>
                     <th scope="col">Name</th>
@@ -52,7 +52,7 @@
                     foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td><input value="@item.TableId" data-categoryItem-id="@item.TableId" class="form-check-input main-checkbox row-checkbox deleteItemCheckbox" type="checkbox"></td>
+                            <td><input value="@item.TableId" data-table-id="@item.TableId" class="form-check-input main-checkbox row-checkbox deleteTableCheckbox" type="checkbox"></td>
 
                             <td class="d-flex gap-2 align-content-center">
                                 <img src="~/images/dining-menu.png" alt="" height="25">
@@ -242,7 +242,33 @@
                         <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
                     </div>
                     <p>Are you sure you want to delete <strong id="deleteTableName"></strong>?</p>
-                    <input type="text" id="deleteTableId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* Delete Multiple *@
+
+<div class="modal fade" id="deleteMultipleTable" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="deleteMultipleTableForm">
+                <div class="modal-body d-flex align-items-center justify-content-center flex-column">
+                    <div>
+                        <img src="~/images/toppng.com-warning-icon-2400x2400.png" height="50px" width="50px" alt="">
+                    </div>
+                    <p>Are you sure you want to delete <strong id="deleteTableName"></strong>?</p>
+                    @* <input type="text" id="deleteTableId"> *@
+                    <div id="arrayResult" hidden></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -258,7 +284,7 @@
 
 <script>   
         if (canAddEdit) {
-            debugger
+
             document.querySelectorAll('#EditBtnForTable, #AddTableBtnForTable').forEach(button => {
             button.disabled = true;
             });
@@ -368,7 +394,6 @@
                 data: { tableId: tableId },
                 success: function (data) {
                     console.log(data);
-                    debugger
                     @* $('#editItemId').val(data.categoryItemId); *@
                     $('#editTableName').val(data.tableName);
                     $('#editTableId').val(data.tableId);
@@ -385,7 +410,7 @@
         });
 
         $('#editTableForm').submit(function (e) {
-            debugger;
+
             e.preventDefault();
             var tableId = parseInt($('#editTableId').val());
             var tableName = $('#editTableName').val();
@@ -409,8 +434,7 @@
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    // Handle success
-                    debugger;
+
                     if (response.success) {
                         
                         $('#editTable').modal('hide');
@@ -475,5 +499,67 @@
                 }
             });
         });
+
+        $('#selectAllTable').click(function () {
+       
+            if ($(this).prop('checked')) {
+            $('.deleteTableCheckbox').prop('checked', true);
+            } else {
+            
+            $('.deleteTableCheckbox').prop('checked', false);
+            }
+        });
+
+        $('.deleteMultipleTable').click(function (){
+            let selectedIds = [];
+
+                $('.deleteTableCheckbox:checked').each(function(){
+                    let id = $(this).data("table-id");
+                    console.log(id);
+                    selectedIds.push(id);
+                });
+            console.log(selectedIds);
+
+            $.each(selectedIds, function(index,value){
+                $("#arrayResult").append('<span class="deleteTablesIds">' + value + '</span>')
+            })
+            $('#deleteMultipleTable').modal('show');
+        });
+
+        $("#deleteMultipleTableForm").submit(function (e) {
+            debugger
+            e.preventDefault();
+
+
+            var dataId = [];
+            $('.deleteTablesIds').each(function(){
+
+                let ids =parseInt($(this).text());
+                dataId.push(ids); 
+            })
+            console.log(dataId);
+
+            var data1 = { "dataId": dataId}
+
+            $.ajax({
+                url: '/TableAndSection/DeleteMultipleTable',
+                type: 'POST',
+                data: data1 ,
+                success: function (response) {
+                    // Handle success
+                    if (response == true) {
+                        $('#deleteMultipleTable').modal('hide'); 
+                        location.reload();
+                    } else {
+                        $('#deleteMultipleTable').modal('hide');
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('Error updating item.');
+                }
+            });
+
+        }); 
     });
 </script>

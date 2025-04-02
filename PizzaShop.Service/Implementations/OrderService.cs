@@ -141,9 +141,9 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
         if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(o =>
-                o.Customer.CustomerName.Contains(search) ||
-                o.Payment.PaymentMethod.Contains(search));
-            // o.OrderId.Contains(search) ||
+            o.Customer.CustomerName.ToLower().Contains(search.ToLower()) ||
+            o.Payment.PaymentMethod.ToLower().Contains(search.ToLower()));
+            // o.OrderId.Contains(search, StringComparison.OrdinalIgnoreCase) ||
         }
 
 
@@ -160,10 +160,10 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
         {
             OrderId = o.OrderId,
             OrderDate = o.CreatedAt,
-            CustomerName = o.Customer.CustomerName,
+            CustomerName = o.Customer != null ? o.Customer.CustomerName : "Unknown",
             OrderStatus = o.Status,
-            PaymentMethod = o.Payment.PaymentMethod,
-            Rating = o.Feedbacks != null && o.Feedbacks.Any() ? o.Feedbacks.FirstOrDefault().Rating : null,
+            PaymentMethod = o.Payment != null ? o.Payment.PaymentMethod : "Unknown",
+            Rating = o.Feedbacks != null && o.Feedbacks.Any() ? (o.Feedbacks.FirstOrDefault() != null ? o.Feedbacks.FirstOrDefault().Rating : null) : null,
             TotalAmount = o.TotalAmount,
         }).ToList();
 

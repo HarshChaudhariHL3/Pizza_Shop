@@ -123,7 +123,6 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     }
     public void DeleteMultipleCategoryItem(List<int> dataId)
     {
-        // var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
         var itemToDelete = _context.CategoryItems.Where(item => dataId.Contains(item.CategoryItemId)).ToList();
 
         if (itemToDelete != null)

@@ -501,14 +501,13 @@
 <script>
             var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit === 'False') {
-            debugger
+
             document.querySelectorAll('.edit-btn, #NewCategoryItemBtnForCategory').forEach(button => {
             button.disabled = true;
             });
         }
         var canDelete = '@Context.Items["CanDelete"]';
         if (canDelete) {
-            debugger
             document.querySelectorAll('.delete-btn, .deleteMultipleCategoryItems').forEach(button => {
             button.disabled = true;
             });
@@ -684,7 +683,6 @@ function addModifierSection(modifierId, modifierName) {
         fetchCategoryItems(currentCategoryId, currentPage, pageSize, search); 
     });
     function pagination() {
-        debugger
         var value =parseInt($("#PageSize").val());
         pageSize = value;
         let totalPages = Math.ceil(@Model.TotalItems / pageSize);
@@ -708,7 +706,7 @@ function addModifierSection(modifierId, modifierName) {
 
     
 function editModifierSection(SelectedModifiers) {
-    debugger;
+
     console.log("Adding Modifier Section:", SelectedModifiers);
     for (let i = 0; i < SelectedModifiers.length; i++) {
         const modifierId = SelectedModifiers[i].modifierId;
@@ -807,7 +805,7 @@ function editModifierSection(SelectedModifiers) {
                     $('#tax').prop('checked', data.defaultTax);
                     $('#code').val(data.shortCode);
                     $('#editModal').modal('show');
-                    debugger
+
                     selectedModifiers = data.selectedModifiers;
                     editModifierSection(selectedModifiers);
                 },
@@ -1007,8 +1005,6 @@ function editModifierSection(SelectedModifiers) {
             $.each(selectedIds, function(index,value){
                 $("#arrayResult").append('<span class="deleteCategoryItemIds">' + value + '</span>')
             })
-            @* const modal = new bootstrap.Modal('#deleteMultipleItems');
-            modal.show(); *@
             $('#deleteMultipleItems').modal('show');
         });
 
@@ -1033,12 +1029,10 @@ function editModifierSection(SelectedModifiers) {
                 success: function (response) {
                     // Handle success
                     if (response == true) {
-                        @* $('#deleteMultipleItems').modal('hide'); *@
-                        $("#deleteMultipleItems").hide();
+                        $('#deleteMultipleItems').modal('hide'); 
                         location.reload();
                     } else {
-                        @* $('#deleteMultipleItems').modal('hide'); *@
-                        $("#deleteMultipleItems").hide();
+                        $('#deleteMultipleItems').modal('hide');
                         location.reload();
                     }
                 },

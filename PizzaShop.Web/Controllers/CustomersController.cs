@@ -147,7 +147,12 @@ public class CustomersController(ICustomersService _customersService) : Controll
         stream.Position = 0;
 
         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customer.xlsx");
+    }
 
-
+    [HttpGet]
+    public IActionResult GetCustomerHistory(int customerId)
+    {
+        var customerHistory = _customersService.GetCustomerHistory(customerId);
+        return PartialView("./PartialView/_CustomerHistory", customerHistory);
     }
 }

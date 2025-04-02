@@ -5,6 +5,18 @@
       "PackagePath": "staticwebassets\\PizzaShop.Web.bundle.scp.css"
     },
     {
+      "Id": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\Rotativa\\wkhtmltoimage.exe",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltoimage.exe"
+    },
+    {
+      "Id": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\Rotativa\\wkhtmltopdf.exe",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltopdf.exe"
+    },
+    {
+      "Id": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\Rotativa\\wkhtmltox.dll",
+      "PackagePath": "staticwebassets\\Rotativa\\wkhtmltox.dll"
+    },
+    {
       "Id": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\css\\login.css",
       "PackagePath": "staticwebassets\\css\\login.css"
     },
