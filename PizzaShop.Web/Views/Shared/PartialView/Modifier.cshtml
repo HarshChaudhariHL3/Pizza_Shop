@@ -89,6 +89,7 @@
                         <button class="border border-0 bg-white mt-3 text-primary addExistingModifier-btn"
                             id="ExistingModifiers"> + Add
                             Existing Modifier</button>
+                            <div id="ExistingModifiersList"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -158,51 +159,7 @@
     </div>
 </form>
 
-@* add existing modifier  *@
-<div class="modal fade" id="ExistingModifier" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <form method="post" id="existingModifierItemForm">
-
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                        Select Existing Modifier </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="responsive-table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th><input id="selectModifierAll" class="form-check-input main-checkbox"
-                                            type="checkbox"></th>
-                                    <th>Name</th>
-                                    <th>Unit</th>
-                                    <th>Rate</th>
-                                    <th>Quantity</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="ExistingModifierItems">
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-white border border-primary"
-                        data-bs-dismiss="modal">Cancel</button>
-                </div>
-
-            </form>
-        </div>
-        <input type="hidden" id="addItemId">
-    </div>
-</div>
-
+<div id="ExistingModifierModal"></div>
 
 
 @* Modal End *@
@@ -258,31 +215,25 @@
         });
 
     }
+    var currentPage = 1;
+    var pageSize = 5; 
+    var search = "";
 
-    function fetchExistingModifierList() {
-
+    function fetchExistingModifierList(currentPage,pageSize,search) {
+        debugger;
         $.ajax({
             url: '/Menu/GetALLModifierItemDetails',
             type: 'GET',
+            data: {
+                page: currentPage,
+                pageSize: pageSize,
+                search:search
+            },
             success: function (data) {
+                debugger;
                 console.log(data);
-                var itemsHtml = '';
-
-                $.each(data, function (index, item) {
-                    itemsHtml += '<tr>';
-                    itemsHtml += '<td><input type="checkbox" class="item-checkbox" data-id="' + item.modifierItemId + '" data-name="' + item.modifierItemName + '"></td>';
-                    itemsHtml += '<td>' + item.modifierItemName + '</td>';
-                    itemsHtml += '<td>' + item.unitId + '</td>';
-                    itemsHtml += '<td>' + item.rate + '</td>';
-                    itemsHtml += '<td>' + item.quantity + '</td>';
-                    itemsHtml += '</tr>';
-                });
-                $('#ExistingModifierItems').html(itemsHtml);
-
+                $('#ExistingModifierModal').html(data);
                 $('#ExistingModifier').modal('show');
-
-
-
             },
             error: function (error) {
                 console.error('Error fetching item details:', error);
@@ -307,23 +258,24 @@
             selectedHtml = '<p>No modifiers selected.</p>';
         }
 
-        $('#ExistingModifiers').html(`
-        <span class="text-primary">+ Add Existing Modifier (${selectedModifiers.length})</span>
+        $('#ExistingModifiersList').html(`
+        @* <span class="text-primary">+ Add Existing Modifier (${selectedModifiers.length})</span> *@
         ${selectedHtml}
     `);
 
         $(document).on('click', '.removeModifier', function () {
+            debugger
             let itemId = $(this).data('item-id');
 
             selectedModifiers = selectedModifiers.filter(item => item.id !== itemId);
             tempSelectedModifiers = tempSelectedModifiers.filter(item => item.id !== itemId);
 
             updateSelectedModifiersDisplay();
-            setTimeout(() => {
+            @* setTimeout(() => {
                 $('#ExistingModifier').modal('show');
                 let selectedSize = parseInt($('#pageSizeSelect').val());
                 ExistingModifierItem(1, selectedSize);
-            }, 300);
+            }, 300); *@
         });
     }
     let tempSelectedModifiers =[];
@@ -379,8 +331,8 @@
             fetchModifierItems(firstModifierId, currentPageModifier, pageSizeModifier, search);
         }
 
-        $(document).on('click', '.addExistingModifier-btn', function () {
-            fetchExistingModifierList();
+        $(document).on('click', '#ExistingModifiers', function () {
+            fetchExistingModifierList(currentPage,pageSize,search);
         });
 
     });

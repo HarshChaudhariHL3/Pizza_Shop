@@ -121,7 +121,7 @@
 
 
 <script>
-    var canAddEdit = '@Context.Items["CanAddEdit"]';
+    @* var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit) {
             document.querySelectorAll('#editBtn').forEach(button => {
             button.disabled = true;
@@ -132,7 +132,7 @@
             document.querySelectorAll('#deleteBtn').forEach(button => {
             button.disabled = true;
             });
-        }
+        } *@
 
 
     function paginationTable() {

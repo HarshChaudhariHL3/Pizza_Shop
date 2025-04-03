@@ -44,7 +44,9 @@ public interface IMenuService
     void EditCategoryItem(CategoryListViewModel model);
     void EditModifierItem(ModifierListViewModel model);
 
-    List<ModifierItem> GetModifierItems();
+    // List<ModifierItem> GetModifierItems();
+    public List<ExistingModifierViewModel> GetModifierItems();
+    Task<PaginationViewModel<ExistingModifierViewModel>> GetModifierItems(int page, int pageSize, string search = "");
 }
 
 

@@ -465,11 +465,25 @@ public class MenuController(IMenuService _menuService) : Controller
         }
     }
 
+    // [HttpGet]
+    // public IActionResult GetALLModifierItemDetails()
+    // {
+    //     var modifierItemsList = _menuService.GetModifierItems();
+    //     return PartialView("./PartialView/_ExistingModifiersPartial" ,modifierItemsList);
+    // }
     [HttpGet]
-    public IActionResult GetALLModifierItemDetails()
+    public async Task<IActionResult> GetALLModifierItemDetails( int page , int pageSize, string search ="")
     {
-        var modifierItemsList = _menuService.GetModifierItems();
-        return Json(modifierItemsList);
+        try
+        {
+            PaginationViewModel<ExistingModifierViewModel> modifierItemsList = await _menuService.GetModifierItems(page,pageSize,search);
+            return PartialView("PartialView/_ExistingModifiersPartial" ,modifierItemsList);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 
     [HttpPost]

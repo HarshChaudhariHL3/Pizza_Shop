@@ -499,7 +499,7 @@
 @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
 
 <script>
-            var canAddEdit = '@Context.Items["CanAddEdit"]';
+            @* var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit === 'False') {
 
             document.querySelectorAll('.edit-btn, #NewCategoryItemBtnForCategory').forEach(button => {
@@ -511,7 +511,7 @@
             document.querySelectorAll('.delete-btn, .deleteMultipleCategoryItems').forEach(button => {
             button.disabled = true;
             });
-        }
+        } *@
     
 
 // Function to load modifier groups

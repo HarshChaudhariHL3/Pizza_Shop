@@ -187,7 +187,7 @@ let tempArray = [];
 
 
 <script>
-    var canAddEdit = '@Context.Items["CanAddEdit"]';
+    @* var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit === 'False') {
             const addCategoryButton = document.getElementById('AddCategoryBtnForCategory');
             if (addCategoryButton) {
@@ -204,7 +204,7 @@ let tempArray = [];
             document.querySelectorAll('#DeleteCategoryBtnForCategory').forEach(button => {
             button.disabled = true;
             });
-        }
+        } *@
 
     var currentPage = 1;
     var pageSize = 5; 

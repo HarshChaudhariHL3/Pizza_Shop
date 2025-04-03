@@ -224,9 +224,58 @@ public class MenuService : IMenuService
     {
         return _menuRepository.ModifierList();
     }
-    public List<ModifierItem> GetModifierItems()
+    public List<ExistingModifierViewModel> GetModifierItems()
     {
-        return _menuRepository.ModifierItemsList();
+        var items = _menuRepository.ModifierItemsList();
+
+        var model = new List<ExistingModifierViewModel>();
+        foreach (var i in items)
+        {
+            model.Add(new ExistingModifierViewModel
+            {
+                ModifierItemId = i.ModifierItemId,
+                ModifierItemName = i.ModifierItemName,
+                Quantity = i.Quantity,
+                Rate = i.Rate,
+                UnitId = i.UnitId,
+                UnitName = i.Unit?.UnitName,
+                Description = i.Description
+            });
+        }
+        return model;
+    }
+        public async Task<PaginationViewModel<ExistingModifierViewModel>> GetModifierItems(int page, int pageSize, string search = "")
+    {
+
+        var items = _menuRepository.ModifierItemsList();
+        List<ExistingModifierViewModel> modifierListViews = new List<ExistingModifierViewModel>();
+
+        foreach (ModifierItem item in items)
+        {
+            modifierListViews.Add(new ExistingModifierViewModel
+            {
+                ModifierItemId = item.ModifierItemId,
+                ModifierItemName = item.ModifierItemName,
+                Quantity = item.Quantity,
+                UnitName = item.Unit?.UnitName,
+                Rate = item.Rate,
+            });
+        }
+        if (!string.IsNullOrEmpty(search))
+        {
+            modifierListViews = modifierListViews.Where(u => u.ModifierItemName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        int catItemCount = modifierListViews.Count;
+        modifierListViews = modifierListViews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        return new PaginationViewModel<ExistingModifierViewModel>
+        {
+            Items = modifierListViews,
+            TotalItems = catItemCount,
+            CurrentPage = page,
+            PageSize = pageSize,
+        };
     }
     public List<Unit> UnitList()
     {
@@ -270,7 +319,6 @@ public class MenuService : IMenuService
             CurrentPage = page,
             PageSize = pageSize,
         };
-
     }
 
     // Fetch item details by ItemId

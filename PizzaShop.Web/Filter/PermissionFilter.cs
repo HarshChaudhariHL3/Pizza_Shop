@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using PizzaShop.Service.Interfaces;
 using PizzaShop.Entity.Models;
+using Microsoft.AspNetCore.Http;
 
 public class PermissionFilter : IActionFilter
 {
@@ -17,8 +18,10 @@ public class PermissionFilter : IActionFilter
         _httpContextAccessor = httpContextAccessor;
     }
 
+    
     public void OnActionExecuting(ActionExecutingContext context)
     {
+        
         var userRoleId = 0;
         var principal = _jwtService.ValidateToken(_httpContextAccessor.HttpContext.Request.Cookies["SuperSecretAuthToken"]);
         if (principal == null)
@@ -31,60 +34,63 @@ public class PermissionFilter : IActionFilter
             userRoleId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
         }
 
-        
         var rolePermissions = _roleService.GetPermissionByroleId(userRoleId);
-
 
         var actionName = context.ActionDescriptor.RouteValues["controller"];
 
-        bool hasPermission = CheckUserPermission(actionName, rolePermissions);
+        bool canView = CheckUserPermission(actionName, rolePermissions, permissionType: "CanView");
+        bool canAddEdit = CheckUserPermission(actionName, rolePermissions, permissionType: "CanAddEdit");
+        bool canDelete = CheckUserPermission(actionName, rolePermissions, permissionType: "CanDelete");
 
-        if (!hasPermission)
+            // If the action doesn't meet permission criteria, return "Permission Denied"
+            if (!canView)
+            {
+                context.Result = new ForbidResult();
+                return;
+            }
+
+        // Continue normal execution
+        context.HttpContext.Items["CanAddEdit"] = canAddEdit;
+        context.HttpContext.Items["CanDelete"] = canDelete;
+
+        if (!Convert.ToBoolean(context.HttpContext.Items["CanDelete"]) || !Convert.ToBoolean(context.HttpContext.Items["CanAddEdit"]))
         {
-            
-            context.Result = new ForbidResult();
+            var method = context.HttpContext.Request.Method;
+            if (method != "GET")
+            {
+                if (context.HttpContext.Request.Headers["Accept"].ToString().Contains("application/json"))
+                {
+                    context.Result = new JsonResult(new { error = "Permission Denied" }) { StatusCode = StatusCodes.Status403Forbidden };
+                }
+                else
+                {
+                    context.HttpContext.Items["Error"] = "Permission Denied";
+                    context.HttpContext.Response.Headers.Add("X-Toastr-Message", "Permission Denied");
+                    context.HttpContext.Response.Headers.Add("X-Toastr-Type", "error");
+                    context.Result = new RedirectResult(context.HttpContext.Request.Headers["Referer"].ToString());
+                }
+            }
+            return;
+
         }
+        
     }
+
+
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        var userRoleId = 0;
-        var principal = _jwtService.ValidateToken(_httpContextAccessor.HttpContext.Request.Cookies["SuperSecretAuthToken"]);
-        if (principal != null)
-        {
-            userRoleId = int.Parse(principal.FindFirst("UserId")?.Value ?? "0");
-        }
-
-        var rolePermissions = _roleService.GetPermissionByroleId(userRoleId);
-        var actionName = context.ActionDescriptor.RouteValues["controller"];
-
-        bool canAddEdit = rolePermissions.Any(rp =>
-            rp.Permission != null &&
-            rp.Permission.ModuleName == actionName &&
-            rp.CanAddEdit);
-
-        bool CanDelete = rolePermissions.Any(rp =>
-            rp.Permission != null &&
-            rp.Permission.ModuleName == actionName &&
-            rp.CanDelete);
-
-        if (!canAddEdit)
-        {
-            context.HttpContext.Items["CanAddEdit"] = canAddEdit;
-        }
-        if (!CanDelete)
-        {
-            context.HttpContext.Items["CanDelete"] = CanDelete;
-        }
+        // No action needed after the action executes
     }
 
-    private bool CheckUserPermission(string actionName, List<RolePermission> rolePermissions)
+    private bool CheckUserPermission(string actionName, List<RolePermission> rolePermissions, string permissionType)
     {
-        // Check permissions for CanView, CanAddEdit, and CanDelete
         return rolePermissions.Any(rp =>
             rp.Permission != null &&
             rp.Permission.ModuleName == actionName &&
-            (rp.CanView || rp.CanAddEdit || rp.CanDelete));
+            (permissionType == "CanView" && rp.CanView ||
+             permissionType == "CanAddEdit" && rp.CanAddEdit ||
+             permissionType == "CanDelete" && rp.CanDelete));
     }
 }
 

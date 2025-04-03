@@ -282,14 +282,17 @@
 @* Modal end *@
 
 
-<script>   
-        if (canAddEdit) {
+<script>
+    
+         var canAddEdit = '@Context.Items["CanAddEdit"]';
+         var canDelete = '@Context.Items["CanDelete"]';
+        if (canAddEdit == 'False') {
 
             document.querySelectorAll('#EditBtnForTable, #AddTableBtnForTable').forEach(button => {
             button.disabled = true;
             });
         }
-        if (canDelete) {
+        if (canDelete == 'False') {
             document.querySelectorAll('#DeleteBtnForTable, .deleteMultipleTable').forEach(button => {
             button.disabled = true;
             });
@@ -356,6 +359,8 @@
             $.ajax({
                 url: '/TableAndSection/AddTable',
                 type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
                 data: formData,
                 success: function (response) {
 
@@ -367,8 +372,10 @@
                         alert('Error: ' + response.message);
                     }
                 },
-                error: function () {
-                    alert('Error updating item.');
+                error: function (response) {
+                     debugger;
+                    toastr.error("Access Denied");
+                    $('#addTable').modal('hide');
                 }
             });
         });
@@ -393,14 +400,15 @@
                 type: 'GET',
                 data: { tableId: tableId },
                 success: function (data) {
+                    
                     console.log(data);
-                    @* $('#editItemId').val(data.categoryItemId); *@
+                    $('#editItemId').val(data.categoryItemId);
                     $('#editTableName').val(data.tableName);
                     $('#editTableId').val(data.tableId);
                     $('#editTableCapacity').val(data.capacity);
                     $('#SectionSelectEdit').val(data.sectionId);
-                    @* $('#editTableStatus').val(data.status.toString()); *@
-                    $('#editTableStatus').val(data.status);
+                    $('#editTableStatus').val(data.status.toString());
+                    @* $('#editTableStatus').val(data.status); *@
                     $('#editTable').modal('show');
                 },
                 error: function (error) {
@@ -432,9 +440,11 @@
             $.ajax({
                 url: '/TableAndSection/UpdateTable',
                 type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
                 data: formData,
                 success: function (response) {
-
+                    debugger;
                     if (response.success) {
                         
                         $('#editTable').modal('hide');
@@ -446,8 +456,9 @@
                     }
                 },
                 error: function (response) {
-                    console.log(response);
-                    @* alert('Error updating item.'); *@
+                    debugger;
+                    toastr.error("Access Denied");
+                    $('#editTable').modal('hide');
                 }
             });
         });
@@ -482,20 +493,25 @@
             $.ajax({
                 url: '/TableAndSection/DeleteTable',
                 type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
                 data: { tableId: tableId },
                 success: function (response) {
                     // Handle success
                     if (response.success) {
-                         $('#deleteItemModal').modal('hide');
+                         $('#deleteTable').modal('hide');
                         location.reload();
-                    } else {
+                    } 
+                    @* else {
                          $('#deleteItemModal').modal('hide'); 
                         
                         location.reload();
-                    }
+                    } *@
                 },
-                error: function () {
-                    alert('Error updating item.');
+                error: function (response) {
+                     debugger;
+                    toastr.error("Access Denied");
+                    $('#deleteTable').modal('hide'); 
                 }
             });
         });
@@ -527,7 +543,6 @@
         });
 
         $("#deleteMultipleTableForm").submit(function (e) {
-            debugger
             e.preventDefault();
 
 
@@ -545,18 +560,24 @@
                 url: '/TableAndSection/DeleteMultipleTable',
                 type: 'POST',
                 data: data1 ,
+                contentType: 'application/json',
+                dataType: 'json',
                 success: function (response) {
+                    debugger;
                     // Handle success
                     if (response == true) {
                         $('#deleteMultipleTable').modal('hide'); 
                         location.reload();
-                    } else {
+                    } 
+                    @* else {
                         $('#deleteMultipleTable').modal('hide');
                         location.reload();
-                    }
+                    } *@
                 },
-                error: function () {
-                    alert('Error updating item.');
+                error: function (response) {
+                     debugger;
+                    toastr.error("Access Denied");
+                    $('#deleteMultipleTable').modal('hide');
                 }
             });
 

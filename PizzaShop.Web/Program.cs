@@ -82,7 +82,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<JwtMiddleware>();
+// app.UseMiddleware<JwtMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 

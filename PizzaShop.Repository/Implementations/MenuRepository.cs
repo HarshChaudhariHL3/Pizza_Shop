@@ -159,6 +159,7 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     public List<ModifierItem> ModifierItemsList()
     {
         var item = _context.ModifierItems
+                    .Include(x => x.Unit)
                     .OrderBy(x => x.ModifierItemId).ToList();
         return item;
     }

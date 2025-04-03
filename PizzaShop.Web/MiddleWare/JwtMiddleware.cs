@@ -10,7 +10,7 @@ public class JwtMiddleware(RequestDelegate _next)
 
         if(!string.IsNullOrEmpty(accessToken)){
 
-            context.Request.Headers.Append("Authorization", $"Bearer {accessToken}");
+            // context.Request.Headers.Append("Authorization", $"Bearer {accessToken}");
 
         }
         await _next(context);

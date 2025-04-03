@@ -39,12 +39,12 @@
 </div>
 
 <script>
-    var canAddEdit = '@Context.Items["CanAddEdit"]';
+    @* var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit === 'False') {
             document.querySelectorAll('#EditBtnForRole').forEach(link => {
             link.classList.add('disabled');
             link.setAttribute('aria-disabled', 'true');
             link.style.pointerEvents = 'none';
             });
-        }
+        } *@
 </script>

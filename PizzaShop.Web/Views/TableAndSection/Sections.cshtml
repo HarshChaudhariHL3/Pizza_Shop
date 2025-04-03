@@ -159,6 +159,23 @@
 
 <script>
 
+        var canAddEdit = '@Context.Items["CanAddEdit"]';
+        if (canAddEdit == 'False') {
+            document.querySelectorAll('#EditbtnForSection').forEach(button => {
+            button.disabled = true;
+            });
+            document.querySelectorAll('#AddSectionForSection').forEach(a => {
+                a.classList.add('disabled');
+                a.setAttribute('aria-disabled', 'true');
+                a.style.pointerEvents = 'none';
+            });
+        }
+        var canDelete = '@Context.Items["CanDelete"]';
+        if (canDelete == 'False') {
+            document.querySelectorAll('#DeletebtnForSection').forEach(button => {
+            button.disabled = true;
+            });
+        }
 
     function openDeleteModal(SectionId, SectionName) {
         document.getElementById('deleteSectionId').value = SectionId;
@@ -199,23 +216,6 @@
     }
 
 
-        var canAddEdit = '@Context.Items["CanAddEdit"]';
-        if (canAddEdit) {
-            document.querySelectorAll('#EditbtnForSection').forEach(button => {
-            button.disabled = true;
-            });
-            document.querySelectorAll('#AddSectionForSection').forEach(a => {
-                a.classList.add('disabled');
-                a.setAttribute('aria-disabled', 'true');
-                a.style.pointerEvents = 'none';
-            });
-        }
-        var canDelete = '@Context.Items["CanDelete"]';
-        if (canDelete) {
-            document.querySelectorAll('#DeletebtnForSection').forEach(button => {
-            button.disabled = true;
-            });
-        }
 
     $(document).ready(function () {
 

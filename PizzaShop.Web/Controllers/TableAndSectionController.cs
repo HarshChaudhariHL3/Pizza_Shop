@@ -138,10 +138,6 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
     {
         try
         {
-            if (!(bool)HttpContext.Items["CanAddEdit"])
-            {
-                return Forbid();  // Return 403 Forbidden if they don't have permission
-            }
             var item = _tablesAndSectionService.GetTableById(tableId);
             if (item == null)
             {
