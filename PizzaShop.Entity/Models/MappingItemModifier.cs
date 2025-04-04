@@ -23,5 +23,7 @@ public partial class MappingItemModifier
 
     public virtual User? ModifiedByNavigation { get; set; }
 
+    public virtual ModifierItem Modifier { get; set; } = null!;
+
     public virtual ModifierGroup ModifierGroup { get; set; } = null!;
 }

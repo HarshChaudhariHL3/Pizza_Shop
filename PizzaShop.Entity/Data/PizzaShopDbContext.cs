@@ -408,6 +408,11 @@ public partial class PizzaShopDbContext : DbContext
                 .HasForeignKey(d => d.ModifierGroupId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("mapping_item_modifier_modifier_group_id_fkey");
+
+            entity.HasOne(d => d.Modifier).WithMany(p => p.MappingItemModifiers)
+                .HasForeignKey(d => d.ModifierId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("mapping_item_modifier_modifier_id_fkey");
         });
 
         modelBuilder.Entity<ModifierGroup>(entity =>
@@ -417,7 +422,6 @@ public partial class PizzaShopDbContext : DbContext
             entity.ToTable("modifier_group");
 
             entity.Property(e => e.ModifierGroupId).HasColumnName("modifier_group_id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -439,10 +443,6 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifierName)
                 .HasMaxLength(50)
                 .HasColumnName("modifier_name");
-
-            entity.HasOne(d => d.Category).WithMany(p => p.ModifierGroups)
-                .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("modifier_group_category_id_fkey");
         });
 
         modelBuilder.Entity<ModifierItem>(entity =>

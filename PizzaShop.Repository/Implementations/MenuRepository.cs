@@ -34,8 +34,12 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     public CategoryItem GetItemById(int itemId)
     {
         return _context.CategoryItems
-        .Include(x => x.CategoryModifierMappings)
+        .Include(x=>x.CategoryModifierMappings)
         .ThenInclude(x => x.Modifier)
+        // .ThenInclude(x => x.MappingItemModifiers!)
+        // .ThenInclude(x => x.Modifier)
+        
+        // .Include(x => x.)
         .FirstOrDefault(x => x.CategoryItemId == itemId)!;
     }
 
@@ -161,6 +165,12 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
         var item = _context.ModifierItems
                     .Include(x => x.Unit)
                     .OrderBy(x => x.ModifierItemId).ToList();
+        return item;
+    }
+    public List<MappingItemModifier> GetModifierItemIdFromModifierGroupId(int ModifierGroupId)
+    {
+        var item = _context.MappingItemModifiers
+            .Where(x => x.ModifierGroupId == ModifierGroupId).ToList();
         return item;
     }
 

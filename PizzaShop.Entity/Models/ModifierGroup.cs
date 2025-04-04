@@ -11,8 +11,6 @@ public partial class ModifierGroup
 
     public string? Description { get; set; }
 
-    public int? CategoryId { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public DateTime? CreatedAt { get; set; }
@@ -22,8 +20,6 @@ public partial class ModifierGroup
     public string? CreatedBy { get; set; }
 
     public string? ModifiedBy { get; set; }
-
-    public virtual Category? Category { get; set; }
 
     public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();
 

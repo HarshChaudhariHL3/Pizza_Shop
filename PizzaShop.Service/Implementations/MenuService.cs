@@ -70,28 +70,6 @@ public class MenuService : IMenuService
 
     }
 
-    // public List<CategoryListViewModel> GetCategoryItemsByCategoryId(int categoryId)
-    // {
-    //     var categoryItems = _menuRepository.CategoryItemList(categoryId);
-
-    //     var categoryItemViewModels = categoryItems.Select(item => new CategoryListViewModel
-    //     {
-    //         CategoryItemId = item.CategoryItemId,
-    //         CategoryId = item.CategoryId,
-    //         ItemName = item.ItemName,
-    //         Description = item.Description,
-    //         Quantity = item.Quantity,
-    //         Price = item.Price,
-    //         ItemType = item.ItemType,
-    //         IsAvailable = item.IsAvailable ?? false,
-    //         ShortCode = item.ShortCode,
-    //         ImageUrl = item.ImageUrl,
-    //         UnitId = item.UnitId
-    //     }).ToList();
-
-    //     return categoryItemViewModels;
-    // }
-
     public CategoryListViewModel GetItemById(int itemId)
     {
         var item = _menuRepository.GetItemById(itemId);
@@ -116,12 +94,14 @@ public class MenuService : IMenuService
             ImageUrl = item.ImageUrl,
             SelectedModifiers = item.CategoryModifierMappings.Select(x => new CategoryModifierMappingsViewModel
             {
+                ModifierGroupId = x.Modifier.ModifierGroupId,
                 ModifierGroupName = x.Modifier.ModifierName,
                 CategoryItemId = x.CategoryItemId,
-                ModifierId = x.ModifierId,
+                ModifierId = x.ModifierId?? 0,
                 MaxValue = x.MaxValue,
-                MinValue = x.MinValue
-            }).ToList()
+                MinValue = x.MinValue,
+                // ModifierItems = x.Modifier.MappingItemModifiers.ToList()
+            }).ToList(),
 
         };
     }
@@ -223,6 +203,10 @@ public class MenuService : IMenuService
     public List<ModifierGroup> GetModifierGroups()
     {
         return _menuRepository.ModifierList();
+    }
+    public List<ModifierItem> ModifierItemsList()
+    {
+        return _menuRepository.ModifierItemsList();
     }
     public List<ExistingModifierViewModel> GetModifierItems()
     {

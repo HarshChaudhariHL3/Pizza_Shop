@@ -270,7 +270,7 @@ public class MenuController(IMenuService _menuService) : Controller
         }
     }
 
-    [Route("/Menu/GetModifierItemDetails")]
+    // [Route("/Menu/GetModifierItemDetails")]
     [HttpGet]
     public async Task<IActionResult> GetModifierItemDetails(int modifierGroupId)
     {
@@ -290,12 +290,27 @@ public class MenuController(IMenuService _menuService) : Controller
         }
     }
     [Route("/Menu/GetAllModifier")]
+    
     [HttpGet]
     public IActionResult GetAllModifier()
     {
         try
         {
             var item = _menuService.GetAllModifierById();
+            return Json(item);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
+    [HttpGet]
+    public IActionResult ModifierItemsList()
+    {
+        try
+        {
+            var item = _menuService.ModifierItemsList();
             return Json(item);
         }
         catch (Exception ex)

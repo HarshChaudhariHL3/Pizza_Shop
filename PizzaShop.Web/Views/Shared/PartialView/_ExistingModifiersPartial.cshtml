@@ -1,7 +1,14 @@
+@* <div id="ExistingModifierModal">
+
+</div> *@
+
+
 @model PizzaShop.Entity.ViewModel.PaginationViewModel<PizzaShop.Entity.ViewModel.ExistingModifierViewModel>
+
+
 @* add existing modifier  *@
 <div class="modal fade" id="ExistingModifier" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    aria-labelledby="staticBackdropLabel">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
@@ -38,7 +45,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                <input type="checkbox" class="form-check-input" name="selectedModifiers"
+                                                <input type="checkbox" class="form-check-input item-checkbox" data-id="@item.ModifierItemId" data-name="@item.ModifierItemName" name="selectedModifiers"
                                                     value="@item.ModifierItemId" />
                                             </td>
                                             <td>@item.ModifierItemName</td>
@@ -69,14 +76,14 @@
                                                     </span>
                                                 </div>
                                                 <div class="m-2">
-                                                <button class="page-link btn" id="prev1"  onclick="pageChangeExisting('prev1')" @(Model.CurrentPage
+                                                <button class="page-link btn" type="button" id="prev1"  onclick="pageChangeExisting('prev1')" @(Model.CurrentPage
                                                                     == 1 ? "disabled" : "") aria-label="Previous" id="previous_page">
 
                                                 <i class="fa-solid fa-backward" aria-hidden="true"></i>
                                                 </button>
                                                 </div>
                                                 <div class="m-2">
-                                                    <button class="page-link btn" id="next1" onclick="pageChangeExisting('next1')" @((Model.CurrentPage
+                                                    <button class="page-link btn" type="button" id="next1" onclick="pageChangeExisting('next1')" @((Model.CurrentPage
                                                                     *Model.PageSize >= Model.TotalItems) ? "disabled" : "") aria-label="Next" id="next_page">
                                                         <i class="fa-solid fa-forward" aria-hidden="true"></i>
                                                     </button>
@@ -112,7 +119,6 @@
 
 <script>
     $('#searchExistingModifierList').on('search', function() {
-
     search = $(this).val();  
 
     fetchExistingModifierList(currentPage, pageSize, search); 
@@ -128,7 +134,7 @@
     }
 
     function pageChangeExisting(pageActions) {
-        debugger;
+       
         if (pageActions == 'prev1') {
             currentPage = currentPage === 1 ? 1 : --currentPage;
         }
@@ -137,4 +143,12 @@
         }
         fetchExistingModifierList(currentPage, pageSize,search);
     }
+    @* $('#existingModifierItemForm').submit(function (event) {
+        event.preventDefault();
+        debugger
+        selectedModifiers = [...tempSelectedModifiers];
+        updateSelectedModifiersDisplay();
+        $('#ExistingModifier').modal('hide');
+    }); *@
+
 </script>

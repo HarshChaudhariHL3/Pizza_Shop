@@ -90,7 +90,7 @@
                             <span>Items Per page: </span>
                             <div class="d-flex justify-content-end align-items-center w-25">
                                 <div>
-                                <select class="form-select ms-2 page-list" asp-for="PageSize" onchange="pagination()">
+                                <select class="form-select ms-2 page-list" asp-for="PageSize" onchange="paginationCategoryItem()">
                                     <option value="2" selected="@((Model.PageSize == 2) ? "selected" : null)">2</option>
                                     <option value="5" selected="@((Model.PageSize == 5) ? "selected" : null)">5</option>
                                     <option value="10" selected="@((Model.PageSize == 10) ? "selected" : null)">10</option>
@@ -106,14 +106,14 @@
                                     </span>
                                 </div>
                                 <div class="m-2 ">
-                                <button class="page-link btn" id="prev"  onclick="pageChange('prev')" @(Model.CurrentPage
+                                <button class="page-link btn" type="button" id="prev2"  onclick="pageChangeCategoryItem('prev2')" @(Model.CurrentPage
                                                     == 1 ? "disabled" : "") aria-label="Previous" id="previous_page">
                                
                                 <i class="fa-solid fa-backward" aria-hidden="true"></i>
                                 </button>
                                 </div>
                                 <div class="m-2 ">
-                                    <button class="page-link btn" id="next" onclick="pageChange('next')" @((Model.CurrentPage
+                                    <button class="page-link btn" type="button" id="next2" onclick="pageChangeCategoryItem('next2')" @((Model.CurrentPage
                                                     *Model.PageSize >= Model.TotalItems) ? "disabled" : "") aria-label="Next" id="next_page">
                                         <i class="fa-solid fa-forward" aria-hidden="true"></i>
                                     </button>
@@ -165,7 +165,7 @@
 
 @* edit Category Items *@
 
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -496,8 +496,6 @@
 @* model end *@
 
 
-@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
-
 <script>
             @* var canAddEdit = '@Context.Items["CanAddEdit"]';
         if (canAddEdit === 'False') {
@@ -648,25 +646,39 @@ function addModifierSection(modifierId, modifierName) {
 // Load modifier groups on page load
     loadModifierGroups();
 
-        function editLoadModifierGroups() {
+        function editLoadModifierGroups(selectedModifiers) {
+            debugger
             $.ajax({
                 url: '/Menu/GetAllModifier',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
+                    debugger
                     console.log("Response Data:", data);
+                    selectedModifierGroupEdit = [];
 
                     const dropdownMenu = document.querySelector('.editModifierDropDown');
+
                     data.forEach(modifier => {
+                        const IsSelected = selectedModifiers.some(m => m.id == modifier.modifierGroupId);
                         const listItem = document.createElement('li');
                         listItem.innerHTML = `
                             <div class="form-check">
-                                <input class="form-check-input modifier-checkbox" type="checkbox" value="${modifier.modifierGroupId}" id="checkbox-${modifier.modifierGroupId}">
+                                <input class="form-check-input modifier-checkbox" type="checkbox" value="${modifier.modifierGroupId}" 
+                                id="checkbox-${modifier.modifierGroupId}" ${IsSelected ? "checked" : ""}>
                                 <label class="form-check-label" for="checkbox-${modifier.modifierGroupId}">
                                     ${modifier.modifierName} 
                                 </label>
                             </div>`;
                         dropdownMenu.appendChild(listItem);
+
+                        if(IsSelected){
+                            const selectedModifierGroups = selectedModifiers.find(m => m.id == modifier.modifierGroupId);
+                            selectedModifiers.push({ id: modifier.modifierGroupId, name: modifier.modifierName });
+                        }
+                        @* addModifierSection(modifier.modifierGroupId, modifier.modifierName); *@
+
+                        editModifierSection(modifier.modifierGroupId, modifier.modifierName, modifier.minValue, modifier.maxValue);
                     });
                 },
                 error: function (xhr, status, error) {
@@ -676,13 +688,14 @@ function addModifierSection(modifierId, modifierName) {
             });
         }
 
-    editLoadModifierGroups();
+    
 
     $('#searchCategoryList').on('search', function() {
         search = $(this).val();  
         fetchCategoryItems(currentCategoryId, currentPage, pageSize, search); 
     });
-    function pagination() {
+    function paginationCategoryItem() {
+        debugger
         var value =parseInt($("#PageSize").val());
         pageSize = value;
         let totalPages = Math.ceil(@Model.TotalItems / pageSize);
@@ -692,9 +705,9 @@ function addModifierSection(modifierId, modifierName) {
         fetchCategoryItems(currentCategoryId,currentPage,pageSize,search);
     }
 
-    function pageChange(pageAction) {
-
-        if (pageAction == 'prev') {
+    function pageChangeCategoryItem(pageAction) {
+        debugger
+        if (pageAction == 'prev2') {
             currentPage = currentPage === 1 ? 1 : --currentPage;
         }
         else {
@@ -705,47 +718,57 @@ function addModifierSection(modifierId, modifierName) {
 
 
     
-function editModifierSection(SelectedModifiers) {
-
-    console.log("Adding Modifier Section:", SelectedModifiers);
-    for (let i = 0; i < SelectedModifiers.length; i++) {
-        const modifierId = SelectedModifiers[i].modifierId;
-        const modifierName = SelectedModifiers[i].modifierGroupName;
-
-        let htmlContent = `
-            <div class="modifier-group-container mt-3" id="group-${modifierId}">
-                <div class="modifier-group-header d-flex justify-content-between">
-                    <div>
-                        <strong>${modifierName}</strong>
-                        <select class="modifier-qty form-select" id="MinimumValue">
-                            <option value="0" ${SelectedModifiers[i].minValue == 0 ? "selected" : ""}>0</option>
-                            <option value="1"  ${SelectedModifiers[i].minValue == 1 ? "selected" : ""}>1</option>
-                            <option value="2"  ${SelectedModifiers[i].minValue == 2 ? "selected" : ""}>2</option>
-                            <option value="3"  ${SelectedModifiers[i].minValue == 3 ? "selected" : ""}>3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <button class="delete-group btn" data-group-id="${modifierId}">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                        <select class="modifier-qty form-select" value = ${SelectedModifiers[i].maxValue} id="MaximumValue">
-                            <option value="0" ${SelectedModifiers[i].maxValue == 0 ? "selected" : ""}>0</option>
-                            <option value="1"  ${SelectedModifiers[i].maxValue == 1 ? "selected" : ""}>1</option>
-                            <option value="2"  ${SelectedModifiers[i].maxValue == 2 ? "selected" : ""}>2</option>
-                            <option value="3"  ${SelectedModifiers[i].maxValue == 3 ? "selected" : ""}>3</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            @* <div class="modifier-items">`
-                    ${generateModifierItemsHtml(SelectedModifiers[i].modifierItems)};
-                    </div>`; *@
-        `;
-        document.querySelector("#editModifierContainer").insertAdjacentHTML("beforeend", htmlContent);
-    }
+function editModifierSection(modifierGroupId, modifierName, minValue, maxValue) {
+    debugger
+    $.ajax({
+        url: "/Menu/GetModifierItemDetails",
+        type: "GET",
+        dataType: "json",
+        data : { modifierGroupId: modifierGroupId },
+        success: function (data) {
+            debugger
+            console.log("Response Data:", data);
+            let htmlContent = '';
+            data.forEach(modifier => {
+                htmlContent += `
+                    <div class="modifier-group-container mt-3" id="group-${modifier.modifierGroupId}">
+                        <div class="modifier-group-header d-flex justify-content-between">
+                            <div>
+                                <strong>${modifier.modifierName}</strong>
+                                <select class="modifier-qty form-select" id="MinimumValue">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button class="delete-group btn" data-group-id="${modifier.modifierGroupId}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <select class="modifier-qty form-select" id="MaximumValue">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modifier-items">
+                            ${generateModifierItemsHtml(modifier.modifierItems)}
+                        </div>
+                    </div>`;
+            });
+            document.querySelector("#editModifierContainer").innerHTML = htmlContent;
+        },
+        error: function () {
+            debugger
+            alert("Error loading modifiers.");
+        }
+    })
 }
 
-       @* // Generate HTML for modifier items
+       // Generate HTML for modifier items
         function generateModifierItemsHtml(items) {
             return items.map(item => `
         <div class="modifier-item d-flex justify-content-between">
@@ -753,7 +776,7 @@ function editModifierSection(SelectedModifiers) {
             <div><span class="modifier-price">₹${item.rate}</span></div>
         </div>`
             ).join('');
-        } *@
+        }
     $(document).ready(function () {       
         
         $('#deleteForm').submit(function (e) {
@@ -771,12 +794,9 @@ function editModifierSection(SelectedModifiers) {
                     // Handle success
                     if (response == true) {
                         $('#deleteItemModal').modal('hide');
-                        @* $("#deleteItemModal").hide(); *@
-
                         location.reload();
                     } else {
                         $('#deleteItemModal').modal('hide');
-                        @* $("#deleteItemModal").hide(); *@
                         location.reload();
                     }
                 },
@@ -793,6 +813,7 @@ function editModifierSection(SelectedModifiers) {
                 type: 'GET',
                 data: { itemId: itemId },
                 success: function (data) {
+                    debugger;
                     $('#editItemId').val(data.categoryItemId);
                     $('#editId').val(data.categoryId);
                     $('#editUnitId').val(data.unitId);
@@ -806,10 +827,12 @@ function editModifierSection(SelectedModifiers) {
                     $('#code').val(data.shortCode);
                     $('#editModal').modal('show');
 
-                    selectedModifiers = data.selectedModifiers;
-                    editModifierSection(selectedModifiers);
+                    selectedModifiers = data.selectedModifiers; 
+                    editLoadModifierGroups(selectedModifiers);
                 },
                 error: function (error) {
+                    debugger
+                    console.log(error);
                     console.error('Error fetching item details:', error);
                 }
             });

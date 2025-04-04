@@ -22,6 +22,4 @@ public partial class Category
     public string? ModifiedBy { get; set; }
 
     public virtual ICollection<CategoryItem> CategoryItems { get; set; } = new List<CategoryItem>();
-
-    public virtual ICollection<ModifierGroup> ModifierGroups { get; set; } = new List<ModifierGroup>();
 }

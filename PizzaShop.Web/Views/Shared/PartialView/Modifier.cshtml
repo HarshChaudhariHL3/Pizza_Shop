@@ -88,8 +88,8 @@
                         </div>
                         <button class="border border-0 bg-white mt-3 text-primary addExistingModifier-btn"
                             id="ExistingModifiers"> + Add
-                            Existing Modifier</button>
-                            <div id="ExistingModifiersList"></div>
+                            Existing Modifier <span id="selectedModifiersCount">(0)</span></button>
+                        <div id="ExistingModifiersList"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -192,7 +192,6 @@
     var pageSizeModifier = 5;
     var search = "";
     var currentModifierId = null;
-    selectedModifierObject = [];
 
     function fetchModifierItems(ModifierGroupId, currentPageModifier, pageSizeModifier) {
 
@@ -216,24 +215,31 @@
 
     }
     var currentPage = 1;
-    var pageSize = 5; 
+    var pageSize = 5;
     var search = "";
 
-    function fetchExistingModifierList(currentPage,pageSize,search) {
-        debugger;
+    function fetchExistingModifierList(currentPage, pageSize, search) {
+
         $.ajax({
             url: '/Menu/GetALLModifierItemDetails',
             type: 'GET',
             data: {
                 page: currentPage,
                 pageSize: pageSize,
-                search:search
+                search: search
             },
             success: function (data) {
-                debugger;
+
                 console.log(data);
-                $('#ExistingModifierModal').html(data);
-                $('#ExistingModifier').modal('show');
+                if (!$('#ExistingModifier').hasClass('show')) {
+                    $('#ExistingModifierModal').html(data);
+                    $('#ExistingModifier').modal('show');
+                }
+                else {
+                    $('#ExistingModifier').modal('hide');
+                    $('#ExistingModifierModal').html(data);
+                    $('#ExistingModifier').modal('show');
+                }
             },
             error: function (error) {
                 console.error('Error fetching item details:', error);
@@ -241,17 +247,20 @@
         });
     }
 
+    let tempSelectedModifiers = [];
+    let selectedModifiers = [];
     function updateSelectedModifiersDisplay() {
+        document.getElementById('selectedModifiersCount').textContent = `(${selectedModifiers.length})`;
         let selectedHtml = '';
 
         if (selectedModifiers.length > 0) {
             selectedHtml = '<p>Selected Modifiers:</p><ul class="d-flex flex-wrap gap-3">';
             selectedModifiers.forEach(item => {
                 selectedHtml += `
-                <li class="d-flex border-2 border-dark me-2 p-2 gap-3" style="align-items: center; border: 1px solid #000; border-radius: 500px;">
-                   ${item.name} 
-                    <span class="removeModifier text-danger" data-item-id="${item.id}" style="cursor:pointer;"> X </span>
-                </li>`;
+                    <li class="d-flex border-2 border-dark me-2 p-2 gap-3" style="align-items: center; border: 1px solid #000; border-radius: 500px;">
+                    ${item.name} 
+                        <span class="removeModifier text-danger" data-item-id="${item.id}" style="cursor:pointer;"> X </span>
+                    </li>`;
             });
             selectedHtml += '</ul>';
         } else {
@@ -259,29 +268,21 @@
         }
 
         $('#ExistingModifiersList').html(`
-        @* <span class="text-primary">+ Add Existing Modifier (${selectedModifiers.length})</span> *@
-        ${selectedHtml}
-    `);
+            @* <span class="text-primary">+ Add Existing Modifier (${selectedModifiers.length})</span> *@
+            ${selectedHtml}
+        `);
 
         $(document).on('click', '.removeModifier', function () {
-            debugger
             let itemId = $(this).data('item-id');
-
             selectedModifiers = selectedModifiers.filter(item => item.id !== itemId);
             tempSelectedModifiers = tempSelectedModifiers.filter(item => item.id !== itemId);
 
             updateSelectedModifiersDisplay();
-            @* setTimeout(() => {
-                $('#ExistingModifier').modal('show');
-                let selectedSize = parseInt($('#pageSizeSelect').val());
-                ExistingModifierItem(1, selectedSize);
-            }, 300); *@
-        });
+            });
     }
-    let tempSelectedModifiers =[];
-    let selectedModifiers =[];
 
-    $(document).on('change', '.item-checkbox', function () {
+    $(document).on('change', ':checkbox', function () {
+        debugger
         let itemId = $(this).data('id');
         let itemName = $(this).data('name');
 
@@ -293,23 +294,24 @@
             tempSelectedModifiers = tempSelectedModifiers.filter(item => item.id !== itemId);
         }
     });
-        $('#existingModifierItemForm').submit(function (event) {
+
+    $(document).on("submit", "#existingModifierItemForm", function (event) {
         event.preventDefault();
+        debugger
         selectedModifiers = [...tempSelectedModifiers];
         updateSelectedModifiersDisplay();
         $('#ExistingModifier').modal('hide');
     });
+        $('#addModifierGroupForm').submit(function () {
 
-    $('#addModifierGroupForm').submit(function () {
+            let selectedIds = selectedModifiers.map(item => item.id);
+            let selectedNames = selectedModifiers.map(item => item.name);
+            console.log("Select Modifier ", selectedIds);
+            console.log("Select Modifier ", selectedNames);
+            $('#selectedModifierIds').val(selectedIds.join(','));
+            $('#selectedModifierName').val(selectedNames.join(','));
 
-        let selectedIds = selectedModifiers.map(item => item.id);
-        let selectedNames = selectedModifiers.map(item => item.name);
-        console.log("Select Modifier ", selectedIds);
-        console.log("Select Modifier ", selectedNames);
-        $('#selectedModifierIds').val(selectedIds.join(','));
-        $('#selectedModifierName').val(selectedNames.join(','));
-
-    });
+        });
 
     $(document).ready(function () {
 
@@ -332,7 +334,7 @@
         }
 
         $(document).on('click', '#ExistingModifiers', function () {
-            fetchExistingModifierList(currentPage,pageSize,search);
+            fetchExistingModifierList(currentPage, pageSize, search);
         });
 
     });

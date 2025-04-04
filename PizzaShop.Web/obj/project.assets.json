@@ -8096,11 +8096,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\PizzaShop.Web.csproj",
+      "projectUniqueName": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\PizzaShop.Web.csproj",
       "projectName": "PizzaShop.Web",
-      "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\PizzaShop.Web.csproj",
+      "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\PizzaShop.Web.csproj",
       "packagesPath": "C:\\Users\\pca96\\.nuget\\packages\\",
-      "outputPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\obj\\",
+      "outputPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pca96\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -8118,8 +8118,8 @@
             "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj": {
               "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Entity\\PizzaShop.Entity.csproj"
             },
-            "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj": {
-              "projectPath": "d:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj"
+            "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj": {
+              "projectPath": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Service\\PizzaShop.Service.csproj"
             }
           }
         }
