@@ -5,6 +5,8 @@ public class ModifierListViewModel
     public int ModifierItemId { get; set; }
 
     public int ModifierGroupId { get; set; }
+    public int MaxValue { get; set; }
+    public int MinValue { get; set; }
 
     public string ModifierItemName { get; set; }
     public string ModifierGroupName { get; set; }

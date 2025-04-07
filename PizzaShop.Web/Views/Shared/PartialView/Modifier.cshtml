@@ -282,7 +282,7 @@
     }
 
     $(document).on('change', ':checkbox', function () {
-        debugger
+
         let itemId = $(this).data('id');
         let itemName = $(this).data('name');
 
@@ -297,7 +297,6 @@
 
     $(document).on("submit", "#existingModifierItemForm", function (event) {
         event.preventDefault();
-        debugger
         selectedModifiers = [...tempSelectedModifiers];
         updateSelectedModifiersDisplay();
         $('#ExistingModifier').modal('hide');

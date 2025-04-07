@@ -59,4 +59,9 @@ public interface IMenuRepository
 
     List<MappingItemModifier> GetModifierItemIdFromModifierGroupId(int ModifierGroupId);
    
+   CategoryModifierMapping EditCategoryModifierMapping(int ModifierId);
+   CategoryModifierMapping UpdateCategoryModifierMapping(CategoryModifierMapping modifier);
+   List<CategoryModifierMapping> GetAllCategoryModifierMapping(int CategoryItemId);
+
+    CategoryModifierMapping DeleteCategoryModifierMapping(int ModifierId);
 }

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Linq;
 using PizzaShop.Entity.Models;
 using PizzaShop.Entity.ViewModel;
 using PizzaShop.Repository.Interfaces;
@@ -71,7 +72,7 @@ public class MenuService : IMenuService
     }
 
     public CategoryListViewModel GetItemById(int itemId)
-    {
+        {
         var item = _menuRepository.GetItemById(itemId);
         if (item == null)
             return null;
@@ -170,6 +171,55 @@ public class MenuService : IMenuService
 
             _menuRepository.UpdateCategoryItem(categoryItem);
         }
+        
+        var allCategoryModifierMapping = _menuRepository.GetAllCategoryModifierMapping(model.CategoryItemId);
+        
+        for(int j= 0 ; j< allCategoryModifierMapping.Count; j++)
+        {
+           
+            if (allCategoryModifierMapping.Count > 0)
+            {
+                var categoryModifierMapping = allCategoryModifierMapping[j];
+                var isPresent = model.SelectedModifiers.Any(x => x.ModifierId == categoryModifierMapping.ModifierId);
+                if (!isPresent)
+                {
+                    _menuRepository.DeleteCategoryModifierMapping(categoryModifierMapping.CategoryModifierMappingId);
+                }
+            }
+            else
+            {
+                break;
+            }
+
+        }
+
+
+        for (int i = 0; i < model.SelectedModifiers.Count; i++)
+        {
+            var categoryModifierMapping = _menuRepository.EditCategoryModifierMapping(model.SelectedModifiers[i].ModifierId);
+
+
+
+            if (categoryModifierMapping != null)
+            {
+                categoryModifierMapping.MaxValue = model.SelectedModifiers[i].MaxValue;
+                categoryModifierMapping.MinValue = model.SelectedModifiers[i].MinValue;
+
+                _menuRepository.UpdateCategoryModifierMapping(categoryModifierMapping);
+            }else{
+                var categoryModifierMappingNew = new CategoryModifierMapping
+                {
+                    CategoryItemId = model.CategoryItemId,
+                    ModifierId = model.SelectedModifiers[i].ModifierId,
+                    MaxValue = model.SelectedModifiers[i].MaxValue,
+                    MinValue = model.SelectedModifiers[i].MinValue
+                };
+                _menuRepository.AddCategoryModifierMapping(categoryModifierMappingNew);
+            }
+
+        }
+
+
     }
 
     public void AddCategoryItem(CategoryListViewModel model)
@@ -313,6 +363,7 @@ public class MenuService : IMenuService
 
         var modifier = item.Select(x => new ModifierListViewModel
         {
+            ModifierGroupId = itemId,
             ModifierGroupName = modifierGroupName.ModifierName,
             ModifierItemName = x.ModifierItemName,
             ModifierItemId = x.ModifierItemId,
@@ -320,7 +371,9 @@ public class MenuService : IMenuService
             Quantity = x.Quantity,
             UnitId = x.UnitId,
             UnitName = x.Unit.UnitName,
-            Description = x.Description
+            Description = x.Description,
+            MaxValue = modifierGroupName.CategoryModifierMappings.FirstOrDefault()?.MaxValue ?? 0,
+            MinValue = modifierGroupName.CategoryModifierMappings.FirstOrDefault()?.MinValue ?? 0,
         }).ToList();
 
         return modifier;

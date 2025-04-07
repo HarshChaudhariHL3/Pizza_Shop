@@ -55,7 +55,8 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     }
     public List<ModifierGroup> GetAllModifierById()
     {
-        return _context.ModifierGroups.ToList();
+        return _context.ModifierGroups
+                .ToList();
     }
     public MappingItemModifier GetMappingModifierItemById(int itemId)
     {
@@ -248,6 +249,20 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             return null;
         }
     }
+    public CategoryModifierMapping UpdateCategoryModifierMapping(CategoryModifierMapping modifier)
+    {
+        try
+        {
+            _context.CategoryModifierMappings.Update(modifier);
+            _context.SaveChanges();
+            return modifier;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+    }
     public CategoryModifierMapping AddCategoryModifierMapping(CategoryModifierMapping categoryModifierMapping)
     {
         try
@@ -261,8 +276,40 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             Console.WriteLine($"DbUpdateException: {ex.Message}\n{ex.InnerException?.Message}");
             throw;
         }
-
-
+    }
+    public List<CategoryModifierMapping> GetAllCategoryModifierMapping(int CategoryItemId)
+    {
+        try
+        {
+            return _context.CategoryModifierMappings
+                .Include(x => x.CategoryItem)
+                .Include(x => x.Modifier)
+                .Where(x => x.CategoryItemId == CategoryItemId)
+                .ToList();
+        }
+        catch (DbUpdateException ex)
+        {
+            Console.WriteLine($"DbUpdateException: {ex.Message}\n{ex.InnerException?.Message}");
+            throw;
+        }
+    }
+    public CategoryModifierMapping EditCategoryModifierMapping(int ModifierId)
+    {
+        var categoryModifierMapping = _context.CategoryModifierMappings
+            .Include(x => x.Modifier)
+            .FirstOrDefault(x => x.ModifierId == ModifierId);
+        return categoryModifierMapping;
+    }
+    public CategoryModifierMapping DeleteCategoryModifierMapping(int ModifierId)
+    {
+        var categoryModifierMapping = _context.CategoryModifierMappings.FirstOrDefault(x => x.ModifierId == ModifierId);
+        if (categoryModifierMapping != null)
+        {
+            _context.CategoryModifierMappings.Remove(categoryModifierMapping);
+            _context.SaveChanges();
+            return categoryModifierMapping;
+        }
+        return null;
     }
 
 
@@ -297,7 +344,9 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
 
     public ModifierGroup GetModifierGroupById(int id)
     {
-        var name = _context.ModifierGroups.FirstOrDefault(p => p.ModifierGroupId == id);
+        var name = _context.ModifierGroups
+        .Include(x => x.CategoryModifierMappings)
+        .FirstOrDefault(p => p.ModifierGroupId == id);
         return name;
     }
     public Unit unitNameById(int id)

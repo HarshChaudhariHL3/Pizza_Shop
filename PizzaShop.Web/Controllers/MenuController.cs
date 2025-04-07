@@ -97,7 +97,8 @@ public class MenuController(IMenuService _menuService) : Controller
         {
             _menuService.EditCategoryItem(model);
             TempData["Success"] = "CategoryItem Edited Successfully";
-            return PartialView("./PartialView/Category");
+            // return PartialView("./PartialView/Category");
+            return Json(new { Success = true });
         }
         catch (Exception ex)
         {
@@ -289,8 +290,7 @@ public class MenuController(IMenuService _menuService) : Controller
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }
-    [Route("/Menu/GetAllModifier")]
-    
+    // [Route("/Menu/GetAllModifier")]
     [HttpGet]
     public IActionResult GetAllModifier()
     {
