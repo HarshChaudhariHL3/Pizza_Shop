@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShop.Entity.ViewModel;
@@ -492,7 +493,7 @@ public class MenuController(IMenuService _menuService) : Controller
         try
         {
             PaginationViewModel<ExistingModifierViewModel> modifierItemsList = await _menuService.GetModifierItems(page,pageSize,search);
-            return PartialView("PartialView/_ExistingModifiersPartial" ,modifierItemsList);
+            return PartialView("PartialView/_ExistingModifiersTablePartial" ,modifierItemsList);
         }
         catch (Exception ex)
         {
@@ -535,7 +536,36 @@ public class MenuController(IMenuService _menuService) : Controller
         }
     }
 
+    [HttpGet]
+    public IActionResult ExistingModifierModelShow()
+    {
+        try
+        {
+            return PartialView("PartialView/_ExistingModifiersPartial");
+            // return PartialView("PartialView/_ExistingModifiersTablePartial");
+            // return Ok();
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
 
+    [HttpGet]
+    public IActionResult allModifierItemsByModifierGroupId(int modifierGroupId)
+    {
+        try
+        {
+            var item = _menuService.GetAllModifierItemsByModifierGroupId(modifierGroupId);
+            return Json(item);
+        }
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+    }
 
 
     #endregion

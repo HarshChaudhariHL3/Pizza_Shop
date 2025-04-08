@@ -513,7 +513,6 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
-            entity.Property(e => e.TableId).HasColumnName("table_id");
             entity.Property(e => e.TotalAmount).HasColumnName("total_amount");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
@@ -524,10 +523,6 @@ public partial class PizzaShopDbContext : DbContext
             entity.HasOne(d => d.Payment).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.PaymentId)
                 .HasConstraintName("orders_payment_id_fkey");
-
-            entity.HasOne(d => d.Table).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.TableId)
-                .HasConstraintName("orders_table_id_fkey");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>

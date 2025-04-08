@@ -64,4 +64,6 @@ public interface IMenuRepository
    List<CategoryModifierMapping> GetAllCategoryModifierMapping(int CategoryItemId);
 
     CategoryModifierMapping DeleteCategoryModifierMapping(int ModifierId);
+
+    List<ModifierItem> GetAllModifierItemsByModifierGroupId(int modifierGroupId);
 }

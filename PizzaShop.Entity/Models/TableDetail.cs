@@ -27,8 +27,6 @@ public partial class TableDetail
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
     public virtual Section? Section { get; set; }
 
     public virtual ICollection<TableOrderMapping> TableOrderMappings { get; set; } = new List<TableOrderMapping>();

@@ -302,7 +302,7 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
     }
     public CategoryModifierMapping DeleteCategoryModifierMapping(int ModifierId)
     {
-        var categoryModifierMapping = _context.CategoryModifierMappings.FirstOrDefault(x => x.ModifierId == ModifierId);
+        var categoryModifierMapping = _context.CategoryModifierMappings.FirstOrDefault(x => x.CategoryModifierMappingId == ModifierId);
         if (categoryModifierMapping != null)
         {
             _context.CategoryModifierMappings.Remove(categoryModifierMapping);
@@ -390,6 +390,14 @@ public class MenuRepository(PizzaShopDbContext _context) : IMenuRepository
             _context.ModifierItems.RemoveRange(itemToDelete);
             _context.SaveChanges();
         }
+    }
+
+    public List<ModifierItem> GetAllModifierItemsByModifierGroupId(int modifierGroupId)
+    {
+        return _context.ModifierItems
+            .Include(x => x.MappingItemModifiers)
+            .Where(x => x.MappingItemModifiers.FirstOrDefault().ModifierGroupId == modifierGroupId)
+            .ToList();
     }
 
     #endregion

@@ -649,12 +649,13 @@ loadModifierGroups();
                     
 
         function editLoadModifierGroups(selectedModifiers) {
-
+            debugger
             $.ajax({
                 url: '/Menu/GetAllModifier',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
+                    debugger
                     const dropdownMenu = document.querySelector('.editModifierDropDown');
                     dropdownMenu.innerHTML = '';
                     document.querySelector("#editModifierContainer").innerHTML = '';
@@ -819,8 +820,8 @@ function editModifierSection(modifierGroupId, modifierName) {
            selectedModifierGroupEdit.push({ id: modifierGroupId, name: modifierName });
 
             if (data && data.length > 0) {
-                minValue = data[0].minValue || 0;
-                maxValue = data[0].maxValue || 0;
+               var minValue = data[0].minValue || 0;
+                var maxValue = data[0].maxValue || 0;
             }
 
 
@@ -917,7 +918,7 @@ function editModifierSection(modifierGroupId, modifierName) {
                 type: 'GET',
                 data: { itemId: itemId },
                 success: function (data) {
-
+                    debugger
                     $('#editItemId').val(data.categoryItemId);
                     $('#editId').val(data.categoryId);
                     $('#editUnitId').val(data.unitId);

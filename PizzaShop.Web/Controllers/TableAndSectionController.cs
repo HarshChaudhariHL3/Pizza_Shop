@@ -40,6 +40,7 @@ public class TableAndSectionController(ITablesAndSectionService _tablesAndSectio
         };
         return View(viewModel);
     }
+    
     [HttpGet]
     public async Task<IActionResult> Tables(int SectionId, int page, int pageSize, string search = "")
     {

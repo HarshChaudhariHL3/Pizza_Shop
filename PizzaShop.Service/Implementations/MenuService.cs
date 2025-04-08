@@ -176,21 +176,12 @@ public class MenuService : IMenuService
         
         for(int j= 0 ; j< allCategoryModifierMapping.Count; j++)
         {
-           
-            if (allCategoryModifierMapping.Count > 0)
-            {
                 var categoryModifierMapping = allCategoryModifierMapping[j];
                 var isPresent = model.SelectedModifiers.Any(x => x.ModifierId == categoryModifierMapping.ModifierId);
                 if (!isPresent)
                 {
                     _menuRepository.DeleteCategoryModifierMapping(categoryModifierMapping.CategoryModifierMappingId);
                 }
-            }
-            else
-            {
-                break;
-            }
-
         }
 
 
@@ -218,8 +209,6 @@ public class MenuService : IMenuService
             }
 
         }
-
-
     }
 
     public void AddCategoryItem(CategoryListViewModel model)
@@ -477,6 +466,22 @@ public class MenuService : IMenuService
         _menuRepository.DeleteMultipleModifierItem(dataId);
         return true;
     }
+
+    public List<ExistingModifierViewModel> GetAllModifierItemsByModifierGroupId(int modifierGroupId)
+    {
+        var item= _menuRepository.GetAllModifierItemsByModifierGroupId(modifierGroupId);
+
+        var model = new List<ExistingModifierViewModel>();
+        foreach (var i in item)
+        {
+            model.Add(new ExistingModifierViewModel
+            {
+                ModifierItemId = i.ModifierItemId,
+                ModifierItemName = i.ModifierItemName,
+            });
+        }
+        return model;
+    }   
 
 
     #endregion

@@ -9,8 +9,6 @@ public partial class Order
 
     public int CustomerId { get; set; }
 
-    public int? TableId { get; set; }
-
     public string? Status { get; set; }
 
     public float? TotalAmount { get; set; }
@@ -38,8 +36,6 @@ public partial class Order
     public virtual ICollection<OrderTaxMapping> OrderTaxMappings { get; set; } = new List<OrderTaxMapping>();
 
     public virtual Payment? Payment { get; set; }
-
-    public virtual TableDetail? Table { get; set; }
 
     public virtual ICollection<TableOrderMapping> TableOrderMappings { get; set; } = new List<TableOrderMapping>();
 }

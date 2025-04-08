@@ -3,7 +3,7 @@
 </div> *@
 
 
-@model PizzaShop.Entity.ViewModel.PaginationViewModel<PizzaShop.Entity.ViewModel.ExistingModifierViewModel>
+@model PizzaShop.Entity.ViewModel.ExistingModifierViewModel
 
 
 @* add existing modifier  *@
@@ -38,8 +38,8 @@
 
                                 </tr>
                             </thead>
-                            <tbody>
-                                @if (Model.Items.Any())
+                            <tbody id="existingModifierListBody">
+                                @* @if (Model.Items.Any())
                                 {
                                     @foreach (var item in Model.Items)
                                     {
@@ -98,7 +98,7 @@
                                     <tr>
                                         <td colspan="7">No items found for this Modifier.</td>
                                     </tr>
-                                }
+                                } *@
                             </tbody>
                         </table>
 
@@ -118,30 +118,35 @@
 
 
 <script>
+    var currentPage = 1;
+    var pageSize = 5;
+    var search = "";
+
+    function fetchExistingModifierList(currentPage, pageSize, search) {
+        debugger
+        $.ajax({
+            url: '/Menu/GetALLModifierItemDetails',
+            type: 'GET',
+            data: {
+                page: currentPage,
+                pageSize: pageSize,
+                search: search
+            },
+            success: function (data) {
+
+                console.log(data);
+                $('#existingModifierListBody').html(data);
+            },
+            error: function (error) {
+                console.error('Error fetching item details:', error);
+            }
+        });
+    }
+
     $('#searchExistingModifierList').on('search', function() {
     search = $(this).val();  
 
     fetchExistingModifierList(currentPage, pageSize, search); 
     });
-    function pagination() {
-        var value =parseInt($("#ExistingPageSize").val());
-        pageSize = value;
-        let totalPages = Math.ceil(@Model.TotalItems / pageSize);
-        if (currentPage > totalPages) {
-            currentPage = totalPages > 0 ? totalPages : 1;
-        }
-        fetchExistingModifierList(currentPage,pageSize,search);
-    }
-
-    function pageChangeExisting(pageActions) {
-       
-        if (pageActions == 'prev1') {
-            currentPage = currentPage === 1 ? 1 : --currentPage;
-        }
-        else {
-            currentPage = (currentPage * pageSize) > @Model.TotalItems ? currentPage : ++currentPage;
-        }
-        fetchExistingModifierList(currentPage, pageSize,search);
-    }
 
 </script>

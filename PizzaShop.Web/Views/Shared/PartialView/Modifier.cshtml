@@ -130,7 +130,7 @@
 </form>
 
 <form method="post" asp-action="EditModifier" asp-controller="Menu">
-    <input type="hidden" asp-for="ModifierGroupId" id="editModifierGroupId">
+    <input type="hidden" asp-for="ModifierGroupId" data-modifier-id="ModifierGroupId" id="editModifierGroupId">
 
     <div class="modal fade" id="editModifierModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -149,11 +149,16 @@
                             id="editModifierDescription"></textarea>
                         <label for="editModifierDescription">Description</label>
                     </div>
+                    <button class="border border-0 bg-white mt-3 text-primary AddExistingModifier-btn"
+                        id="ExistingModifiers"> + Add
+                        Existing Modifier <span id="selectedModifiersCount">(0)</span></button>
+                    <div id="EditExistingModifiersList"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -163,14 +168,6 @@
 
 
 @* Modal End *@
-
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-
 
 <Script type="text/javascript">
 
@@ -184,6 +181,7 @@
         document.getElementById('editModifierGroupId').value = ModifierGroupId;
         document.getElementById('editModifierName').value = ModifierName;
         document.getElementById('editModifierDescription').textContent = Description;
+        updateSelectedModifiersDisplayEdit(ModifierGroupId);
     }      
 </Script>
 
@@ -214,41 +212,13 @@
         });
 
     }
-    var currentPage = 1;
-    var pageSize = 5;
-    var search = "";
 
-    function fetchExistingModifierList(currentPage, pageSize, search) {
 
-        $.ajax({
-            url: '/Menu/GetALLModifierItemDetails',
-            type: 'GET',
-            data: {
-                page: currentPage,
-                pageSize: pageSize,
-                search: search
-            },
-            success: function (data) {
-
-                console.log(data);
-                if (!$('#ExistingModifier').hasClass('show')) {
-                    $('#ExistingModifierModal').html(data);
-                    $('#ExistingModifier').modal('show');
-                }
-                else {
-                    $('#ExistingModifier').modal('hide');
-                    $('#ExistingModifierModal').html(data);
-                    $('#ExistingModifier').modal('show');
-                }
-            },
-            error: function (error) {
-                console.error('Error fetching item details:', error);
-            }
-        });
-    }
 
     let tempSelectedModifiers = [];
     let selectedModifiers = [];
+
+
     function updateSelectedModifiersDisplay() {
         document.getElementById('selectedModifiersCount').textContent = `(${selectedModifiers.length})`;
         let selectedHtml = '';
@@ -268,7 +238,6 @@
         }
 
         $('#ExistingModifiersList').html(`
-            @* <span class="text-primary">+ Add Existing Modifier (${selectedModifiers.length})</span> *@
             ${selectedHtml}
         `);
 
@@ -278,8 +247,52 @@
             tempSelectedModifiers = tempSelectedModifiers.filter(item => item.id !== itemId);
 
             updateSelectedModifiersDisplay();
-            });
+        });
     }
+
+    function updateSelectedModifiersDisplayEdit(ModifierGroupId) {
+        $.ajax({
+
+            url: '/Menu/allModifierItemsByModifierGroupId',
+            type: 'GET',
+            data: { ModifierGroupId: ModifierGroupId },
+            success: function (data) {
+                debugger
+                let selectedHtml = '';
+                if (data.length > 0) {
+                    selectedHtml = '<p>Selected Modifiers:</p><ul class="d-flex flex-wrap gap-3">';
+                    data.forEach(item => {
+                        selectedHtml += `
+                                <li class="d-flex border-2 border-dark me-2 p-2 gap-3" style="align-items: center; border: 1px solid #000; border-radius: 500px;">
+                                ${item.modifierItemName} 
+                                    <span class="removeModifier text-danger" data-item-id="${item.modifierItemId}" style="cursor:pointer;"> X </span>
+                                </li>`;
+                    });
+                    selectedHtml += '</ul>';
+                } else {
+                    selectedHtml = '<p>No modifiers selected.</p>';
+                }
+                $('#EditExistingModifiersList').html(`
+                        ${selectedHtml}
+                    `);
+                $('#selectedModifiersCount').text(`(${data.length})`);
+                selectedModifiers = data.map(item => ({ id: item.modifierItemId, name: item.modifierItemName }));
+                document.getElementById('selectedModifiersCount').textContent = `(${selectedModifiers.length})`;
+
+                $(document).on('click', '.removeModifier', function () {
+                    let itemId = $(this).data('item-id');
+                    selectedModifiers = selectedModifiers.filter(item => item.modifierItemId !== itemId);
+                    updateSelectedModifiersDisplayEdit();
+                });
+
+            },
+            error: function (xhr, status, error) {
+                debugger
+                console.error("AJAX Error:", status, error, xhr);
+            }
+        });
+    }
+
 
     $(document).on('change', ':checkbox', function () {
 
@@ -301,17 +314,31 @@
         updateSelectedModifiersDisplay();
         $('#ExistingModifier').modal('hide');
     });
-        $('#addModifierGroupForm').submit(function () {
 
-            let selectedIds = selectedModifiers.map(item => item.id);
-            let selectedNames = selectedModifiers.map(item => item.name);
-            console.log("Select Modifier ", selectedIds);
-            console.log("Select Modifier ", selectedNames);
-            $('#selectedModifierIds').val(selectedIds.join(','));
-            $('#selectedModifierName').val(selectedNames.join(','));
+    $('#addModifierGroupForm').submit(function () {
 
+        let selectedIds = selectedModifiers.map(item => item.id);
+        let selectedNames = selectedModifiers.map(item => item.name);
+        $('#selectedModifierIds').val(selectedIds.join(','));
+        $('#selectedModifierName').val(selectedNames.join(','));
+    });
+
+    $(document).on('click', '#ExistingModifiers', function () {
+        debugger
+        $.ajax({
+            url: '/Menu/ExistingModifierModelShow',
+            type: 'GET',
+            success: function (data) {
+
+                $("#ExistingModifierModal").html(data);
+                fetchExistingModifierList(currentPage, pageSize, search);
+                $('#ExistingModifier').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error, xhr);
+            }
         });
-
+    });
     $(document).ready(function () {
 
         // When a Modifier is clicked
@@ -331,10 +358,6 @@
             currentModifierId = firstModifierId;
             fetchModifierItems(firstModifierId, currentPageModifier, pageSizeModifier, search);
         }
-
-        $(document).on('click', '#ExistingModifiers', function () {
-            fetchExistingModifierList(currentPage, pageSize, search);
-        });
 
     });
 </script>

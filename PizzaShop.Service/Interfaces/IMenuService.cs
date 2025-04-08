@@ -48,6 +48,8 @@ public interface IMenuService
     public List<ExistingModifierViewModel> GetModifierItems();
     Task<PaginationViewModel<ExistingModifierViewModel>> GetModifierItems(int page, int pageSize, string search = "");
      List<ModifierItem> ModifierItemsList();
+
+     List<ExistingModifierViewModel> GetAllModifierItemsByModifierGroupId(int modifierGroupId);
 }
 
 
