@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "JasyJlw4phqQUBBCV4yQ2sQKD6fCkTr+g6eFvQPHISE=",
+  "Hash": "rmkRyJjfTcDr+3qAIYIln4BHWmFEffDGSkE1AcIG6pA=",
   "Source": "PizzaShop.Web",
   "BasePath": "_content/PizzaShop.Web",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\login.css"
+    },
+    {
+      "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\css\\OrderApp.css",
+      "SourceId": "PizzaShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\",
+      "BasePath": "_content/PizzaShop.Web",
+      "RelativePath": "css/OrderApp.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\OrderApp.css"
     },
     {
       "Identity": "D:\\DotNet N Layered\\PizzaShop\\PizzaShop.Web\\wwwroot\\css\\site.css",

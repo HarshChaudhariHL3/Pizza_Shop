@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using PizzaShop.Service.Interfaces;
 
 
 namespace PizzaShop.Web.Controllers;
 
-public class OrderAppController : Controller
+public class OrderAppController(IOrderAppService _orderAppService) : Controller
 {
     public IActionResult Kot()
     {
-        return View();
+        var ModifierGroupList = _orderAppService.GetModifierGroupList();
+        return View(ModifierGroupList);
     }
 
-    
+
 
 
 
