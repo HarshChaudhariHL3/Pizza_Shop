@@ -69,10 +69,14 @@
 
                 </div>
                 <div class="col-6">
-                    <div class="form-floating">
+                    @* <div class="form-floating">
                         <input type="password" class="form-control" asp-for="Password" id="floatingPassword" placeholder="Password">
                         <label asp-for="Password">Password</label>
                         <span class="text-danger" asp-validation-for="Password"></span>
+                    </div> *@
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
                     </div>
                 </div>
             </div>
@@ -126,21 +130,21 @@
             <div class="row mt-3">
                 <div class="col">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" asp-for="ZipCode" id="fname" placeholder="Zipcode">
+                        <input type="text" class="form-control" asp-for="ZipCode"  placeholder="Zipcode">
                         <label asp-for="ZipCode">Zipcode</label>
                         <span class="text-danger" asp-validation-for="ZipCode"></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" asp-for="Address" id="fname" placeholder="Address">
+                        <input type="text" class="form-control" asp-for="Address"  placeholder="Address">
                         <label asp-for="Address">Address</label>
                         <span class="text-danger" asp-validation-for="Address"></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" asp-for="Phone" id="fname" placeholder="Phone">
+                        <input type="text" class="form-control" asp-for="Phone"  placeholder="Phone">
                         <label asp-for="Phone">Phone</label>
                         <span class="text-danger" asp-validation-for="Phone"></span>
                     </div>
@@ -157,17 +161,18 @@
 
 <script>
     $(document).ready(function () {
+
         $.ajax({
             url: '/Users/GetRoles',
             type: 'GET',
             success: function (data) {
+                debugger
                 console.log(data);
                 $.each(data, function (index, Role) {
                     $('#roleSelect').append(`<option value="${Role.roleId}">${Role.roleName}</option>`);
                 });
             }
         });
-
         $.ajax({
             url: '/Users/GetCountries',
             type: 'GET',
@@ -192,6 +197,10 @@
                     $.each(data, function (index, State) {
                         $('#stateSelect').append(`<option value="${State.stateId}">${State.stateName}</option>`);
                     });
+                },
+                error: function (response) {
+                    debugger
+                    console.log(response);
                 }
             });
         });

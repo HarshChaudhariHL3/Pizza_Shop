@@ -149,7 +149,7 @@
             </div>
 
             <div>
-                <button type="submit" disabled class="p-2 bg-primary text-white rounded">Update User</button>
+                <button type="submit"  class="p-2 bg-primary text-white rounded">Update User</button>
                 <button class="p-2 rounded" asp-controller="Users" asp-action="Users">Cancel</button>
             </div>
         </div>
@@ -160,7 +160,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script> *@
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        @* document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('form');
         const updateButton = form.querySelector('button[type="submit"]');
         const allInputs = form.querySelectorAll('input, select');
@@ -172,6 +172,7 @@
 
         // Keep a snapshot of the initial values for comparison
         const initialFormState = Array.from(allInputs).map((field) => {
+            debugger
             if (field.type === 'file') return null; // for file inputs we skip comparison
             return field.type === 'checkbox' || field.type === 'radio'
                 ? field.checked
@@ -180,6 +181,7 @@
 
         // Enable button if any input changes
         allInputs.forEach((input, index) => {
+            debugger;
             input.addEventListener('input', function () {
                 isFormChanged = Array.from(allInputs).some((field, idx) => {
                     if (field.type === 'file') return false; // Skip file comparison
@@ -192,7 +194,7 @@
                 updateButton.disabled = !isFormChanged;
             });
         });
-    });
+    }); *@
 
     $(document).ready(function () {
 

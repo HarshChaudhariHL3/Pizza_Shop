@@ -119,7 +119,8 @@ public class UsersController(IUserService _userService, IJwtService _jwtService)
         try
         {
             var roles = _userService.GetRoles();
-            return Json(roles);
+            var abc = Json(roles);
+            return abc;
         }
         catch (Exception ex)
         {

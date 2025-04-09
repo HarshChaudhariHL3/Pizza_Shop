@@ -10,7 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
-   
+    @* <script src="https://unpkg.com/bootstrap-multiselect@0.9.13/dist/js/bootstrap-multiselect.js"></script> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
@@ -23,97 +23,90 @@
 </head>
 
 <body>
-    
-    <!-- Navbar -->
-        <header>
-        <div class="top-nav">
-            <h2 class="logo d-flex align-items-center gap-2">
-                <span>
-                    <img src="~/images/logos/pizzashop_logo.png" height="50px" width="60px" alt="">
-                </span>
-                <span>Pizza Shop</span>
-            </h2>
-            <div>
-                <a asp-controller="OrderApp" asp-action="Kot" class="h1 pe-3">Kot</i></a>
+    <div class="p-0 bg-light" id="main-part">
+        <header class="header d-flex align-items-center justify-content-between px-sm-none p-2 bg-primary"
+            style="height: 60px;">
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2" id="logo-section">
+                    <a asp-action="Index" asp-controller="Home">
+                    <img src="~/images/logos/pizzashop_logo.png" width="60px" class="bg-white">
+                    </a>
+                    <span class="text-white fs-4 fw-semibold">PIZZASHOP</span>
+                </div>
             </div>
-            <div>
-                <a asp-controller="OrderApp" asp-action="WaitingList" class="h1 pe-3">Waiting List</i></a>
-            </div>
-            <div>
-                <a asp-controller="OrderApp" asp-action="Tables" class="h1 pe-3">Tables</i></a>
-            </div>
-            <div>
-                <a asp-controller="OrderApp" asp-action="MenuOrderApp" class="h1 pe-3">Menu</i></a>
-            </div>
-            <div class="info">
-                <div class="info-txt">
-                    <p class="name">
-                        <img src="~/images/Default_pfp.svg.png" alt="" height="50px" width="50px">
-                    </p>
-
-                    <div class="menu p-2">
-                        <ul>
-                            <li>
-                                <a asp-controller="Users" asp-action="Profile">
-                                    <span class="material-symbols-outlined"><i class="bi bi-person"></i></span>
-                                    <span>My Profile</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Validation" asp-action="Changepassword">
-                                    <span class="material-symbols-outlined"><i class="bi bi-key"></i></span>
-                                    <span>Change Password</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-controller="Validation" asp-action="Logout">
-                                    <span class="material-symbols-outlined"><i class="bi bi-box-arrow-left"></i></span>
-                                    <span>Logout</span>
-                                </a>
-                            </li>
-                        </ul>
+            <div class="dropdown d-flex align-items-center justify-content-center">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="border border-1 rounded-pill border-white w-50  p-2 d-flex justify-content-center">
+                        <a asp-controller="OrderApp" asp-action="Kot" class="text-decoration-none text-white">
+                            <span><i class="fa-solid fa-mobile-button"></i></span>
+                            <span>Kot</span>     
+                            </a>
+                    </div>
+                    <div class="border border-1 rounded-pill border-white  p-2 d-flex justify-content-center" style="width: 280px;">
+                        <a asp-controller="OrderApp" asp-action="WaitingList"
+                            class="text-decoration-none text-white">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <span>Waiting List</span>
+                        </a>
+                    </div>
+                    <div class="border border-1 rounded-pill border-white w-50  p-2 d-flex justify-content-center">
+                        <a asp-controller="OrderApp" asp-action="Tables"
+                            class="text-decoration-none text-white">
+                             <span><i class="fa-solid fa-table"></i></span>
+                            <span>Tables</span>
+                            </a>
+                    </div>
+                    <div class="border border-1 rounded-pill border-white w-50  p-2 d-flex justify-content-center">
+                        <a asp-controller="OrderApp" asp-action="MenuOrderApp"
+                            class="text-decoration-none text-white">
+                            <span><i class="fa-solid fa-bell-concierge"></i></span>
+                            <span>Menu</span>
+                            </a>
                     </div>
                 </div>
-            
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
+                    @* <img src="/@profile" width="40px" class="rounded-5"> *@
+                    <img src="~/images/Default_pfp.svg.png" alt="" height="50px" width="50px">
+                    <img src="" width="40px" class="rounded-5">
+                </button>
+                <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
+                    <li></li>
+                    <li class="d-flex align-items-center gap-3">
+                        @* <img src="/@profile" width="30px" alt="image"> *@
+                        <img src="" width="30px" alt="image">
+
+                        <span>
+                            @* @user *@
+                            User
+                        </span>
+                    </li>
+                    <hr>
+                    <li>
+                        <a asp-controller="Users" asp-action="Profile"
+                            class="dropdown-item text-decoration-none text-dark ">
+                            <span class="material-symbols-outlined"><i class="fa-solid fa-user"></i></span>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Validation" asp-action="ChangePassword"
+                            class="dropdown-item text-decoration-none text-dark">
+                            <span class="material-symbols-outlined"><i class="fa-solid fa-key"></i></span>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                    <li>
+                        <button type="submit" class="dropdown-item" data-bs-toggle="modal"
+                            data-bs-target="#LogoutModal"><i class="fa-solid fa-right-from-bracket"></i>
+                            LogOut</button>
+                    </li>
+                </ul>
             </div>
-        </div>
-
-        <!-- sidebar open and close buttons -->
-
-        <button class="menu-toggle" id="menu-toggle-open">
-            <a class="navbar-brand ps-3" id="sidebar-toggle">
-                <span class="material-symbols-outlined side-open-icon"><i class="bi bi-justify"></i></i></span>
-        </button>
-        <button class="menu-toggle" id="menu-toggle-close">
-
-            <span class="material-symbols-outlined side-close-icon"><i class="bi bi-x-lg"></i></span>
-        </button>
-        <!-- sidebar open and close buttons over -->
-    </header>
-
-    <div class="container-fluid">
-        <main  class="pb-3 p-5">
-            <partial name="_Notification" />
+        </header>
+        <div class="container-fluid p-4">
             @RenderBody()
-        </main>
+        </div>
     </div>
-
-    @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 
 </html>
-
-@* <script>
-    $(document).ready(function () {
-        $.ajax({
-            url: "@Url.Action("UserProfile", "Home")",
-            type: "GET",
-            success: function (response) {
-                console.log(response);
-                $("#profileimg").attr("src", response);
-            },
-
-        });
-    })
-</script> *@

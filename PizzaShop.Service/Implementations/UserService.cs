@@ -49,7 +49,7 @@ public class UserService(IUserRepository _repository) : IUserService
             return null;
         }
 
-        var role = user.UserRole.HasValue ? _repository.GetRole(user.UserRole.Value) : null;
+        var role = user.UserRole.HasValue ? _repository.GetRole(user.UserId) : null;
 
         var edituserViewModel = new EdituserViewModel
         {

@@ -11,7 +11,7 @@ public class CustomersController(ICustomersService _customersService) : Controll
     {
         return View();
     }
-        [HttpGet]
+    [HttpGet]
     public async Task<IActionResult> GetCustomerDetails( int page, int pageSize, string search, string customerTime )
     {
         try
