@@ -2,15 +2,16 @@ namespace PizzaShop.Entity.ViewModel;
 
 public class KotViewModel
 {
-    public List<KotModifierGroup> ModifierGroupList { get; set; }
+    public List<KotCategory> CategoryList { get; set; }
 
 }
 
 
-public class KotModifierGroup
+public class KotCategory
 {
-    public int ModifierGroupId { get; set; }
+    public int CategoryId { get; set; }
 
-    public string ModifierName { get; set; } = null!;
+    public string CategoryName { get; set; } = null!;
 
 }
+

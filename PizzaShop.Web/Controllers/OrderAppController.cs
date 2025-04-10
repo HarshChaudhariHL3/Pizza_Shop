@@ -8,8 +8,8 @@ public class OrderAppController(IOrderAppService _orderAppService) : Controller
 {
     public IActionResult Kot()
     {
-        var ModifierGroupList = _orderAppService.GetModifierGroupList();
-        return View(ModifierGroupList);
+        var CategoryList = _orderAppService.GetCategoryList();
+        return View(CategoryList);
     }
 
 

@@ -3,8 +3,11 @@
     ViewData["Title"] = "Kot";
 }
 @model PizzaShop.Entity.ViewModel.KotViewModel
+<style>
 
-<div class="container-fluid mt-3 mb-3 border">
+</style>
+
+@* <div class="container-fluid mt-3 mb-3 border">
     <h1>Kot</h1>
     <div class="row">
         <div class="col-md-12">
@@ -15,38 +18,103 @@
 
                     @foreach(var i in Model.ModifierGroupList){
                     <button class="nav-link border-0  " id="nav-tqb2-tab" data-bs-toggle="tab"
-                        data-bs-target="#nav-tqb2" type="button" role="tab" aria-controls="nav-profile"
+                        data-bs-target="#nav-tqb-2" type="button" role="tab" aria-controls="nav-profile"
                         aria-selected="false">@i.ModifierName</button>
                     }
-
-                @* <button class="nav-link border-0 " id="nav-tqb2-tab" data-bs-toggle="tab" data-bs-target="#nav-tqb2"
-                    type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Tab-2</button>
-                <button class="nav-link border-0 " id="nav-tab3-tab" data-bs-toggle="tab" data-bs-target="#nav-tab3"
-                    type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Tab-3</button> *@
             </div>
+            <div id="modifierItems"></div>
 
-            <div class="tab-content p-3 border-0" id="nav-tabContent">
-                <div class="tab-pane fade active show" id="nav-tab1" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam non fuga quod
-                        ullam a quam, rerum enim dicta reiciendis explicabo.</p>
-                </div>
-                <div class="tab-pane fade" id="nav-tqb2" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat commodi fuga a.
-                        Officia quo, sint labore alias fugiat voluptatum itaque.</p>
-                </div>
-                <div class="tab-pane fade" id="nav-tab3" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis non adipisci
-                        sapiente repellat, unde deserunt commodi earum fugit sequi. Vel incidunt eaque
-                        autem, natus porro amet rem facere officia numquam!</p>
-                </div>
-
-            </div>
         </div>
 
     </div>
 
+</div> *@
+
+<div class="ordersApp-main-content">
+    <div class="ordersApp-header">
+        <h4 class="text-primary px-5 py-3">KOT</h4>
+    </div>
+
+    <div class="kot-main-content">
+        <div class="kot-order-categories bg-white mx-3 px-3 py-3 ">
+        <div class="kot-category" data-categoryid="0"><span>All</span></div>
+            @foreach (var category in Model.CategoryList)
+            {
+                <div class="kot-category" data-categoryname="@category.CategoryName" data-categoryid="@category.CategoryId"><span
+                        data-categoryname="@category.CategoryName" data-categoryid="@category.CategoryId">@category.CategoryName</span></div>
+            }
+
+        </div>
+
+        <div class="kot-orders-categories-cards mx-3 my-2 px-3 py-3 bg-white">
+            <div class="kot-orders-header-pagination d-flex align-items-center justify-content-between mb-2">
+                <p class="mb-0 text-primary fw-bold fs-4">All</p>
+                <div class="kot-orders-filtering-slide d-flex align-items-center gap-2">
+                    <div class="kot-filtering-orders">
+                        <button class="border-1 active-button-pizzaShop px-2 py-1 progress-kotOrders"
+                            data-progress="InProgress">In Progress</button>
+                        <button class="border-1 inactive-button-pizzaShop px-2 py-1 progress-kotOrders"
+                            data-progress="Ready">Ready</button>
+                    </div>
+                    <div class="kot-sliding-orders d-flex gap-3">
+                        <button class="btn btn-outline-primary kot-order-slideprevious">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-outline-primary kot-order-slidenext">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="all-kot-cards-wrapper overflow-hidden position-relative" style="width: 100%;">
+                <div class="all-kot-cards d-flex gap-3" style="transition: transform 0.5s ease;" id="allKotOrderCards">
+
+                    <!-- KOT Orders Card Structure Partial View -->
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    $(document).on("click", ".kot-category", function(){
+  kotCategory = $(this).data("categoryid");
+  kotCategoryName = $(this).data("categoryname");
+  console.log(`This tab data is clicked ${kotCategory} asdf`);
+  loadKOTOrders();
+})
 
+    $(document).on("click", ".progress-kotOrders", function(){
+        $(".progress-kotOrders").removeClass("active-button-pizzaShop");
+        $(".progress-kotOrders").addClass("inactive-button-pizzaShop");
+        $(this).removeClass("inactive-button-pizzaShop");
+        $(this).addClass("active-button-pizzaShop");
+        loadKOTOrders();
+    })
+
+    $(document).on("click", ".kot-order-slideprevious", function(){
+        console.log("Previous clicked");
+    })
+
+    $(document).on("click", ".kot-order-slidenext", function(){
+        console.log("Next clicked");
+    })
+
+    function loadKOTOrders() {
+        $.ajax({
+            url: '@Url.Action("GetKotOrderCards", "OrderApp")',
+            type: 'GET',
+            data: {
+                categoryId: kotCategory,
+                progress: $(".active-button-pizzaShop").data("progress")
+            },
+            success: function (response) {
+                $('#allKotOrderCards').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error loading KOT orders:', error);
+            }
+        });
+    }
 </script>

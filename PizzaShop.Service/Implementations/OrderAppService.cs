@@ -6,24 +6,24 @@ namespace PizzaShop.Service.Implementations;
 
 public class OrderAppService(IOrderAppRepository _orderAppRepository) : IOrderAppService
 {
-    public KotViewModel GetModifierGroupList()
+    public KotViewModel GetCategoryList()
     {
-        var modifierGroupList = _orderAppRepository.GetModifierGroupList();
+        var CategoryList = _orderAppRepository.GetCategoryList();
 
-        var modifierGroupViewModelList = new KotViewModel
+        var CategoryViewModelList = new KotViewModel
         {
-            ModifierGroupList = new List<KotModifierGroup>()
+            CategoryList = new List<KotCategory>()
         };
-        foreach (var modifierGroup in modifierGroupList)
+        foreach (var modifierGroup in CategoryList)
         {
-            var modifierGroupViewModel = new KotModifierGroup
+            var CategoryViewModel = new KotCategory
             {
-                ModifierGroupId = modifierGroup.ModifierGroupId,
-                ModifierName = modifierGroup.ModifierName
+                CategoryId = modifierGroup.CategoryId,
+                CategoryName = modifierGroup.CategoryName
             };
-            modifierGroupViewModelList.ModifierGroupList.Add(modifierGroupViewModel);
+            CategoryViewModelList.CategoryList.Add(CategoryViewModel);
         }
 
-        return  modifierGroupViewModelList;
+        return  CategoryViewModelList;
     }
 }

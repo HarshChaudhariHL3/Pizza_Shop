@@ -4,5 +4,5 @@ namespace PizzaShop.Service.Interfaces;
 
 public interface IOrderAppService
 {
-    KotViewModel GetModifierGroupList();
+    KotViewModel GetCategoryList();
 }

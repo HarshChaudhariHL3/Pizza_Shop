@@ -6,8 +6,8 @@ namespace PizzaShop.Repository.Implementations;
 
 public class OrderAppRepository(PizzaShopDbContext _context) : IOrderAppRepository
 {
-    public List<ModifierGroup> GetModifierGroupList(){
-        var modifierGroupList = _context.ModifierGroups.ToList();
-        return modifierGroupList;
+    public List<Category> GetCategoryList(){
+        var CategoryList = _context.Categories.ToList();
+        return CategoryList;
     }
 }
