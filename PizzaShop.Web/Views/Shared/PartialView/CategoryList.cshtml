@@ -930,6 +930,7 @@ function editModifierSection(modifierGroupId, modifierName) {
                     $('#available').prop('checked', data.isAvailable);
                     $('#tax').prop('checked', data.defaultTax);
                     $('#code').val(data.shortCode);
+                    $('#taxpercentage').val(data.taxPercentage);
 
                     $('#editModal').modal('show');
 
@@ -996,6 +997,7 @@ function editModifierSection(modifierGroupId, modifierName) {
             var isAvailable = $('#available').prop('checked');
             var defaultTax = $('#tax').prop('checked');
             var shortCode = $('#code').val(); 
+            var taxPercentage = $('#taxpercentage').val();
 
 
 
@@ -1010,11 +1012,12 @@ function editModifierSection(modifierGroupId, modifierName) {
                 ItemType: itemType,
                 IsAvailable: isAvailable,
                 DefaultTax: defaultTax,
+                TaxPercentage: taxPercentage,
                 ShortCode: shortCode
             };
 
             if (selectedModifierGroupEdit && selectedModifierGroupEdit.length > 0) {
-                formData["selectedModifiers"] = selectedModifierGroupEdit; // Safely append modifiers
+                formData["selectedModifiers"] = selectedModifierGroupEdit; 
                 }
 
             // Send data to the server using AJAX

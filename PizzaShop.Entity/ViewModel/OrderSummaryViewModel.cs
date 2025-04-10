@@ -26,6 +26,7 @@ public class TableAndSectionViewModel
     public string SectionName { get; set; } = null!;
     public string Name { get; set; } = null!;
     public int NoOfPerson { get; set; }
+    public int Capacity { get; set; }
 }
 
 
@@ -35,7 +36,8 @@ public class ItemsViewModel
     public string ItemName { get; set; } = null!;
     public string? ItemType { get; set; }
     public int? Quantity { get; set; }
-    public decimal? Rate { get; set; }
+    public float? Rate { get; set; }
+    public int? TaxPercentage { get; set; }
     public decimal? TotalAmount { get; set; }
     public List<ModifierViewModel> modifier = new List<ModifierViewModel>();
 }

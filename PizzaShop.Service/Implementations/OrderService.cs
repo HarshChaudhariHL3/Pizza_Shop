@@ -102,6 +102,7 @@ public class OrderService(IOrderRepository _orderRepository) : IOrderService
 
     public OrderSummaryViewModel GetOrderDetails(long id)
     {
+        
         return _orderRepository.GetOrderDetails(id);
     }
 

@@ -8,5 +8,9 @@ public class ModifierViewModel
 
     public string? Description { get; set; }
 
+    public int? Quantity { get; set; }
+
+    public float? Rate { get; set; }
+
 
 }

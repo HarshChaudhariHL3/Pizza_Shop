@@ -37,11 +37,12 @@
 
     <div class="kot-main-content">
         <div class="kot-order-categories bg-white mx-3 px-3 py-3 ">
-        <div class="kot-category" data-categoryid="0"><span>All</span></div>
+            <div class="kot-category" data-categoryid="0"><span>All</span></div>
             @foreach (var category in Model.CategoryList)
             {
-                <div class="kot-category" data-categoryname="@category.CategoryName" data-categoryid="@category.CategoryId"><span
-                        data-categoryname="@category.CategoryName" data-categoryid="@category.CategoryId">@category.CategoryName</span></div>
+                <div class="kot-category" data-categoryname="@category.CategoryName" data-categoryid="@category.CategoryId">
+                    <span data-categoryname="@category.CategoryName"
+                        data-categoryid="@category.CategoryId">@category.CategoryName</span></div>
             }
 
         </div>
@@ -78,36 +79,40 @@
 </div>
 
 <script>
-    $(document).on("click", ".kot-category", function(){
-  kotCategory = $(this).data("categoryid");
-  kotCategoryName = $(this).data("categoryname");
-  console.log(`This tab data is clicked ${kotCategory} asdf`);
-  loadKOTOrders();
-})
-
-    $(document).on("click", ".progress-kotOrders", function(){
-        $(".progress-kotOrders").removeClass("active-button-pizzaShop");
-        $(".progress-kotOrders").addClass("inactive-button-pizzaShop");
-        $(this).removeClass("inactive-button-pizzaShop");
-        $(this).addClass("active-button-pizzaShop");
+    $(document).on("click", ".kot-category", function () {
+        debugger
+        kotCategory = $(this).data("categoryid");
+        kotCategoryName = $(this).data("categoryname");
+        console.log(`This tab data is clicked ${kotCategory} asdf`);
         loadKOTOrders();
     })
 
-    $(document).on("click", ".kot-order-slideprevious", function(){
+    $(document).on("click", ".progress-kotOrders", function () {
+        debugger
+        $(".progress-kotOrders").removeClass("active-button-pizzaShop").addClass("inactive-button-pizzaShop");
+
+        // Add the active class to the clicked button and remove the inactive class
+        $(this).removeClass("inactive-button-pizzaShop").addClass("active-button-pizzaShop");
+        kotOrderProgress = $(this).data("progress")
+        console.log(`The progress button was clicked ${kotOrderProgress}`)
+        loadKOTOrders();
+    })
+
+    @* $(document).on("click", ".kot-order-slideprevious", function () {
         console.log("Previous clicked");
     })
 
-    $(document).on("click", ".kot-order-slidenext", function(){
+    $(document).on("click", ".kot-order-slidenext", function () {
         console.log("Next clicked");
-    })
+    }) *@
 
     function loadKOTOrders() {
         $.ajax({
-            url: '@Url.Action("GetKotOrderCards", "OrderApp")',
+            url: '/OrderApp/KotOrders',
             type: 'GET',
             data: {
                 categoryId: kotCategory,
-                progress: $(".active-button-pizzaShop").data("progress")
+                progress: kotOrderProgress
             },
             success: function (response) {
                 $('#allKotOrderCards').html(response);

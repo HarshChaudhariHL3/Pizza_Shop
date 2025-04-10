@@ -50,6 +50,8 @@ public class MenuService : IMenuService
                 IsAvailable = item.IsAvailable ?? false,
                 ShortCode = item.ShortCode,
                 ImageUrl = item.ImageUrl,
+                DefaultTax = item.DefaultTax,
+                TaxPercentage = item.TaxPercentage,
                 UnitId = item.UnitId
             });
         }
@@ -90,7 +92,7 @@ public class MenuService : IMenuService
             Price = item.Price,
             ItemType = item.ItemType,
             IsAvailable = item.IsAvailable ?? false,
-            // TaxPercentage = item.TaxPercentage,
+            TaxPercentage = item.TaxPercentage,
             ShortCode = item.ShortCode,
             ImageUrl = item.ImageUrl,
             SelectedModifiers = item.CategoryModifierMappings.Select(x => new CategoryModifierMappingsViewModel
@@ -168,6 +170,10 @@ public class MenuService : IMenuService
             categoryItem.IsAvailable = model.IsAvailable;
             categoryItem.ItemType = model.ItemType;
             categoryItem.ShortCode = model.ShortCode;
+            categoryItem.TaxPercentage = model.TaxPercentage;
+            categoryItem.ImageUrl = model.ImageUrl;
+            categoryItem.CategoryId = model.CategoryId;
+
 
             _menuRepository.UpdateCategoryItem(categoryItem);
         }

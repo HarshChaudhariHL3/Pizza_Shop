@@ -147,6 +147,7 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ShortCode)
                 .HasMaxLength(50)
                 .HasColumnName("short_code");
+            entity.Property(e => e.TaxPercentage).HasColumnName("tax_percentage");
             entity.Property(e => e.UnitId).HasColumnName("unit_id");
 
             entity.HasOne(d => d.Category).WithMany(p => p.CategoryItems)
@@ -583,6 +584,7 @@ public partial class PizzaShopDbContext : DbContext
                 .HasColumnName("modified_by");
             entity.Property(e => e.ModifierItemId).HasColumnName("modifier_item_id");
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.ModifierItem).WithMany(p => p.OrderItemModifiers)
                 .HasForeignKey(d => d.ModifierItemId)

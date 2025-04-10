@@ -19,6 +19,8 @@ public partial class OrderItemModifier
 
     public string? ModifiedBy { get; set; }
 
+    public int? Quantity { get; set; }
+
     public virtual ModifierItem? ModifierItem { get; set; }
 
     public virtual OrderItem? OrderItem { get; set; }

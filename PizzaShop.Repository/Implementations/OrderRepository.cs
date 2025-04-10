@@ -39,22 +39,23 @@ public class OrderRepository(PizzaShopDbContext _context) : IOrderRepository
     {
         try
         {
-            // var taxQuery =  _context.OrderTaxMappings.Where(x=>x.OrderId == id).Select(tax => new TaxesAndFeesViewModel{
-            //             TaxName = tax.Tax.TaxName,
-            //             TaxValue = tax.Tax.TaxValue,
-            //         }).ToList();
 
-            // var tableQuery = _context.TableOrderMappings.Where(x => x.OrderId == id).Select(table => new TableAndSectionViewModel
-            // {
-            //     TableName = table.Table.TableName,
-            //     Name = table.Table.Section.Name,
-            //     Capacity = table.Capacity,
-            // }).FirstOrDefault();
+            var taxQuery =  _context.OrderTaxMappings.Where(x=>x.OrderId == id).Select(tax => new TaxesAndFeesViewModel{
+                        TaxName = tax.Tax.TaxName,
+                        TaxValue = tax.Tax.TaxValue,
+                        TaxType = tax.Tax.TaxType,
+                    }).ToList();
+
+            var tableQuery = _context.TableOrderMappings.Where(x => x.OrderId == id).Select(table => new TableAndSectionViewModel
+            {
+                TableName = table.Table.TableName,
+                SectionName = table.Table.Section.SectionName,
+            }).FirstOrDefault();
 
             var Query = _context.Orders.Where(x => x.OrderId == id).Select(order => new OrderSummaryViewModel
             {
-                // tax = taxQuery,
-                // table = tableQuery!,
+                tax = taxQuery,
+                table = tableQuery!,
                 OrderId = order.OrderId,
                 CustomerName = order.Customer.CustomerName,
                 Phone = order.Customer.Phone,
@@ -62,14 +63,18 @@ public class OrderRepository(PizzaShopDbContext _context) : IOrderRepository
                 OrderStatus = order.Status,
                 CreatedAt = (DateTime)order.CreatedAt,
                 ModifiedAt = (DateTime)order.ModifiedAt!,
-                // items = order.OrderedItems.Where(x=>x.OrderId == id).Select(m =>new ItemsViewModel{
-                //     ItemName = m.MenuItem.ItemName,
-                //     Quantity = m.MenuItem.Quantity,
+                items = order.OrderItems.Where(x=>x.OrderId == id).Select(m =>new ItemsViewModel{
+                    ItemName = m.CategoryItem.ItemName,
+                    TaxPercentage = m.CategoryItem.TaxPercentage,
+                    Rate = m.CategoryItem.Price,
+                    Quantity = m.Quantity,
 
-                //         modifier = m.OrderedItemModifierMappings.Where(u=>u.OrderItemId == m.Id).Select(n=>new ModifierViewModel(){
-                //             ModifierName = n.Modifier.ModifierItem.Name
-                //         }).ToList()
-                // }).ToList(),
+                        modifier = m.OrderItemModifiers.Where(u=>u.OrderItemId == m.OrderItemId).Select(n=>new ModifierViewModel(){
+                            ModifierName = n.ModifierItem.ModifierItemName,
+                            Rate = n.ModifierItem.Rate,
+                            Quantity = n.Quantity
+                        }).ToList()
+                }).ToList(),
             }).FirstOrDefault();
 
             return Query!;

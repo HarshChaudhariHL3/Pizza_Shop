@@ -26,4 +26,12 @@ public class OrderAppService(IOrderAppRepository _orderAppRepository) : IOrderAp
 
         return  CategoryViewModelList;
     }
+
+
+    // public KotViewModel GetKOTCardDetails(int categoryId , string progress ){
+
+
+
+
+    // }
 }

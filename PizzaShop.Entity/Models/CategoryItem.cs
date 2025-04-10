@@ -37,6 +37,8 @@ public partial class CategoryItem
 
     public int? UnitId { get; set; }
 
+    public int? TaxPercentage { get; set; }
+
     public virtual Category? Category { get; set; }
 
     public virtual ICollection<CategoryModifierMapping> CategoryModifierMappings { get; set; } = new List<CategoryModifierMapping>();

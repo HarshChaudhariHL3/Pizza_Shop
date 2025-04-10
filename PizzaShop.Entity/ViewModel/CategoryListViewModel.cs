@@ -15,6 +15,7 @@ public class CategoryListViewModel
     public bool DefaultTax { get; set; }
 
     public int? UnitId { get; set; }
+    public int? TaxPercentage { get; set; }
 
 
     public int? Quantity { get; set; }

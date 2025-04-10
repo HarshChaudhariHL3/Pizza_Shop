@@ -189,5 +189,6 @@ public class OrderController(IOrderService _orderService) : Controller
 
         // Uncomment this to directly generate the PDF if desired
         return new Rotativa.AspNetCore.ViewAsPdf("DownloadInvoice", model) { FileName = "Invoice.pdf" };
+        // return View("DownloadInvoice", model);
     }
 }

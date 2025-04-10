@@ -12,6 +12,11 @@ public class OrderAppController(IOrderAppService _orderAppService) : Controller
         return View(CategoryList);
     }
 
+    // public IActionResult KotOrders(int categoryId , string progress){
+    //     var orderDetails = _orderAppService.GetKOTCardDetails(categoryId, progress);
+    //     return PartialView("_KotModifierItem", orderDetails);
+    // }
+
 
 
 

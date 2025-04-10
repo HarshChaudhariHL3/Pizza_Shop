@@ -6,22 +6,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-   .container{
+   .container {
       padding: 10px 0px;
    }
+
    .border-color-blue {
       background-color: #0066a6;
    }
+
    .color-blue {
       color: #0066a6;
    }
+
    .pizzaHeading {
       color: #0066a6;
       font-size: 25px;
    }
-   .text-white{
+
+   .text-white {
       color: white;
    }
+
    .border-bottom {
       border-bottom: 1px solid #0066a6;
    }
@@ -45,7 +50,8 @@
                style="width: 50%; vertical-align: middle;">
          </div>
          <div style="display: inline-block">
-            <p class="pizzaHeading" style="display: inline-block; margin-left:-50px; font-size: 24px; font-weight: bold;">
+            <p class="pizzaHeading"
+               style="display: inline-block; margin-left:-50px; font-size: 24px; font-weight: bold;">
                PIZZASHOP</p>
          </div>
       </div>
@@ -75,7 +81,7 @@
                <span>@Model.table.SectionName</span>
                <br />
                <span>Table: </span>
-               @* @for (var i = 0; i < Model.table.TableName.Count(); i++)
+               @for (var i = 0; i < Model.table.TableName.Count(); i++)
                {
                   if (Model.table.TableName.Count() - i == 1)
                   {
@@ -85,7 +91,7 @@
                   {
                      <span>@Model.table.TableName[i],</span>
                   }
-               } *@
+               }
                <br />
             </div>
          </div>
@@ -102,61 +108,63 @@
                </tr>
             </thead>
             <tbody id="orderTableBody">
-               @* @if (Model.Items != null && Model.Items.Any())
+               @if (Model.items != null && Model.items.Any())
                {
-                  for (int i = 0; i < Model.Items.Count; i++)
+                  for (int i = 0; i < Model.items.Count; i++)
                   {
-                     var item = Model.Items[i];
+                     var item = Model.items[i];
                      <tr>
-                        <td rowspan="@(item.itemModifiers?.Count() > 0 ? item.itemModifiers.Count() + 1 : 1)">
+                        <td rowspan="@(item.modifier?.Count() > 0 ? item.modifier.Count() + 1 : 1)">
                            @(i + 1)
                         </td>
-                        <td class="pb-0">@item.Itemname</td>
-                        <td class="pb-0">@item.Quantity</td>
-                        <td class="text-end pb-0">@item.unitPrice.ToString("0.00")</td>
-                        <td class="text-end pb-0">@((item.Quantity * item.unitPrice).ToString("0.00"))</td>
+                        <td class="pb-0">
+                           @item.ItemName
+                           <span id="TaxPercentage" hidden>@item.TaxPercentage</span>
+                        </td>
+                        <td class="pb-0" id="CategoryItemQuantity">@item.Quantity</td>
+                        <td class="text-end pb-0" id="CategoryItemRate" >@item.Rate.ToString()</td>
+                        <td class="text-end pb-0" id="TotalCategoryItem" ></td>
                      </tr>
-                     if (item.itemModifiers != null && item.itemModifiers.Any())
+                     if (item.modifier != null && item.modifier.Any())
                      {
-                        for (int j = 0; j < item.itemModifiers.Count(); j++)
+                        for (int j = 0; j < item.modifier.Count(); j++)
                         {
-                           var modifier = item.itemModifiers.ElementAt(j); var count = item.itemModifiers?.Count();
+                           var modifier = item.modifier.ElementAt(j); var count = item.modifier?.Count();
                            <tr class="@(count != j + 1 ? "" : "border-bottom")">
                               <td class="@(count != j + 1 ? "py-0" : "pt-0")">@modifier.ModifierName</td>
-                              <td class="@(count != j + 1 ? "py-0" : "pt-0")">@modifier.Quantity</td>
-                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")">
-                                 @modifier.unitPrice.ToString("0.00")
+                              <td class="@(count != j + 1 ? "py-0" : "pt-0")" id="ModifierItemQuantity" >@modifier.Quantity</td>
+                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")" id="ModifierItemRate">
+                                 @modifier.Rate.ToString()
                               </td>
-                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")">@((modifier.Quantity *
-                                                      modifier.unitPrice).ToString("0.00"))
-                  </td>
-               </tr>
-                              }
+                              <td class="text-end @(count != j + 1 ? "py-0" : "pt-0")" id="TotalModifierItem"></td>
+                              </tr>
+                        }
                      }
                   }
                   <tr>
                      <td colspan="4"><strong>Sub Total:</strong></td>
-                     <td class="text-end"><strong>@Model.Amount.ToString("0.00")</strong></td>
+                     <td class="text-end" id="SubTotal"><strong></strong></td>
 
                   </tr>
 
-                  @if (Model.Taxes != null && Model.Taxes.Any())
+                  @if (Model.tax != null && Model.tax.Any())
                   {
-                     @foreach (var tax in Model.Taxes.Where(t => t.TaxAmount > 0))
+                     @foreach (var tax in Model.tax.Where(t => t.TaxValue > 0))
                      {
                         <tr>
                            <td colspan="4">@tax.TaxName</td>
-                           <td class="text-end">@tax.TaxAmount.ToString("0.00")</td>
+                           <td class="text-end TaxValueTotal" data-taxtype="@tax.TaxType"
+                                            data-taxvalue="@tax.TaxValue">@tax.TaxValue.ToString()</td>
                         </tr>
                      }
                   }
                   <tr>
                      <td colspan="4"> Other:</td>
-                     <td class="text-end"> @Model.Other.ToString("0.00") </td>
+                     <td class="text-end OtherTaxValue"></td>
                   </tr>
                   <tr class="border-top  text-white fw-bold">
                      <td colspan="4" class="color-blue"> Total Amount Due:</td>
-                     <td class="text-end color-blue"> @Model.Amount.ToString("0.00") </td>
+                     <td class="text-end color-blue" id="TotalAmount"></td>
                   </tr>
                }
                else
@@ -165,7 +173,7 @@
                      <td colspan="5" class="text-center">No items found</td>
                   </tr>
                }
- *@
+
             </tbody>
          </table>
       </div>
@@ -184,3 +192,87 @@
 </body>
 
 </html>
+
+<script>
+   $(document).ready(function () {
+        var totalCategoryItem = 0;
+        var totalModifierItem = 0;
+        var subTotal = 0;
+        var totalTax = 0;
+        var taxPercentage = 0;
+
+         debugger
+         // Calculate total for each category item
+         $("#orderTableBody tr").each(function () {
+               var categoryItemRate = parseFloat($(this).find("#CategoryItemRate").text()) || 0;
+               var categoryItemQuantity = parseFloat($(this).find("#CategoryItemQuantity").text()) || 0;
+               var totalCategoryItem = categoryItemRate * categoryItemQuantity;
+   
+               $(this).find("#TotalCategoryItem").text(totalCategoryItem.toFixed(2));
+               subTotal += totalCategoryItem;
+   
+               // Calculate total for each modifier item
+               $(this).find("#ModifierItemRate").each(function () {
+                  var modifierItemRate = parseFloat($(this).text()) || 0;
+                  var modifierItemQuantity = parseFloat($(this).closest("tr").find("#ModifierItemQuantity").text()) || 0;
+                  var totalModifierItem = modifierItemRate * modifierItemQuantity;
+   
+                  $(this).closest("tr").find("#TotalModifierItem").text(totalModifierItem.toFixed(2));
+                  subTotal += totalModifierItem;
+               });
+
+               // Calculate tax percentage
+               var taxPercentage = parseFloat($(this).find("#TaxPercentage").text()) || 0;
+               if (taxPercentage > 0) {
+                  var taxAmount = (totalCategoryItem * taxPercentage) / 100;
+                  totalTax += taxAmount;
+               }
+         });
+         // Display the sub total
+         $("#SubTotal").text(subTotal.toFixed(2));
+         // Display the total amount
+         $("#TotalAmount").text((subTotal + totalTax).toFixed(2));
+
+
+          // Calculate tax values
+        $(".TaxValueTotal").each(function () {
+
+            var taxType = $(this).data("taxtype");
+            var taxValue = parseFloat($(this).data("taxvalue"));
+            var subTotal = parseFloat($("#SubTotal").text());
+            var taxAmount = 0;
+
+            if (taxType === "Percentage") {
+                taxAmount = (subTotal * taxValue) / 100;
+            } else if (taxType === "FlatAmount") {
+                taxAmount = taxValue;
+            }
+
+            totalTax += taxAmount;
+            $(this).text(taxAmount.toFixed(2));
+        });
+
+
+        // Calculate other taxes
+        var otherTaxTotal = 0;
+        $(".table tbody tr").each(function () {
+            var percentageTax = parseFloat($(this).find("#TaxPercentage").text()) || 0;
+            var categoryItemRate = parseFloat($(this).find("#CategoryItemRate").text()) || 0;
+            var categoryItemQuantity = parseFloat($(this).find("#CategoryItemQuantity").text()) || 0;
+            var otherTaxAmount = categoryItemQuantity * (categoryItemRate * percentageTax) / 100;
+
+            otherTaxTotal += otherTaxAmount;
+        });
+
+        
+        // Display the total other tax
+        $(".OtherTaxValue").text(otherTaxTotal.toFixed(2));
+      
+
+
+        // Calculate total amount
+        var totalAmount = subTotal + (totalTax);
+        $("#TotalAmount").text(totalAmount.toFixed(2));
+
+    });
+</script>

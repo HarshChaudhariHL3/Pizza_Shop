@@ -55,7 +55,18 @@
                                         type="checkbox" />
                                 </div>
                             </td>
-                            <td>@taxFee.TaxValue</td>
+                            <td>
+                                @if (taxFee.TaxType == "Percentage")
+                                {
+                                    @(taxFee.TaxValue+"%") 
+                                }
+                                else if (taxFee.TaxType == "FlatAmount")
+                                {
+                                    @("₹"+taxFee.TaxValue)
+                                }
+                                else{
+                                    <span class="text-danger">Invalid Type</span>
+                                }
                             <td>
                                 <button type="button" class="btn btn-sm " id="EditTaxBtn"
                                     data-itemid="@taxFee.TaxId">
