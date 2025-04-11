@@ -10,7 +10,7 @@ public class TableViewModel
 
     public int? Capacity { get; set; }
 
-    public bool Status { get; set; }
+    public string? Status { get; set; }
 
     public List<TableViewModel> TableList { get; set; }
 

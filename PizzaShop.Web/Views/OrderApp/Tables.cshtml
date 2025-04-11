@@ -3,4 +3,330 @@
     ViewData["Title"] = "Tables";
 }
 
-<h1>Table</h1>
+@model PizzaShop.Entity.ViewModel.TableOrderAppViewModel
+
+<style>
+    .floor-section {
+        background: #fff;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .floor-header {
+        padding: 16px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        font-size: 18px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .floor-header:hover {
+        background-color: #f0f0f0;
+    }
+
+    .arrow {
+        transition: transform 0.3s ease;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+    }
+
+    .arrow.rotate {
+        transform: rotate(90deg);
+    }
+
+    .floor-body {
+        display: none;
+        padding: 20px;
+        background: #fdfdfd;
+    }
+
+    .table-card {
+        display: inline-block;
+        background: #e8f0fe;
+        border: 2px solid #cfe2ff;
+        padding: 16px;
+        margin: 10px;
+        border-radius: 10px;
+        width: 180px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .table-card.green {
+        background: #e6f4ea;
+        border-color: #b5dfc0;
+    }
+
+    .table-card .title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .table-card .info {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .reserverd {
+        background-color: rgb(202, 202, 248);
+    }
+
+    .occupied {
+        background-color: hwb(99 58% 11%);
+
+    }
+
+    .available {
+        background-color: hwb(0 60% 38%);
+    }
+</style>
+
+<div>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="text-primary fw-bold">Table View</h1>
+        </div>
+        <div class="d-flex flex-row gap-3 mt-3">
+            <p>
+                <i class="bi bi-record-fill " style="color: hwb(0 60% 38%);"></i>Avilable
+            </p>
+            <p>
+                <i class="bi bi-record text-success"></i>Selected
+            </p>
+            <p>
+                <i class="bi bi-record-fill " style="color: hwb(99 58% 11%);"></i>Assign
+            </p>
+            <p>
+                <i class="bi bi-record-fill  text-primary"></i>Running
+            </p>
+        </div>
+    </div>
+
+    <div>
+        @foreach (var item in @Model.SectionList)
+        {
+
+            <div class="floor-section">
+                <div class="floor-header" onclick="toggleFloor(this)">
+                    <div class="d-flex gap-2">
+                        <span class="arrow" style=" ">
+                            <small class="m-auto"><i class="bi bi-chevron-right "></i> </small></span>
+                        <span id="getAllSection">@item.SectionName</span>
+                    </div>
+
+                    <div class="">
+                        <small class="mx-1"><i class="bi bi-record-fill " style="color: hwb(0 60% 38%);"></i>3</small>
+                        <small class="mx-1"><i class="bi bi-record " style="color: hwb(99 58% 11%);"></i>2</small>
+                        <small class="mx-1"><i class="bi bi-record-fill text-primary"></i>1</small>
+                        <button class="btn border-2 border-primary text-primary" id="AddWaitingUserButton"
+                            data-id="@item.SectionId">+ Waiting
+                            List</button>
+                    </div>
+                </div>
+                <div class="floor-body">
+                    <div>
+                        @foreach (var table in item.TableList)
+                        {
+                            @if (table.Status == "occupied" || table.Status == "reserverd")
+                            {
+                                <div class="table-card h-25 @table.Status">
+                                    <div class="title d-flex justify-content-between align-items-center">
+                                        <div>@table.TableName</div>
+                                        <span>₹309.40</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="bi bi-people"></i>
+
+                                            <p>@table.Capacity</p>
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-stopwatch"></i>
+                                            <p>0 Min <br></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="table-card h-25 @table.Status " onclick="selectTableCard(this, @table.TableId)">
+                                    <div class="title d-flex justify-content-between align-items-center">
+                                        <div>@table.TableName</div>
+                                        <span>₹309.40</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="bi bi-people"></i>
+
+                                            <p>@table.Capacity</p>
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-stopwatch"></i>
+                                            <p>0 Min <br></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                        }
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <button id="AssignButton" class="btn btn-info text-white AddAssignSidebar d-none"
+                            style="background-color:blue ; " data-id="@item.SectionId">Assign</button>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+
+
+<div id="AddUserWaiting"></div>
+<div id="AddAssign"></div>
+
+<script>
+
+    let tempselectedTableIdsforOrder = [];
+    let selectedTableIdsforOrder = [];
+    let count = 0;
+
+    function selectTableCard(card, tableId) {
+        const isSelected = $(card).hasClass('selected');
+
+        if (isSelected) {
+            $(card).removeClass('selected').css('border', 'none');
+            count--;
+            if (count == 0) {
+                $("#AssignButton").addClass("d-none");
+            }
+            tempselectedTableIdsforOrder = tempselectedTableIdsforOrder.filter(id => id != tableId);
+        } else {
+            $(card).addClass('selected').css('border', '2px solid green');
+            count++;
+            $("#AssignButton").removeClass("d-none");
+            tempselectedTableIdsforOrder.push(tableId);
+        }
+        console.log("Selected Table IDs: ", tempselectedTableIdsforOrder);
+    }
+    function toggleFloor(header) {
+        const arrow = header.querySelector('.arrow');
+        const body = header.nextElementSibling;
+        const isVisible = body.style.display === 'block';
+
+        body.style.display = isVisible ? 'none' : 'block';
+        arrow.classList.toggle('rotate', !isVisible);
+    }
+
+
+    $(document).on('click', '#AddWaitingUserButton', function () {
+        debugger
+        AddWaitingUserAdd();
+        var sectionId = $(this).data('id');
+        console.log("Section ID: ", sectionId);
+        GetAllSectionSelection(sectionId);
+    });
+
+    function AddWaitingUserAdd() {
+
+        console.log("AddWaitingUserAdd.....................");
+        $.ajax({
+
+            url: '/OrderApp/AddWaitingUser',
+            type: 'GET',
+            success: function (data) {
+
+                $("#AddUserWaiting").html(data);
+                $('#AddWaitingUser').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+
+            }
+        });
+    }
+
+
+
+    function GetAllSectionSelection(selectedId) {
+        $.ajax({
+            url: '/TableAndSection/SectionsList',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                var s = '<option value="-1">Please select Section</option>';
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].sectionId == selectedId) {
+                        s += '<option value="' + data[i].sectionId + '" selected>' + data[i].sectionName + '</option>'
+                    }
+                    else {
+                        s += '<option value="' + data[i].sectionId + '">' + data[i].sectionName + '</option>'
+
+                    }
+                }
+                $("#AddSectionSelectWaitingList").html(s);
+            }
+        });
+    }
+
+
+
+
+    $(document).ready(function () {
+        $('.AddAssignSidebar').on('click', function () {
+            console.log("Selected Table IDs: ", tempselectedTableIdsforOrder);
+            AddAssignSidebar($(this).data('id'), tempselectedTableIdsforOrder);
+        });
+    });
+
+
+    function AddAssignSidebar(sectionId, tblids) {
+        let Data = { "sectionId": sectionId, "tableIds": tblids };
+        $.ajax({
+
+            url: '/Kot/AddAssignSidebar',
+            type: 'POST',
+            data: Data,
+            success: function (data) {
+
+                $("#AddAssign").html(data);
+                $('#AddAssignPage').modal('show');
+                //  GetAllSectionSelection(sectionId);
+                $.ajax({
+                    url: '/Admin/GetAllSection',
+                    type: 'GET',
+                    success: function (data) {
+
+                        console.log("GetAllSection....................... ", data)
+                        const dropdown = $('#SectionSelectID123');
+
+                        dropdown.empty();
+
+                        data.forEach(function (section) {
+                            dropdown.append(new Option(section.sectionName, section.sectionId,
+                                section.sectionId == sectionId, section.sectionId == sectionId));
+                        });
+                    }
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+
+
+            }
+        });
+    }
+
+</script>

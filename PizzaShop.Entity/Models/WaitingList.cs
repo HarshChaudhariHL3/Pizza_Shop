@@ -7,13 +7,7 @@ public partial class WaitingList
 {
     public int WaitingId { get; set; }
 
-    public int? CustomerId { get; set; }
-
-    public int? TokenId { get; set; }
-
-    public int? TableId { get; set; }
-
-    public string? WaitingStatus { get; set; }
+    public int? SectionId { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -23,7 +17,13 @@ public partial class WaitingList
 
     public string? ModifiedBy { get; set; }
 
-    public virtual Customer? Customer { get; set; }
+    public string? UserName { get; set; }
 
-    public virtual TableDetail? Table { get; set; }
+    public string? Email { get; set; }
+
+    public int? TotalPerson { get; set; }
+
+    public string? Phone { get; set; }
+
+    public virtual Section? Section { get; set; }
 }

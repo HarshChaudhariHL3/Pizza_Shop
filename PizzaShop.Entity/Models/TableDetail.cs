@@ -13,7 +13,7 @@ public partial class TableDetail
 
     public int? Capacity { get; set; }
 
-    public bool Status { get; set; }
+    public string? Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -30,6 +30,4 @@ public partial class TableDetail
     public virtual Section? Section { get; set; }
 
     public virtual ICollection<TableOrderMapping> TableOrderMappings { get; set; } = new List<TableOrderMapping>();
-
-    public virtual ICollection<WaitingList> WaitingLists { get; set; } = new List<WaitingList>();
 }

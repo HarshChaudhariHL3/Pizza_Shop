@@ -22,4 +22,6 @@ public partial class Section
     public bool? IsDeleted { get; set; }
 
     public virtual ICollection<TableDetail> TableDetails { get; set; } = new List<TableDetail>();
+
+    public virtual ICollection<WaitingList> WaitingLists { get; set; } = new List<WaitingList>();
 }

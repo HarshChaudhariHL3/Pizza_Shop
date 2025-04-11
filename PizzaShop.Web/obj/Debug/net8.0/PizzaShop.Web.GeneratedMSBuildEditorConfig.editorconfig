@@ -46,6 +46,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJBcHBcUGFydGlhbFZpZXdcX0tvdE1vZGlmaWVySXRlbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/OrderApp/PartialView/_TableAssignTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJBcHBcUGFydGlhbFZpZXdcX1RhYmxlQXNzaWduVGFibGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/OrderApp/PartialView/_TableWaitingListModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJBcHBcUGFydGlhbFZpZXdcX1RhYmxlV2FpdGluZ0xpc3RNb2RhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/DotNet N Layered/PizzaShop/PizzaShop.Web/Views/OrderApp/Tables.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJBcHBcVGFibGVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

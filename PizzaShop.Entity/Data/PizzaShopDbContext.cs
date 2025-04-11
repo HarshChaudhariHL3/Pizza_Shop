@@ -827,7 +827,8 @@ public partial class PizzaShopDbContext : DbContext
                 .HasColumnName("modified_by");
             entity.Property(e => e.SectionId).HasColumnName("section_id");
             entity.Property(e => e.Status)
-                .HasDefaultValue(true)
+                .HasMaxLength(10)
+                .HasDefaultValueSql("'available'::character varying")
                 .HasColumnName("status");
             entity.Property(e => e.TableName)
                 .HasMaxLength(255)
@@ -1019,6 +1020,8 @@ public partial class PizzaShopDbContext : DbContext
 
             entity.ToTable("waiting_list");
 
+            entity.HasIndex(e => e.Email, "waiting_list_email_key").IsUnique();
+
             entity.Property(e => e.WaitingId).HasColumnName("waiting_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -1027,7 +1030,9 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)
                 .HasColumnName("created_by");
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.Email)
+                .HasColumnType("character varying")
+                .HasColumnName("email");
             entity.Property(e => e.ModifiedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -1035,19 +1040,18 @@ public partial class PizzaShopDbContext : DbContext
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .HasColumnName("modified_by");
-            entity.Property(e => e.TableId).HasColumnName("table_id");
-            entity.Property(e => e.TokenId).HasColumnName("token_id");
-            entity.Property(e => e.WaitingStatus)
-                .HasMaxLength(50)
-                .HasColumnName("waiting_status");
+            entity.Property(e => e.Phone)
+                .HasColumnType("character varying")
+                .HasColumnName("phone");
+            entity.Property(e => e.SectionId).HasColumnName("section_id");
+            entity.Property(e => e.TotalPerson).HasColumnName("total_person");
+            entity.Property(e => e.UserName)
+                .HasColumnType("character varying")
+                .HasColumnName("user_name");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.WaitingLists)
-                .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("waiting_list_customer_id_fkey");
-
-            entity.HasOne(d => d.Table).WithMany(p => p.WaitingLists)
-                .HasForeignKey(d => d.TableId)
-                .HasConstraintName("waiting_list_table_id_fkey");
+            entity.HasOne(d => d.Section).WithMany(p => p.WaitingLists)
+                .HasForeignKey(d => d.SectionId)
+                .HasConstraintName("waiting_list_section_id_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

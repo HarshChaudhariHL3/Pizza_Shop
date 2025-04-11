@@ -60,14 +60,19 @@
                             </td>
                         <td>@item.Capacity</td>
                             <td class="">
-                                @if (item.Status == true)
+                                @if (item.Status == "Occupied")
                                 {
                                    <span class="btn btn-sm bg-success text-white">Occupied</span>
                                 }
-                                else
+                                else if(item.Status == "available")
                                 {
-                                    <span class="btn btn-sm bg-danger text-white">Free</span>
+                                    <span class="btn btn-sm bg-danger text-white">Available</span>
                                 }
+                                else if(item.Status == "reserved")
+                                {
+                                    <span class="btn btn-sm bg-light text-white">Reserved</span>
+                                }
+
                         </td>
                         <td class="gap-3">
                             <button class="btn  edit-btn" data-table-id="@item.TableId" id="EditBtnForTable" data-bs-toggle="modal" data-bs-target="#editTable"><i class="bi bi-pen"></i></button>
